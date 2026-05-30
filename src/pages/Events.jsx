@@ -1,8 +1,13 @@
 import { useState } from "react"
+import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
+
+let idCounter = 0
+const nextId = () => `event_${++idCounter}`
 
 const events = [
   {
+    id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB-jUxRJ-jmVQf4tFVucHtZHbG6Rydt4bke3ZWoYuL8dr3wYbdbY4HwRK1x1MDL_g8MxJM5ze9yRlKGRJQCpE_QG1eIosGfElnfJs_1SINdWVLd4_bnqWittrcwxr3AFtxHbN3cTPmSIYNjs-TcXxn8BZ7piaxxDQqIf_EKtfV_dif3fKlkkpvGomNBdh_XWIdmo8O4p0uuN7CL03I_NXiFIfpVIZ0tlYqVPO_ju7NhvoB8JmcBdesV9jI9WPT5cChgWV5A2Jqy2Wh8",
     category: "Educational",
     date: "Sept 24, 2024",
@@ -12,6 +17,7 @@ const events = [
     location: "Main Community Hall, Central Hub",
   },
   {
+    id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAW5xvn0cc3DgCVQg5bkF-Wi1CfkQS1UagvH6ty7hmRBIvFIQ7rsMEqdduYV8xhw6HRgBBIamWFFLiwqUVWvAhP__MQ_nuSWwgEzMaiHPxIbkRTwf50g-EfbpIgYwWAP0QhaF1Z4Yx0JNZaozFpNjKKCgcqVmKq_fnLO4g85Yq2DQFRbXBT8l4gI0U8frEgPl9ILdM9s2zv_UEwSd8Z_95fOKgFkOsQT6ayUfQLlb6hAbAjDE9j-gSNgx5ZFKyxIdBAxM1aSWRLN99c",
     category: "Social",
     date: "Oct 02, 2024",
@@ -21,6 +27,7 @@ const events = [
     location: "Westside Park Pavilion",
   },
   {
+    id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCLiwE-hlogQYChYrtc-oOGQYJ2PpMZUxgs4_xix-qqQ9knSg2xGW4FNy9Dy2uvie01vTu1iNcRSTmksFBSA8WRZ6Jxm0i5LjOiIXW0pJmlqSxsFuSwUnbMrUuII5kmH9o13hWoaiP6_kOnINMnlYbTduDelmy4GJDV6iXUO6dKDRKAvHXO-6EULBbqao0iZeZT7XC2UnwAuoJ_WdGCJ1_YCadNT4cz3Uzrs91ut1ZGPZsY8y5cQ5L5dxTbfrMaC4ENaBhHptl5mSE-",
     category: "Sports",
     date: "Oct 15, 2024",
@@ -30,6 +37,7 @@ const events = [
     location: "City Sports Complex, Arena B",
   },
   {
+    id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCNH16vwhXGqaF1VAdBNpLF0kK7ikDFwh4s_UbcAMjSRdt5CYlZmFRz_-0Ygk-qKNMSf2HHXo1CCs0cLR49IPMzY2HXeOHMGGkXu3zS13EBLS8ojWFMO0fNdjsOYfA_4IV5BEnLUjj9gfEFCrK49hjXA4DfmcACs0xfgwAmgh1112UGtqQwW2hEooLe77--ck9vNO4uNag0azHcgoHEWwrT6qW4W24MRrHBSgEi9wAoXvwpc55E1Du3sw-jbOUUmfwFeJmr8i_mF2iR",
     category: "Spiritual",
     date: "Oct 22, 2024",
@@ -39,6 +47,7 @@ const events = [
     location: "Noor Youth Lounge",
   },
   {
+    id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA_lomlikiWb98gUcitbAjAH5DCKxtr6GgYVNeBg-6wPs6Uusd46LUtO5VYvs--lQTs28HeBM_-hzzNc824BSwMXHzJFFKmE4I9Hhj9-0jWjs2l-ZaWBAgmoddRF6vlw6JIvBOfRv9EPxvhiIRs222c1uum9es4Z29n9GmkaBJANRxhyIAVmUE-O-qOSDTCJWRbH9Cv9eewgKS8N2Uo5QY_OVckLIKWbwxM02VrpwdeADBvEwaO5wuOwAcEQUqUQmZRotGVd3U9n00f",
     category: "Educational",
     date: "Nov 05, 2024",
@@ -48,6 +57,7 @@ const events = [
     location: "Innovation Lab, 3rd Floor",
   },
   {
+    id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCuZk5mgxsXwLg_nW2pjhNGHQUZslphTRkwD6Csi52ap6Pg1eb0Kdmac4wu4-K2GUWYK3JpsuTszkkNyaAexE1MlL-SVqUzwmWkFySLUDLci08WbA4DWsRPRIgOsVD1N7zd5ctUNJGyehqguF5yU_1wE8Q_m0ySJZYNQYmB3ZJjvQBhJW75zyoO34ewhKn9tRwv5yr-zdLdZDrHH8MAS45tSXjq2rBqIK6Vc31b74VHfZTHKZoFY69dGDCVAkiJsq16R4wWxsRoJzrv",
     category: "Sports",
     date: "Nov 12, 2024",
@@ -81,8 +91,42 @@ const dotColors = {
 };
 
 export default function Events() {
+  const { user, addRsvp, rsvps } = useAuth()
   const [activeCategory, setActiveCategory] = useState("All Events");
   const [view, setView] = useState("grid");
+  const [rsvpEvent, setRsvpEvent] = useState(null);
+  const [rsvpName, setRsvpName] = useState(user?.name || '');
+  const [rsvpEmail, setRsvpEmail] = useState(user?.email || '');
+  const [rsvpPhone, setRsvpPhone] = useState(user?.phone || '');
+  const [rsvpMessage, setRsvpMessage] = useState('');
+
+  const openRsvp = (event) => {
+    if (!user) return alert('Please log in to register for events.')
+    setRsvpEvent(event)
+    setRsvpName(user.name || '')
+    setRsvpEmail(user.email || '')
+    setRsvpPhone(user.phone || '')
+    setRsvpMessage('')
+  }
+
+  const handleRsvpSubmit = (e) => {
+    e.preventDefault()
+    addRsvp({
+      id: rsvpEvent.id,
+      title: rsvpEvent.title,
+      date: rsvpEvent.date,
+      time: rsvpEvent.time,
+      location: rsvpEvent.location,
+      name: rsvpName,
+      email: rsvpEmail,
+      phone: rsvpPhone,
+    })
+    setRsvpEvent(null)
+    setRsvpMessage('You are registered! Check your profile for details.')
+    setTimeout(() => setRsvpMessage(''), 3000)
+  }
+
+  const isRsvped = (eventId) => rsvps.some((e) => e.id === eventId)
 
   const filtered =
     activeCategory === "All Events"
@@ -216,8 +260,8 @@ export default function Events() {
                     </span>
                     <span>{event.location}</span>
                   </div>
-                  <button className="w-full py-3 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
-                    Register Now
+                  <button onClick={() => openRsvp(event)} className="w-full py-3 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
+                    {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
                   </button>
                 </div>
               </div>
@@ -279,8 +323,8 @@ export default function Events() {
                             </span>
                             <span>{event.location}</span>
                           </div>
-                          <button className="px-6 py-2 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
-                            Register Now
+                          <button onClick={() => openRsvp(event)} className="px-6 py-2 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
+                            {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
                           </button>
                         </div>
                       </div>
@@ -304,6 +348,41 @@ export default function Events() {
           </div>
         </div>
       </section>
+
+      {/* RSVP Modal */}
+      {rsvpEvent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-gutter" onClick={() => setRsvpEvent(null)}>
+          <div className="bg-surface-container-lowest rounded-xl p-lg max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-md">
+              <h2 className="font-headline-md text-headline-md text-primary">Register for Event</h2>
+              <button onClick={() => setRsvpEvent(null)} className="text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">close</span></button>
+            </div>
+            <p className="font-headline-sm text-headline-sm text-primary mb-sm">{rsvpEvent.title}</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg">{rsvpEvent.date} &middot; {rsvpEvent.time} &middot; {rsvpEvent.location}</p>
+            <form onSubmit={handleRsvpSubmit} className="space-y-md">
+              <div>
+                <label className="font-label-md text-label-md text-on-surface-variant block mb-sm">Full Name</label>
+                <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} className="w-full px-4 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
+              </div>
+              <div>
+                <label className="font-label-md text-label-md text-on-surface-variant block mb-sm">Email</label>
+                <input type="email" value={rsvpEmail} onChange={(e) => setRsvpEmail(e.target.value)} className="w-full px-4 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
+              </div>
+              <div>
+                <label className="font-label-md text-label-md text-on-surface-variant block mb-sm">Phone</label>
+                <input type="tel" value={rsvpPhone} onChange={(e) => setRsvpPhone(e.target.value)} className="w-full px-4 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" />
+              </div>
+              <button type="submit" className="w-full py-3 rounded-lg bg-primary text-on-primary font-button text-button hover:opacity-90 transition-all">Confirm Registration</button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {rsvpMessage && (
+        <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-on-primary-container px-lg py-md rounded-lg shadow-lg font-body-md animate-[fadeIn_0.3s_ease-in-out]">
+          {rsvpMessage}
+        </div>
+      )}
     </main>
   );
 }

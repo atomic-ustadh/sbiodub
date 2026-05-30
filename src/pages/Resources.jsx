@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import SubscribeForm from '../components/SubscribeForm'
 import posts from '../data/posts'
 
@@ -12,6 +13,7 @@ const categories = [
 ]
 
 export default function Resources() {
+  const { user, isBookmarked, toggleBookmark } = useAuth()
   const [activeCat, setActiveCat] = useState('All Resources')
 
   const filtered = activeCat === 'All Resources'
@@ -141,6 +143,16 @@ export default function Resources() {
                     {post.type}
                   </span>
                 </div>
+                {user && (
+                  <button
+                    onClick={(e) => { e.preventDefault(); toggleBookmark(post.slug) }}
+                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface/80 backdrop-blur-sm flex items-center justify-center hover:bg-surface transition-all"
+                  >
+                    <span className={`material-symbols-outlined text-sm ${isBookmarked(post.slug) ? 'text-secondary-fixed-dim' : 'text-on-surface-variant'}`}>
+                      {isBookmarked(post.slug) ? 'bookmark' : 'bookmark_border'}
+                    </span>
+                  </button>
+                )}
               </div>
               <div className="flex flex-col p-md grow">
                 <span className="text-secondary font-label-md text-label-md mb-xs">

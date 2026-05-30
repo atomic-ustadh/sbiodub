@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const links = [
   { label: "Home", key: "home", to: "/" },
@@ -10,6 +11,7 @@ const links = [
 ];
 
 export default function Navbar({ active }) {
+  const { user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -44,12 +46,21 @@ export default function Navbar({ active }) {
           >
             Donate
           </Link>
-          <Link
-            to="/login"
-            className="bg-primary text-on-primary font-button text-xs md:text-button px-sm md:px-md py-sm rounded-lg scale-95 active:scale-90 transition-transform"
-          >
-            Login
-          </Link>
+          {user ? (
+            <Link
+              to="/profile"
+              className="bg-primary text-on-primary font-button text-xs md:text-button px-sm md:px-md py-sm rounded-lg scale-95 active:scale-90 transition-transform"
+            >
+              Profile
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-primary text-on-primary font-button text-xs md:text-button px-sm md:px-md py-sm rounded-lg scale-95 active:scale-90 transition-transform"
+            >
+              Login
+            </Link>
+          )}
           <button
             className="md:hidden p-2 text-on-surface-variant"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -77,6 +88,11 @@ export default function Navbar({ active }) {
               {label}
             </Link>
           ))}
+          {user ? (
+            <Link to="/profile" onClick={() => setMenuOpen(false)} className="block px-gutter py-4 font-body-md text-body-md text-primary font-bold border-l-4 border-secondary">Profile</Link>
+          ) : (
+            <Link to="/login" onClick={() => setMenuOpen(false)} className="block px-gutter py-4 font-body-md text-body-md text-primary font-bold border-l-4 border-secondary">Login</Link>
+          )}
         </div>
       )}
     </nav>
