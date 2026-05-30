@@ -1,9 +1,6 @@
 import { Link } from 'react-router-dom'
 import SubscribeForm from './SubscribeForm'
-import facebookIcon from '../assets/facebook.svg'
-import instagramIcon from '../assets/instagram.svg'
-import twitterIcon from '../assets/twitter-x.svg'
-import whatsappIcon from '../assets/whatsapp.svg'
+import { facebook, instagram, twitter, whatsapp } from '../assets'
 
 export default function Footer() {
   return (
@@ -12,21 +9,24 @@ export default function Footer() {
         <div className="space-y-md">
           <div className="font-headline-sm text-headline-sm text-secondary-fixed font-bold">Contact Us</div>
           <p className="font-body-sm text-on-primary/80">
-            Empowering the Next Generation of Muslim Leaders through community, faith, and dedicated service.
+            Banex Plaza, 2nd Floor, Suite 5, 123 Main Street, Abuja, Nigeria.
           </p>
           <div className="flex gap-md">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-              <img src={facebookIcon} alt="Facebook" className="w-5 h-5" />
+              <img src={facebook} alt="Facebook" className="w-5 h-5" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-              <img src={instagramIcon} alt="Instagram" className="w-5 h-5" />
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+              <img src={instagram} alt="Instagram" className="w-5 h-5" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <img src={twitterIcon} alt="Twitter" className="w-5 h-5" />
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+              <img src={twitter} alt="Twitter" className="w-5 h-5" />
             </a>
-            <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer">
-              <img src={whatsappIcon} alt="WhatsApp" className="w-5 h-5" />
+            <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+              <img src={whatsapp} alt="WhatsApp" className="w-5 h-5" />
             </a>
+          </div>
+          <div>
+            <p>09065750161, 08105185369, 09041520412</p>
           </div>
         </div>
         <div>

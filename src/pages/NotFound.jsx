@@ -39,17 +39,17 @@ export default function NotFound() {
   return (
     <>
       <style>{styles}</style>
-      <main className="relative min-h-screen flex flex-col items-center justify-center px-4 md:px-gutter overflow-hidden bg-background text-on-background font-body-md selection:bg-secondary-container">
-      <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden">
+      <main className="relative flex flex-col items-center justify-center min-h-screen px-4 overflow-hidden md:px-gutter bg-background text-on-background font-body-md selection:bg-secondary-container">
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <img
           alt="Serene spiritual path illustration"
-          className="w-full h-full object-cover object-center opacity-30 md:opacity-20"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPowqeB3YHGJUApslmmYQELepponieDnbDnbNl1oeoMF3v0DQc1w91fi6fkZBBq5-i4dEIZOX16Zp8rzq63HiobuC1nr1s1iagqUd5ORvn1woH6zkn11d1GEwpNrInSO_tR82BuOLpPFQzC8vP5cKW8CnXU3y4vMYHvVsbUBchmb1VX_5fIiuuL1FalQvtbA396xJN2UVpHfyFsvO-bQk13E6F6_TYuseq_y_NBUumu7RmIGmJy3Mv3L84U0ORBY0SL4zaRfnPA5Y-"
+          className="object-cover object-center w-full h-full opacity-30 md:opacity-70"
+          src="../public/404bg.png"
         />
       </div>
-      <div className="absolute inset-0 geometric-pattern pointer-events-none opacity-20" />
-      <div className="absolute inset-0 hero-gradient pointer-events-none opacity-20" />
-      <div className="relative z-10 text-center w-full max-w-2xl animate-fade-in backdrop-blur-sm md:backdrop-blur-none bg-white/10 md:bg-transparent p-6 md:p-0 rounded-2xl">
+      <div className="absolute inset-0 pointer-events-none geometric-pattern opacity-20" />
+      <div className="absolute inset-0 pointer-events-none hero-gradient opacity-20" />
+      <div className="relative z-10 w-full max-w-2xl p-6 text-center animate-fade-in backdrop-blur-sm md:backdrop-blur-none bg-white/10 md:bg-transparent md:p-0 rounded-2xl">
         <div className="mb-sm md:mb-md">
           <span
             ref={floatingRef}
@@ -62,29 +62,29 @@ export default function NotFound() {
             404
           </span>
         </div>
-        <h1 className="font-headline-md text-3xl md:text-5xl lg:text-6xl text-primary mb-4 md:mb-sm leading-tight px-2">
+        <h1 className="px-2 mb-4 text-3xl leading-tight font-headline-md md:text-5xl lg:text-6xl text-primary md:mb-sm">
           Even the best paths have a detour.
         </h1>
-        <p className="font-body-lg text-base md:text-body-lg text-on-surface-variant mb-8 md:mb-lg  mx-auto px-4">
+        <p className="px-4 mx-auto mb-8 text-base font-body-lg md:text-body-lg text-on-surface-variant md:mb-lg">
           It looks like the page you are looking for has moved or no longer exists. Let us help you find your way back.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 md:gap-md justify-center items-center mb-xl px-4">
+        <div className="flex flex-col items-center justify-center gap-4 px-4 sm:flex-row md:gap-md mb-xl">
           <Link
             to="/"
-            className="w-full sm:w-auto px-10 py-4 bg-primary text-on-primary font-button text-button rounded-lg shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-2 active:scale-95"
+            className="flex items-center justify-center w-full gap-2 px-10 py-4 transition-all rounded-lg shadow-md sm:w-auto bg-primary text-on-primary font-button text-button hover:bg-primary-container active:scale-95"
           >
             <span className="material-symbols-outlined">home</span>
             Back to Home
           </Link>
           <Link
             to="/events"
-            className="w-full sm:w-auto px-10 py-4 border-2 border-primary text-primary font-button text-button rounded-lg hover:bg-primary/5 transition-all flex items-center justify-center gap-2 active:scale-95"
+            className="flex items-center justify-center w-full gap-2 px-10 py-4 transition-all border-2 rounded-lg sm:w-auto border-primary text-primary font-button text-button hover:bg-primary/5 active:scale-95"
           >
             <span className="material-symbols-outlined">event</span>
             View Events
           </Link>
         </div>
-        <div className="w-16 h-px bg-outline-variant/30 mx-auto" />
+        <div className="w-16 h-px mx-auto bg-outline-variant/30" />
       </div>
     </main>
     </>

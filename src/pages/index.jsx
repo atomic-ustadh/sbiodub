@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+// Testimonials data — displayed in the "Impact Stories" carousel section
 const testimonials = [
   {
     quote: 'Noor Youth provided me with more than just a place to hang out; it gave me a purpose. I found mentors who looked like me and friends who shared my values. It has completely transformed my outlook on my role in society.',
@@ -28,13 +29,15 @@ const testimonials = [
 ]
 
 export default function Platform() {
+  // Track which testimonial is currently shown in the carousel
   const [current, setCurrent] = useState(0)
   const t = testimonials[current]
 
   return (
     <main className="pt-18">
-      {/* Hero */}
+      {/* ===== Hero Section ===== */}
       <section className="relative min-h-150 flex items-center overflow-hidden">
+        {/* Background with animated pattern overlay */}
         <div className="absolute inset-0 z-0 bg-primary overflow-hidden">
           <div
             className="absolute inset-0 opacity-10"
@@ -48,6 +51,7 @@ export default function Platform() {
           <div className="absolute inset-0 bg-linear-to-b from-primary/60 to-primary" />
         </div>
         <div className="relative z-10 max-w-container-max mx-auto px-gutter grid lg:grid-cols-2 gap-xl items-center">
+          {/* Hero text */}
           <div className="text-left space-y-md">
             <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-primary">
               Empowering the{" "}
@@ -68,6 +72,7 @@ export default function Platform() {
               </button>
             </div>
           </div>
+          {/* Hero image with stat badge */}
           <div className="hidden lg:block relative">
             <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-700">
               <img
@@ -76,6 +81,7 @@ export default function Platform() {
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW1wZVJsltSdAHvUqqMXsfag_jEwiLzM4se6Nhzh8hEP7WkUy7HRWb1sxXp8yAXs3BEV9bayxyDW2xd2fN8P6mkp_d6dB8KZrTuiKLIxUU28DsCMkGslCc3OFjltqhR571QiuL6eYNtrdkucPvokkOB7erByTGWbpU4lbYI-8D12rVpvr7KS6qOzzKSbcSihqnm0nwkLbgCaxztITnJVkB1scKRt1dWw4DDCa5J72DkxnN4r_UHxtMH2luQt9xQBPXTEfnp2pFlMJp"
               />
             </div>
+            {/* Floating stat card */}
             <div className="absolute -bottom-md -left-md bg-secondary-fixed p-md rounded-xl shadow-xl">
               <div className="flex items-center gap-sm">
                 <span
@@ -96,15 +102,16 @@ export default function Platform() {
         </div>
       </section>
 
-      {/* Our Pillars */}
-      <section className="py-xl pattern-bg">
+      {/* ===== Core Pillars Section ===== */}
+      <section className="py-lg pattern-bg">
         <div className="max-w-container-max mx-auto px-gutter">
-          <div className="text-center mb-xl">
+          <div className="text-center mb-md">
             <h2 className="font-headline-md text-headline-md text-primary">
               Our Core Pillars
             </h2>
             <div className="w-24 h-1 bg-secondary mx-auto mt-base" />
           </div>
+          {/* Map over pillars array to render 3 cards */}
           <div className="grid md:grid-cols-3 gap-md">
             {[
               {
@@ -158,9 +165,10 @@ export default function Platform() {
         </div>
       </section>
 
-      {/* Upcoming Events */}
-      <section className="py-xl bg-surface-container-low">
+      {/* ===== Upcoming Events Section ===== */}
+      <section className="py-lg bg-surface-container-low">
         <div className="max-w-container-max mx-auto px-gutter">
+          {/* Section header with "View All" link */}
           <div className="flex justify-between items-end mb-xl">
             <div>
               <h2 className="font-headline-md text-headline-md text-primary">
@@ -175,6 +183,7 @@ export default function Platform() {
               <span className="material-symbols-outlined">arrow_forward</span>
             </span>
           </div>
+          {/* Map over events array to render 3 event cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-md">
             {[
               {
@@ -203,6 +212,7 @@ export default function Platform() {
                 key={title}
                 className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow group"
               >
+                {/* Event card image with tag overlay */}
                 <div className="h-48 overflow-hidden relative">
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -213,6 +223,7 @@ export default function Platform() {
                     {tag}
                   </div>
                 </div>
+                {/* Event card details */}
                 <div className="p-md space-y-sm">
                   <div className="flex items-center text-secondary text-sm gap-xs">
                     <span className="material-symbols-outlined text-sm">
@@ -223,7 +234,7 @@ export default function Platform() {
                   <h4 className="font-headline-sm text-headline-sm text-primary">
                     {title}
                   </h4>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  <p className="font-body-sm text-sm text-on-surface-variant line-clamp-2">
                     {desc}
                   </p>
                   <button className="w-full mt-md py-sm border-2 border-primary text-primary font-button rounded-lg hover:bg-primary hover:text-white transition-colors">
@@ -236,8 +247,9 @@ export default function Platform() {
         </div>
       </section>
 
-      {/* Impact Stories */}
+      {/* ===== Impact Stories (Testimonials Carousel) Section ===== */}
       <section className="py-xl bg-white relative overflow-hidden">
+        {/* Decorative blurred background circles */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary-fixed/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-fixed/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
         <div className="max-w-container-max mx-auto px-gutter relative z-10">
@@ -250,6 +262,7 @@ export default function Platform() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-lg items-center">
+            {/* Testimonial author image */}
             <div className="relative">
               <div className="aspect-4/5 rounded-3xl overflow-hidden shadow-2xl">
                 <img
@@ -259,13 +272,14 @@ export default function Platform() {
                 />
               </div>
             </div>
-            <div className="space-y-md">
+            {/* Testimonial quote + navigation controls */}
+            <div className="space-y-sm">
               <span className="material-symbols-outlined text-secondary-fixed text-6xl opacity-50">
                 format_quote
               </span>
               <blockquote
                 key={current}
-                className="font-headline-sm text-headline-sm text-primary italic leading-relaxed animate-[fadeIn_0.3s_ease-in-out]"
+                className="font-headline-sm text-headline-xs md:text-headline-sm text-primary italic leading-relaxed animate-[fadeIn_0.3s_ease-in-out]"
               >
                 &ldquo;{t.quote}&rdquo;
               </blockquote>
@@ -273,6 +287,7 @@ export default function Platform() {
                 <p className="font-bold text-primary">{t.name}</p>
                 <p className="text-on-surface-variant">{t.title}</p>
               </div>
+              {/* Prev / Next buttons */}
               <div className="flex gap-base items-center">
                 <button
                   onClick={() => setCurrent((current - 1 + testimonials.length) % testimonials.length)}
@@ -295,18 +310,10 @@ export default function Platform() {
         </div>
       </section>
 
-      {/* Get Involved */}
+      {/* ===== Get Involved (CTA) Section ===== */}
       <section className="py-xl">
         <div className="max-w-container-max mx-auto px-gutter">
           <div className="bg-primary-container rounded-4xl p-lg md:p-xl flex flex-col md:flex-row items-center gap-xl relative overflow-hidden">
-            <div
-              className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none"
-              style={{
-                backgroundImage:
-                  "repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)",
-                backgroundSize: "20px 20px",
-              }}
-            />
             <div className="relative z-10 md:w-3/5 text-left space-y-md">
               <h2 className="font-display-lg text-on-primary">
                 Make an Impact Today
@@ -325,6 +332,7 @@ export default function Platform() {
                 </button>
               </div>
             </div>
+            {/* Decorative hexagon icons */}
             <div className="md:w-2/5 flex justify-center items-center">
               <div className="grid grid-cols-2 gap-sm">
                 <div
