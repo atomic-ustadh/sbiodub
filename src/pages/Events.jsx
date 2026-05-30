@@ -92,18 +92,18 @@ export default function Events() {
   return (
     <main className="pt-16">
       {/* Hero */}
-      <header className="relative pt-32 pb-16 px-gutter bg-primary-container overflow-hidden">
+      <header className="relative pt-32 pb-16 overflow-hidden px-gutter bg-primary-container">
         <div className="absolute inset-0 geometric-pattern" />
-        <div className="relative z-10 max-w-container-max mx-auto text-center">
-          <h1 className="font-display-lg text-display-lg text-on-primary mb-4">
+        <div className="relative z-10 mx-auto text-center max-w-container-max">
+          <h1 className="mb-4 font-display-lg text-display-lg text-on-primary">
             Upcoming Events & Workshops
           </h1>
-          <p className="font-body-lg text-body-lg text-on-primary-container/90 max-w-2xl mx-auto mb-lg">
+          <p className="max-w-2xl mx-auto font-body-lg text-body-lg text-on-primary-container/90 mb-lg">
             Discover opportunities to learn, connect, and grow. Join our vibrant
             community in activities designed for the next generation.
           </p>
-          <div className="flex flex-col md:flex-row items-center justify-between gap-md bg-surface/10 backdrop-blur-md p-md rounded-xl border border-white/10">
-            <div className="hidden md:flex flex-wrap items-center gap-sm">
+          <div className="flex flex-col items-center justify-between border md:flex-row gap-md bg-surface/10 backdrop-blur-md p-md rounded-xl border-white/10">
+            <div className="flex-wrap items-center hidden md:flex gap-sm">
               {categories.map((cat) => (
                 <button
                   key={cat}
@@ -121,7 +121,7 @@ export default function Events() {
             <select
               value={activeCategory}
               onChange={(e) => setActiveCategory(e.target.value)}
-              className="md:hidden w-full bg-surface/20 text-on-primary border border-white/20 rounded-lg px-4 py-2 font-button text-button outline-none focus:ring-2 focus:ring-secondary"
+              className="w-full px-4 py-2 border rounded-lg outline-none md:hidden bg-surface/20 text-on-primary border-white/20 font-button text-button focus:ring-2 focus:ring-secondary"
             >
               {categories.map((cat) => (
                 <option
@@ -133,7 +133,7 @@ export default function Events() {
                 </option>
               ))}
             </select>
-            <div className="flex items-center bg-white/20 rounded-lg p-1">
+            <div className="flex items-center p-1 rounded-lg bg-white/20">
               <button
                 onClick={() => setView("grid")}
                 className={
@@ -174,7 +174,7 @@ export default function Events() {
       {/* Grid View */}
       {view === "grid" && (
         <main
-          className="py-xl px-gutter max-w-container-max mx-auto"
+          className="mx-auto py-xl px-gutter max-w-container-max"
           id="event-grid"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
@@ -185,7 +185,7 @@ export default function Events() {
               >
                 <div className="relative h-56 overflow-hidden">
                   <img
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
                     alt={event.title}
                     src={event.img}
                   />
@@ -196,7 +196,7 @@ export default function Events() {
                   </div>
                 </div>
                 <div className="p-md">
-                  <div className="flex items-center gap-2 text-primary font-label-md text-label-md mb-2">
+                  <div className="flex items-center gap-2 mb-2 text-primary font-label-md text-label-md">
                     <span className="material-symbols-outlined text-[18px]">
                       calendar_today
                     </span>
@@ -204,7 +204,7 @@ export default function Events() {
                     <span className="mx-1 text-outline">&bull;</span>
                     <span>{event.time}</span>
                   </div>
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface mb-3">
+                  <h3 className="mb-3 font-headline-sm text-headline-sm text-on-surface">
                     {event.title}
                   </h3>
                   <p className="font-body-sm text-body-sm text-on-surface-variant mb-md">
@@ -216,7 +216,7 @@ export default function Events() {
                     </span>
                     <span>{event.location}</span>
                   </div>
-                  <button className="w-full font-button text-button bg-primary text-on-primary py-3 rounded-lg hover:bg-primary-container transition-all">
+                  <button className="w-full py-3 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
                     Register Now
                   </button>
                 </div>
@@ -228,12 +228,12 @@ export default function Events() {
 
       {/* Timeline View */}
       {view === "calendar" && (
-        <div className="py-xl px-gutter max-w-container-max mx-auto">
+        <div className="mx-auto py-xl px-gutter max-w-container-max">
           <h2 className="font-headline-md text-headline-md text-on-surface mb-xl">
             Event Timeline
           </h2>
           {filtered.length === 0 ? (
-            <p className="text-on-surface-variant text-center py-xl">
+            <p className="text-center text-on-surface-variant py-xl">
               No events match this category.
             </p>
           ) : (
@@ -245,7 +245,7 @@ export default function Events() {
                     <div
                       className={`absolute left-3 top-6 w-3.5 h-3.5 rounded-full border-4 border-surface ${dotColors[event.category]} ring-2 ring-outline-variant`}
                     />
-                    <div className="bg-white rounded-xl border border-outline-variant p-md shadow-sm hover:shadow-lg transition-all duration-300">
+                    <div className="transition-all duration-300 bg-white border shadow-sm rounded-xl border-outline-variant p-md hover:shadow-lg">
                       <div className="flex flex-col md:flex-row gap-md">
                         <div className="md:w-1/4">
                           <div
@@ -259,7 +259,7 @@ export default function Events() {
                             </span>
                             <span>{event.date}</span>
                           </div>
-                          <div className="flex items-center gap-2 text-primary font-label-md text-label-md mt-1">
+                          <div className="flex items-center gap-2 mt-1 text-primary font-label-md text-label-md">
                             <span className="material-symbols-outlined text-[18px]">
                               schedule
                             </span>
@@ -267,19 +267,19 @@ export default function Events() {
                           </div>
                         </div>
                         <div className="md:w-3/4">
-                          <h3 className="font-headline-sm text-headline-sm text-on-surface mb-2">
+                          <h3 className="mb-2 font-headline-sm text-headline-sm text-on-surface">
                             {event.title}
                           </h3>
-                          <p className="font-body-sm text-body-sm text-on-surface-variant mb-3">
+                          <p className="mb-3 font-body-sm text-body-sm text-on-surface-variant">
                             {event.desc}
                           </p>
-                          <div className="flex items-center gap-2 text-on-surface-variant font-body-sm mb-4">
+                          <div className="flex items-center gap-2 mb-4 text-on-surface-variant font-body-sm">
                             <span className="material-symbols-outlined text-[18px]">
                               location_on
                             </span>
                             <span>{event.location}</span>
                           </div>
-                          <button className="font-button text-button bg-primary text-on-primary py-2 px-6 rounded-lg hover:bg-primary-container transition-all">
+                          <button className="px-6 py-2 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
                             Register Now
                           </button>
                         </div>
@@ -295,11 +295,11 @@ export default function Events() {
 
       {/* CTA */}
       <section className="bg-surface-container py-xl">
-        <div className="max-w-container-max mx-auto px-gutter text-center">
+        <div className="mx-auto text-center max-w-container-max px-gutter">
           <h2 className="font-headline-md text-headline-md text-on-surface mb-md">
             Don't miss out on our community updates.
           </h2>
-          <div className="max-w-128 mx-auto">
+          <div className="mx-auto max-w-128">
             <SubscribeForm />
           </div>
         </div>

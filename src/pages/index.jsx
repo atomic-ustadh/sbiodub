@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 // Testimonials data — displayed in the "Impact Stories" carousel section
 const testimonials = [
@@ -36,9 +37,9 @@ export default function Platform() {
   return (
     <main className="pt-18">
       {/* ===== Hero Section ===== */}
-      <section className="relative min-h-150 flex items-center overflow-hidden">
+      <section className="relative flex items-center overflow-hidden min-h-150">
         {/* Background with animated pattern overlay */}
-        <div className="absolute inset-0 z-0 bg-primary overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden bg-primary">
           <div
             className="absolute inset-0 opacity-10"
             style={{
@@ -50,7 +51,7 @@ export default function Platform() {
           />
           <div className="absolute inset-0 bg-linear-to-b from-primary/60 to-primary" />
         </div>
-        <div className="relative z-10 max-w-container-max mx-auto px-gutter grid lg:grid-cols-2 gap-xl items-center">
+        <div className="relative z-10 grid items-center mx-auto max-w-container-max px-gutter lg:grid-cols-2 gap-xl">
           {/* Hero text */}
           <div className="text-left space-y-md">
             <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-primary">
@@ -73,19 +74,19 @@ export default function Platform() {
             </div>
           </div>
           {/* Hero image with stat badge */}
-          <div className="hidden lg:block relative">
-            <div className="aspect-square rounded-2xl overflow-hidden shadow-2xl rotate-3 transform hover:rotate-0 transition-transform duration-700">
+          <div className="relative hidden lg:block">
+            <div className="overflow-hidden transition-transform duration-700 transform shadow-2xl aspect-square rounded-2xl rotate-3 hover:rotate-0">
               <img
-                className="w-full h-full object-cover"
+                className="object-cover w-full h-full"
                 alt="A diverse group of energetic young adults collaborating"
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW1wZVJsltSdAHvUqqMXsfag_jEwiLzM4se6Nhzh8hEP7WkUy7HRWb1sxXp8yAXs3BEV9bayxyDW2xd2fN8P6mkp_d6dB8KZrTuiKLIxUU28DsCMkGslCc3OFjltqhR571QiuL6eYNtrdkucPvokkOB7erByTGWbpU4lbYI-8D12rVpvr7KS6qOzzKSbcSihqnm0nwkLbgCaxztITnJVkB1scKRt1dWw4DDCa5J72DkxnN4r_UHxtMH2luQt9xQBPXTEfnp2pFlMJp"
               />
             </div>
             {/* Floating stat card */}
-            <div className="absolute -bottom-md -left-md bg-secondary-fixed p-md rounded-xl shadow-xl">
+            <div className="absolute shadow-xl -bottom-md -left-md bg-secondary-fixed p-md rounded-xl">
               <div className="flex items-center gap-sm">
                 <span
-                  className="material-symbols-outlined text-primary text-4xl"
+                  className="text-4xl material-symbols-outlined text-primary"
                   style={{ fontVariationSettings: '"FILL" 1' }}
                 >
                   star
@@ -104,12 +105,12 @@ export default function Platform() {
 
       {/* ===== Core Pillars Section ===== */}
       <section className="py-lg pattern-bg">
-        <div className="max-w-container-max mx-auto px-gutter">
+        <div className="mx-auto max-w-container-max px-gutter">
           <div className="text-center mb-md">
             <h2 className="font-headline-md text-headline-md text-primary">
               Our Core Pillars
             </h2>
-            <div className="w-24 h-1 bg-secondary mx-auto mt-base" />
+            <div className="w-24 h-1 mx-auto bg-secondary mt-base" />
           </div>
           {/* Map over pillars array to render 3 cards */}
           <div className="grid md:grid-cols-3 gap-md">
@@ -141,7 +142,7 @@ export default function Platform() {
               }) => (
                 <div
                   key={title}
-                  className="backdrop-blur-xl bg-white/80 border border-slate-100/50 p-md rounded-xl text-center group hover:border-primary transition-all duration-500"
+                  className="text-center transition-all duration-500 border backdrop-blur-xl bg-white/80 border-slate-100/50 p-md rounded-xl group hover:border-primary"
                 >
                   <div
                     className={`w-20 h-20 ${bg} rounded-full flex items-center justify-center mx-auto mb-md group-hover:scale-110 transition-transform`}
@@ -167,9 +168,9 @@ export default function Platform() {
 
       {/* ===== Upcoming Events Section ===== */}
       <section className="py-lg bg-surface-container-low">
-        <div className="max-w-container-max mx-auto px-gutter">
+        <div className="mx-auto max-w-container-max px-gutter">
           {/* Section header with "View All" link */}
-          <div className="flex justify-between items-end mb-xl">
+          <div className="flex items-end justify-between mb-xl">
             <div>
               <h2 className="font-headline-md text-headline-md text-primary">
                 Upcoming Events
@@ -178,10 +179,13 @@ export default function Platform() {
                 Don&rsquo;t miss out on our latest gatherings.
               </p>
             </div>
-            <span className="text-primary font-bold hover:underline flex items-center gap-xs cursor-pointer">
+            <Link
+              to="/events"
+              className="flex items-center font-bold text-primary hover:underline gap-xs"
+            >
               View All{" "}
               <span className="material-symbols-outlined">arrow_forward</span>
-            </span>
+            </Link>
           </div>
           {/* Map over events array to render 3 event cards */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-md">
@@ -210,23 +214,23 @@ export default function Platform() {
             ].map(({ img, tag, date, title, desc }) => (
               <div
                 key={title}
-                className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow group"
+                className="overflow-hidden transition-shadow bg-white shadow-sm rounded-xl hover:shadow-xl group"
               >
                 {/* Event card image with tag overlay */}
-                <div className="h-48 overflow-hidden relative">
+                <div className="relative h-48 overflow-hidden">
                   <img
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                     alt={title}
                     src={img}
                   />
-                  <div className="absolute top-md left-md bg-secondary-container text-on-secondary-container px-sm py-xs rounded-full font-label-md text-label-md">
+                  <div className="absolute rounded-full top-md left-md bg-secondary-container text-on-secondary-container px-sm py-xs font-label-md text-label-md">
                     {tag}
                   </div>
                 </div>
                 {/* Event card details */}
                 <div className="p-md space-y-sm">
-                  <div className="flex items-center text-secondary text-sm gap-xs">
-                    <span className="material-symbols-outlined text-sm">
+                  <div className="flex items-center text-sm text-secondary gap-xs">
+                    <span className="text-sm material-symbols-outlined">
                       calendar_today
                     </span>
                     <span>{date}</span>
@@ -234,10 +238,10 @@ export default function Platform() {
                   <h4 className="font-headline-sm text-headline-sm text-primary">
                     {title}
                   </h4>
-                  <p className="font-body-sm text-sm text-on-surface-variant line-clamp-2">
+                  <p className="text-sm font-body-sm text-on-surface-variant line-clamp-2">
                     {desc}
                   </p>
-                  <button className="w-full mt-md py-sm border-2 border-primary text-primary font-button rounded-lg hover:bg-primary hover:text-white transition-colors">
+                  <button className="w-full transition-colors border-2 rounded-lg mt-md py-sm border-primary text-primary font-button hover:bg-primary hover:text-white">
                     Register Now
                   </button>
                 </div>
@@ -248,11 +252,11 @@ export default function Platform() {
       </section>
 
       {/* ===== Impact Stories (Testimonials Carousel) Section ===== */}
-      <section className="py-xl bg-white relative overflow-hidden">
+      <section className="relative overflow-hidden bg-white py-xl">
         {/* Decorative blurred background circles */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-fixed/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary-fixed/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-        <div className="max-w-container-max mx-auto px-gutter relative z-10">
+        <div className="absolute top-0 right-0 w-64 h-64 translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-fixed/10 blur-3xl" />
+        <div className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 rounded-full w-96 h-96 bg-secondary-fixed/10 blur-3xl" />
+        <div className="relative z-10 mx-auto max-w-container-max px-gutter">
           <div className="text-center mb-xl">
             <h2 className="font-headline-md text-headline-md text-primary">
               Voices of Our Youth
@@ -261,12 +265,12 @@ export default function Platform() {
               Real stories from the heart of our community.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-lg items-center">
+          <div className="grid items-center md:grid-cols-2 gap-lg">
             {/* Testimonial author image */}
             <div className="relative">
-              <div className="aspect-4/5 rounded-3xl overflow-hidden shadow-2xl">
+              <div className="overflow-hidden shadow-2xl aspect-4/5 rounded-3xl">
                 <img
-                  className="w-full h-full object-cover"
+                  className="object-cover w-full h-full"
                   alt={t.name}
                   src={t.image}
                 />
@@ -274,7 +278,7 @@ export default function Platform() {
             </div>
             {/* Testimonial quote + navigation controls */}
             <div className="space-y-sm">
-              <span className="material-symbols-outlined text-secondary-fixed text-6xl opacity-50">
+              <span className="text-6xl opacity-50 material-symbols-outlined text-secondary-fixed">
                 format_quote
               </span>
               <blockquote
@@ -288,10 +292,10 @@ export default function Platform() {
                 <p className="text-on-surface-variant">{t.title}</p>
               </div>
               {/* Prev / Next buttons */}
-              <div className="flex gap-base items-center">
+              <div className="flex items-center gap-base">
                 <button
                   onClick={() => setCurrent((current - 1 + testimonials.length) % testimonials.length)}
-                  className="w-10 h-10 rounded-full border border-outline flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+                  className="flex items-center justify-center w-10 h-10 transition-colors border rounded-full border-outline hover:bg-primary hover:text-white"
                 >
                   <span className="material-symbols-outlined">chevron_left</span>
                 </button>
@@ -300,7 +304,7 @@ export default function Platform() {
                 </span>
                 <button
                   onClick={() => setCurrent((current + 1) % testimonials.length)}
-                  className="w-10 h-10 rounded-full border border-outline flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+                  className="flex items-center justify-center w-10 h-10 transition-colors border rounded-full border-outline hover:bg-primary hover:text-white"
                 >
                   <span className="material-symbols-outlined">chevron_right</span>
                 </button>
@@ -312,9 +316,9 @@ export default function Platform() {
 
       {/* ===== Get Involved (CTA) Section ===== */}
       <section className="py-xl">
-        <div className="max-w-container-max mx-auto px-gutter">
-          <div className="bg-primary-container rounded-4xl p-lg md:p-xl flex flex-col md:flex-row items-center gap-xl relative overflow-hidden">
-            <div className="relative z-10 md:w-3/5 text-left space-y-md">
+        <div className="mx-auto max-w-container-max px-gutter">
+          <div className="relative flex flex-col items-center overflow-hidden bg-primary-container rounded-4xl p-lg md:p-xl md:flex-row gap-xl">
+            <div className="relative z-10 text-left md:w-3/5 space-y-md">
               <h2 className="font-display-lg text-on-primary">
                 Make an Impact Today
               </h2>
@@ -324,36 +328,36 @@ export default function Platform() {
                 next generation of leaders.
               </p>
               <div className="flex flex-wrap gap-md pt-base">
-                <button className="bg-secondary-fixed text-on-secondary-fixed font-button text-button px-lg py-md rounded-xl hover:scale-105 transition-transform shadow-lg">
+                <button className="transition-transform shadow-lg bg-secondary-fixed text-on-secondary-fixed font-button text-button px-lg py-md rounded-xl hover:scale-105">
                   Become a Volunteer
                 </button>
-                <button className="bg-surface/10 text-on-primary font-button text-button px-lg py-md rounded-xl backdrop-blur-md border border-white/20 hover:bg-surface/20 transition-all">
+                <button className="transition-all border bg-surface/10 text-on-primary font-button text-button px-lg py-md rounded-xl backdrop-blur-md border-white/20 hover:bg-surface/20">
                   Make a Donation
                 </button>
               </div>
             </div>
             {/* Decorative hexagon icons */}
-            <div className="md:w-2/5 flex justify-center items-center">
+            <div className="flex items-center justify-center md:w-2/5">
               <div className="grid grid-cols-2 gap-sm">
                 <div
-                  className="w-32 h-32 bg-primary-fixed rounded-2xl shadow-lg flex items-center justify-center"
+                  className="flex items-center justify-center w-32 h-32 shadow-lg bg-primary-fixed rounded-2xl"
                   style={{
                     clipPath:
                       "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                   }}
                 >
-                  <span className="material-symbols-outlined text-primary text-4xl">
+                  <span className="text-4xl material-symbols-outlined text-primary">
                     favorite
                   </span>
                 </div>
                 <div
-                  className="w-32 h-32 bg-secondary-fixed-dim rounded-2xl shadow-lg flex items-center justify-center translate-y-md"
+                  className="flex items-center justify-center w-32 h-32 shadow-lg bg-secondary-fixed-dim rounded-2xl translate-y-md"
                   style={{
                     clipPath:
                       "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                   }}
                 >
-                  <span className="material-symbols-outlined text-on-secondary-fixed text-4xl">
+                  <span className="text-4xl material-symbols-outlined text-on-secondary-fixed">
                     handshake
                   </span>
                 </div>

@@ -38,22 +38,22 @@ export default function Join() {
           opacity: 0.05,
         }}
       />
-      <section className="max-w-container-max mx-auto px-gutter py-xl">
-        <div className="mb-xl text-center md:text-left">
+      <section className="mx-auto max-w-container-max px-gutter py-xl">
+        <div className="text-center mb-xl md:text-left">
           <h1 className="font-display-lg text-display-lg text-primary mb-md">
             Become a Part of Noor Youth
           </h1>
-          <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+          <p className="max-w-2xl font-body-lg text-body-lg text-on-surface-variant">
             Shape the future of our community through active engagement,
             spiritual development, and collaborative service.
           </p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-xl items-start">
+        <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-xl">
           {/* Left: Benefits */}
           <div className="space-y-md">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
-              <div className="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 hover:shadow-md transition-shadow group">
-                <div className="w-12 h-12 rounded-lg bg-primary-fixed flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+              <div className="transition-shadow border shadow-sm bg-surface-container-lowest p-md rounded-xl border-outline-variant/30 hover:shadow-md group">
+                <div className="flex items-center justify-center w-12 h-12 transition-transform rounded-lg bg-primary-fixed mb-md group-hover:scale-110">
                   <span className="material-symbols-outlined text-primary">
                     groups
                   </span>
@@ -66,8 +66,8 @@ export default function Join() {
                   committed to your personal growth and career success.
                 </p>
               </div>
-              <div className="bg-surface-container-lowest p-md rounded-xl shadow-sm border border-outline-variant/30 hover:shadow-md transition-shadow group">
-                <div className="w-12 h-12 rounded-lg bg-secondary-fixed flex items-center justify-center mb-md group-hover:scale-110 transition-transform">
+              <div className="transition-shadow border shadow-sm bg-surface-container-lowest p-md rounded-xl border-outline-variant/30 hover:shadow-md group">
+                <div className="flex items-center justify-center w-12 h-12 transition-transform rounded-lg bg-secondary-fixed mb-md group-hover:scale-110">
                   <span className="material-symbols-outlined text-secondary">
                     hub
                   </span>
@@ -81,9 +81,9 @@ export default function Join() {
                 </p>
               </div>
             </div>
-            <div className="bg-primary p-lg rounded-xl text-on-primary relative overflow-hidden shadow-lg">
+            <div className="relative overflow-hidden shadow-lg bg-primary p-lg rounded-xl text-on-primary">
               <div className="relative z-10">
-                <div className="w-12 h-12 rounded-lg bg-primary-container flex items-center justify-center mb-md">
+                <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-primary-container mb-md">
                   <span className="material-symbols-outlined text-on-primary-container">
                     volunteer_activism
                   </span>
@@ -96,26 +96,13 @@ export default function Join() {
                   a spirit of giving back to society.
                 </p>
               </div>
-              <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-primary-container opacity-20" />
-              <div className="absolute right-10 top-5 w-24 h-24 border-4 border-primary-fixed/20 rounded-full" />
-            </div>
-            <div className="relative h-75 rounded-xl overflow-hidden shadow-md">
-              <img
-                className="w-full h-full object-cover"
-                alt="Youth community"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMq-2GnpirD7vA11pTV8LokP4V6dKfmm39tm83TCf76qg3cQMDRx5WtVjF7IJEqnc1fRX6bqNiavHqaS5MvkS0LZQqTxetPzLR9YneFn9k0BwiJY3JmYdBw5Zkc3_jxNM9hCOOoXWX8mRKbB8OPXgkNUFW4IrDjzXjKYeBGoBxEh_rttMhnXqhVXNRlkrvp_LpjS0Jr3_cu2i35fYBWqhSSv79DBEzhvU87igYwuguD6TBKrG63H1WDMOBxW8wc9Aka3YS61DfJQSP"
-              />
-              <div className="absolute inset-0 bg-linear-to-t from-primary/80 to-transparent flex items-end p-lg">
-                <p className="font-body-lg text-body-lg text-white font-semibold italic">
-                  &ldquo;Joining Noor Youth was the best decision for my
-                  spiritual and professional journey.&rdquo;
-                </p>
-              </div>
+              <div className="absolute w-48 h-48 rounded-full -right-10 -bottom-10 bg-primary-container opacity-20" />
+              <div className="absolute w-24 h-24 border-4 rounded-full right-10 top-5 border-primary-fixed/20" />
             </div>
           </div>
 
           {/* Right: Multi-step Form */}
-          <div className="backdrop-blur-xl bg-white/70 border border-slate-100/50 px-sm md:px-lg py-lg rounded-xl shadow-lg">
+          <div className="border shadow-lg backdrop-blur-xl bg-white/70 border-slate-100/50 px-sm md:px-lg py-lg rounded-xl">
             <div className="mb-lg">
               <div className="flex items-center gap-xs mb-sm">
                 {[1, 2, 3].map((i) => (
@@ -142,7 +129,7 @@ export default function Join() {
                         Full Name
                       </label>
                       <input
-                        className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary outline-none transition-all"
+                        className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary"
                         placeholder="Enter your name"
                         type="text"
                       />
@@ -152,7 +139,7 @@ export default function Join() {
                         Email Address
                       </label>
                       <input
-                        className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary outline-none transition-all"
+                        className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary"
                         placeholder="name@example.com"
                         type="email"
                       />
@@ -162,7 +149,7 @@ export default function Join() {
                     <label className="font-label-md text-label-md text-on-surface-variant">
                       Interest Area
                     </label>
-                    <select className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary outline-none transition-all">
+                    <select className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary">
                       <option>Community Service</option>
                       <option>Educational Programs</option>
                       <option>Spiritual Growth</option>
@@ -181,10 +168,10 @@ export default function Join() {
                     {["Member", "Volunteer"].map((role) => (
                       <label
                         key={role}
-                        className="flex items-start p-md border border-outline-variant rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group"
+                        className="flex items-start transition-colors border cursor-pointer p-md border-outline-variant rounded-xl hover:bg-surface-container-low group"
                       >
                         <input
-                          className="mt-1 text-primary focus:ring-primary h-4 w-4"
+                          className="w-4 h-4 mt-1 text-primary focus:ring-primary"
                           name="path"
                           type="radio"
                         />
@@ -205,10 +192,10 @@ export default function Join() {
               )}
 
               {step === 3 && (
-                <div className="transition-all duration-400 text-center py-lg">
-                  <div className="w-20 h-20 bg-primary-fixed rounded-full flex items-center justify-center mx-auto mb-md">
+                <div className="text-center transition-all duration-400 py-lg">
+                  <div className="flex items-center justify-center w-20 h-20 mx-auto rounded-full bg-primary-fixed mb-md">
                     <span
-                      className="material-symbols-outlined text-primary text-4xl"
+                      className="text-4xl material-symbols-outlined text-primary"
                       style={{ fontVariationSettings: '"FILL" 1' }}
                     >
                       check_circle
@@ -224,7 +211,7 @@ export default function Join() {
                 </div>
               )}
 
-              <div className="pt-lg flex items-center justify-between">
+              <div className="flex items-center justify-between pt-lg">
                 <button
                   type="button"
                   onClick={prev}
@@ -239,7 +226,7 @@ export default function Join() {
                 <button
                   type="button"
                   onClick={next}
-                  className="font-button text-button bg-primary text-on-primary px-md md:px-xl py-2 rounded-full hover:shadow-lg transition-all flex items-center"
+                  className="flex items-center py-2 transition-all rounded-full font-button text-button bg-primary text-on-primary px-md md:px-xl hover:shadow-lg"
                 >
                   {step < 3 ? (
                     <>
