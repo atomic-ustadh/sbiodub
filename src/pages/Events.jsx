@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
 
@@ -100,6 +100,10 @@ export default function Events() {
   const [rsvpPhone, setRsvpPhone] = useState(user?.phone || '');
   const [rsvpMessage, setRsvpMessage] = useState('');
 
+  useEffect(() => {
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   const openRsvp = (event) => {
     if (!user) return alert('Please log in to register for events.')
     setRsvpEvent(event)
@@ -107,6 +111,12 @@ export default function Events() {
     setRsvpEmail(user.email || '')
     setRsvpPhone(user.phone || '')
     setRsvpMessage('')
+    document.body.style.overflow = 'hidden'
+  }
+
+  const closeRsvp = () => {
+    setRsvpEvent(null)
+    document.body.style.overflow = ''
   }
 
   const handleRsvpSubmit = (e) => {
@@ -121,7 +131,7 @@ export default function Events() {
       email: rsvpEmail,
       phone: rsvpPhone,
     })
-    setRsvpEvent(null)
+    closeRsvp()
     setRsvpMessage('You are registered! Check your profile for details.')
     setTimeout(() => setRsvpMessage(''), 3000)
   }
@@ -351,28 +361,28 @@ export default function Events() {
 
       {/* RSVP Modal */}
       {rsvpEvent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-gutter" onClick={() => setRsvpEvent(null)}>
-          <div className="bg-surface-container-lowest rounded-xl p-lg max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-gutter" onClick={closeRsvp}>
+          <div className="bg-surface-container-lowest rounded-xl p-lg max-h-[90vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-md">
               <h2 className="font-headline-md text-headline-md text-primary">Register for Event</h2>
-              <button onClick={() => setRsvpEvent(null)} className="text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">close</span></button>
+              <button onClick={closeRsvp} className="text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">close</span></button>
             </div>
             <p className="font-headline-sm text-headline-sm text-primary mb-sm">{rsvpEvent.title}</p>
             <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg">{rsvpEvent.date} &middot; {rsvpEvent.time} &middot; {rsvpEvent.location}</p>
             <form onSubmit={handleRsvpSubmit} className="space-y-md">
               <div>
-                <label className="font-label-md text-label-md text-on-surface-variant block mb-sm">Full Name</label>
-                <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} className="w-full px-4 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
+                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Full Name</label>
+                <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
               </div>
               <div>
-                <label className="font-label-md text-label-md text-on-surface-variant block mb-sm">Email</label>
-                <input type="email" value={rsvpEmail} onChange={(e) => setRsvpEmail(e.target.value)} className="w-full px-4 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
+                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Email</label>
+                <input type="email" value={rsvpEmail} onChange={(e) => setRsvpEmail(e.target.value)} className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
               </div>
               <div>
-                <label className="font-label-md text-label-md text-on-surface-variant block mb-sm">Phone</label>
-                <input type="tel" value={rsvpPhone} onChange={(e) => setRsvpPhone(e.target.value)} className="w-full px-4 py-3 border border-outline-variant rounded-lg bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" />
+                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Phone</label>
+                <input type="tel" value={rsvpPhone} onChange={(e) => setRsvpPhone(e.target.value)} className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" />
               </div>
-              <button type="submit" className="w-full py-3 rounded-lg bg-primary text-on-primary font-button text-button hover:opacity-90 transition-all">Confirm Registration</button>
+              <button type="submit" className="w-full py-3 transition-all rounded-lg bg-primary text-on-primary font-button text-button hover:opacity-90">Confirm Registration</button>
             </form>
           </div>
         </div>
