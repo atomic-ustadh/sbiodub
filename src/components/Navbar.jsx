@@ -38,9 +38,12 @@ export default function Navbar({ active }) {
           ))}
         </div>
         <div className="flex items-center gap-sm">
-          <button className="hidden md:block font-button text-button text-primary px-md py-sm hover:text-secondary-fixed-dim transition-all duration-300">
+          <Link
+            to="/donate"
+            className="hidden md:block font-button text-button text-primary px-md py-sm hover:text-secondary-fixed-dim transition-all duration-300"
+          >
             Donate
-          </button>
+          </Link>
           <Link
             to="/login"
             className="bg-primary text-on-primary font-button text-xs md:text-button px-sm md:px-md py-sm rounded-lg scale-95 active:scale-90 transition-transform"

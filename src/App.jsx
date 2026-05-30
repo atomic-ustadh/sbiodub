@@ -8,12 +8,15 @@ import Events from './pages/Events'
 import Join from './pages/Join'
 import Resources from './pages/Resources'
 import BlogPost from './pages/BlogPost'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import TermsOfService from './pages/TermsOfService'
+import Donate from './pages/Donate'
 import NotFound from './pages/NotFound'
 
 export default function App() {
   const location = useLocation()
   const isAuthPage = location.pathname === '/login'
-  const isNotFound = !['/', '/about', '/login', '/events', '/join', '/resources'].includes(location.pathname) && !location.pathname.startsWith('/resources/')
+  const isNotFound = !['/', '/about', '/login', '/events', '/join', '/resources', '/privacy', '/terms', '/donate'].includes(location.pathname) && !location.pathname.startsWith('/resources/')
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -25,6 +28,9 @@ export default function App() {
         <Route path="/join" element={<><Navbar active="membership" /><Join /></>} />
         <Route path="/resources" element={<><Navbar active="resources" /><Resources /></>} />
         <Route path="/resources/:slug" element={<><Navbar /><BlogPost /></>} />
+        <Route path="/privacy" element={<><Navbar /><PrivacyPolicy /></>} />
+        <Route path="/terms" element={<><Navbar /><TermsOfService /></>} />
+        <Route path="/donate" element={<><Navbar /><Donate /></>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!isAuthPage && !isNotFound && <Footer />}

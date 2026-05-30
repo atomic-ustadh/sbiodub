@@ -4,10 +4,10 @@ import { facebook, instagram, twitter, whatsapp } from '../assets'
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-on-primary mt-auto">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-lg px-gutter py-xl max-w-container-max mx-auto">
+    <footer className="mt-auto bg-primary text-on-primary">
+      <div className="grid grid-cols-1 mx-auto md:grid-cols-4 gap-lg px-gutter py-xl max-w-container-max">
         <div className="space-y-md">
-          <div className="font-headline-sm text-headline-sm text-secondary-fixed font-bold">Contact Us</div>
+          <div className="font-bold font-headline-sm text-headline-sm text-secondary-fixed">Contact Us</div>
           <p className="font-body-sm text-on-primary/80">
             Banex Plaza, 2nd Floor, Suite 5, 123 Main Street, Abuja, Nigeria.
           </p>
@@ -15,13 +15,13 @@ export default function Footer() {
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
               <img src={facebook} alt="Facebook" className="w-5 h-5" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-white transition-colors hover:text-white/80">
               <img src={instagram} alt="Instagram" className="w-5 h-5" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white transition-colors hover:text-white/80">
               <img src={twitter} alt="Twitter" className="w-5 h-5" />
             </a>
-            <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-white/80 transition-colors">
+            <a href="https://whatsapp.com" target="_blank" rel="noopener noreferrer" className="text-white transition-colors hover:text-white/80">
               <img src={whatsapp} alt="WhatsApp" className="w-5 h-5" />
             </a>
           </div>
@@ -32,18 +32,18 @@ export default function Footer() {
         <div>
           <h5 className="font-bold mb-md">Quick Links</h5>
           <ul className="space-y-sm font-body-sm text-on-primary/80">
-            <li><Link to="/" className="hover:text-secondary-fixed transition-colors">Home</Link></li>
-            <li><Link to="/events" className="hover:text-secondary-fixed transition-colors">Events</Link></li>
-            <li><Link to="/join" className="hover:text-secondary-fixed transition-colors">Volunteer</Link></li>
-            <li><Link to="/resources" className="hover:text-secondary-fixed transition-colors">Resources</Link></li>
+            <li><Link to="/" className="transition-colors hover:text-secondary-fixed">Home</Link></li>
+            <li><Link to="/events" className="transition-colors hover:text-secondary-fixed">Events</Link></li>
+            <li><Link to="/join" className="transition-colors hover:text-secondary-fixed">Volunteer</Link></li>
+            <li><Link to="/resources" className="transition-colors hover:text-secondary-fixed">Resources</Link></li>
           </ul>
         </div>
         <div>
           <h5 className="font-bold mb-md">Legal</h5>
           <ul className="space-y-sm font-body-sm text-on-primary/80">
-            <li><span className="hover:text-secondary-fixed transition-colors cursor-pointer">Privacy Policy</span></li>
-            <li><span className="hover:text-secondary-fixed transition-colors cursor-pointer">Terms of Service</span></li>
-            <li><span className="hover:text-secondary-fixed transition-colors cursor-pointer">Contact</span></li>
+            <li><Link to="/privacy" className="transition-colors hover:text-secondary-fixed">Privacy Policy</Link></li>
+            <li><Link to="/terms" className="transition-colors hover:text-secondary-fixed">Terms of Service</Link></li>
+            <li><Link to="/donate" className="transition-colors cursor-pointer hover:text-secondary-fixed">Donate</Link></li>
           </ul>
         </div>
         <div>
@@ -52,8 +52,8 @@ export default function Footer() {
           <SubscribeForm variant="footer" />
         </div>
       </div>
-      <div className="border-t border-white/10 py-md px-gutter text-center font-body-sm text-on-primary/60">
-        &copy; 2024 Noor Youth Organization. All rights reserved.
+      <div className="text-center border-t border-white/10 py-md px-gutter font-body-sm text-on-primary/60">
+        Noor Youth Organization &copy; {new Date().getFullYear()}. All rights reserved.
       </div>
     </footer>
   )

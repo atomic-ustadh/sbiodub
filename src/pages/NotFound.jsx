@@ -43,7 +43,7 @@ export default function NotFound() {
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <img
           alt="Serene spiritual path illustration"
-          className="object-cover object-center w-full h-full opacity-30 md:opacity-70"
+          className="object-cover object-center w-full h-full opacity-30 md:opacity-90"
           src="../public/404bg.png"
         />
       </div>
