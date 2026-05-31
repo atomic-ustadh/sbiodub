@@ -108,6 +108,12 @@ export default function Profile() {
               {t}
             </button>
           ))}
+          <button
+            onClick={() => logout()}
+            className="ml-auto font-button text-button px-md py-sm rounded-t-lg text-error hover:opacity-80 transition-all"
+          >
+            Log Out
+          </button>
         </div>
 
         {/* Tab Content */}
@@ -434,16 +440,6 @@ export default function Profile() {
           )}
         </div>
 
-        <div className="text-center mt-xl">
-          <button
-            onClick={() => {
-              logout();
-            }}
-            className="text-error font-button text-button hover:underline"
-          >
-            Log Out
-          </button>
-        </div>
       </div>
     </main>
   );

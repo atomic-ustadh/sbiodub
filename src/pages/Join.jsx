@@ -10,7 +10,6 @@ export default function Join() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [interest, setInterest] = useState('Community Service')
   const [role, setRole] = useState('Member')
   const [error, setError] = useState('')
 
@@ -29,7 +28,7 @@ export default function Join() {
 
   const handleSubmit = () => {
     setError('')
-    const result = signup({ name, email, password, interests: [interest] })
+    const result = signup({ name, email, password, interests: [] })
     if (result.ok) navigate('/profile')
     else setError(result.error)
   }
@@ -108,15 +107,6 @@ export default function Join() {
                   <div className="mt-md space-y-xs">
                     <label className="font-label-md text-label-md text-on-surface-variant">Password</label>
                     <input className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary" placeholder="Create a password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  </div>
-                  <div className="mt-md space-y-xs">
-                    <label className="font-label-md text-label-md text-on-surface-variant">Interest Area</label>
-                    <select className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary" value={interest} onChange={(e) => setInterest(e.target.value)}>
-                      <option>Community Service</option>
-                      <option>Educational Programs</option>
-                      <option>Spiritual Growth</option>
-                      <option>Leadership Training</option>
-                    </select>
                   </div>
                 </div>
               )}

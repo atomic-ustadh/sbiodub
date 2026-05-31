@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
@@ -60,18 +60,27 @@ export default function Login() {
             </p>
             <div className="flex items-center mt-md md:mt-lg gap-sm">
               <div className="flex space-x-[-12px] overflow-hidden">
-                {[1, 2, 3].map((i) => (
-                  <img
-                    key={i}
-                    alt={`Member ${i}`}
-                    className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
-                    src={`https://lh3.googleusercontent.com/aida-public/AB6AXuA2njxIygCe1ZpDVHv3I1yHuMq9jVqVASjiKTE5R6VbT_CLksgCQ3MmTboNOSUWv7hVY127qRSrgrCfgZ8fV4lQr73x5m2yqo54gwJvHIFHwfHFPze_Se2EmEqW-lcfuBCkz_1ly5V5VacjIZ7PHgaN_BUr6d2Q19UK34CYrZkwcS8MAc9x0S6N8RuHNY3X-ZwMuGCM_l2QUkVHLDbmSQ4Rka9lWYfmthjXyRxt8hR1rUSvid1N57OD2aAlkQCPiJjKEe8wSxUA-B6e`}
-                  />
-                ))}
-              </div>
-              <p className="font-body-sm text-body-sm text-on-primary/80">Join 2,000+ youth members</p>
+                <img
+                  alt="Member 1"
+                  className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2njxIygCe1ZpDVHv3I1yHuMq9jVqVASjiKTE5R6VbT_CLksgCQ3MmTboNOSUWv7hVY127qRSrgrCfgZ8fV4lQr73x5m2yqo54gwJvHIFHwfHFPze_Se2EmEqW-lcfuBCkz_1ly5V5VacjIZ7PHgaN_BUr6d2Q19UK34CYrZkwcS8MAc9x0S6N8RuHNY3X-ZwMuGCM_l2QUkVHLDbmSQ4Rka9lWYfmthjXyRxt8hR1rUSvid1N57OD2aAlkQCPiJjKEe8wSxUA-B6e"
+                />
+                <img
+                  alt="Member 2"
+                  className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiK95LsX9ZL2ZZ11TycutHBWQ6H5mTEMLphb63GASjINVk_mOgnf7HmeYfQIPQN4k8NHQ3xzQHGI1bn4rerd-ULuragt00ZXf1lXCb4po-NAIw-YTjZS1_yr93SauhU-y_-C-rWH0sPRTj3buj_9HRmmibuZNRcv7J9VUvuLxXwco4CBAse7lw4o-0ZRjkW9Ev0ls6hEeCBOP5iH1qb1J1M2jOu2dLl97_AeY7K5nu3gNUMX4xUH__rzJ_4CIb-j0ea-58C1ed_i2y"
+                />
+                <img
+                  alt="Member 3"
+                  className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBriPffv_6w60ycnplrf4tDb3T2qAEIM0RHfKPx2haJfxr2xudN9wnJMf-rF2G53F3QfJMT5Ua2wsJIcrEpgO1hWBP-xWv-Xor6FU6Tl_a0H9K66CcGY21iuCBoyFxSKisMK0L5sP22xoSeki6YVO36pmREVV6EFgE7EkABKJbANJ7AGAdD4P2exbqtjEQOUaw9qopSuXpdHR73GXBrwdbSKSuWuiyxyEv52FtjWHq7BSwxWtBi97_E4aNewj95FEJhFZTaZM6Ok1Ct"
+                />
             </div>
+            <p className="font-body-sm text-body-sm text-on-primary/80">
+              Join 2,000+ youth members
+            </p>
           </div>
+        </div>
         ) : (
           <div className="relative z-10 flex flex-col justify-end px-xl py-sm text-on-primary max-w-120">
             <div className="py-sm mt-md">
@@ -97,7 +106,7 @@ export default function Login() {
                 <h2 className="font-bold font-headline-md text-headline-md text-primary mb-xs">Noor Youth</h2>
                 <p className="font-body-md text-body-md text-on-surface-variant">Create your account to join the community.</p>
               </div>
-              {error && <p className="bg-error-container text-on-error-container p-sm rounded-lg font-body-sm mb-md">{error}</p>}
+              {error && <p className="rounded-lg bg-error-container text-on-error-container p-sm font-body-sm mb-md">{error}</p>}
               <form className="space-y-5" onSubmit={handleSignup}>
                 <div className="space-y-xs">
                   <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="full_name">Full Name</label>
@@ -153,7 +162,7 @@ export default function Login() {
                 <h2 className="font-headline-md text-headline-md text-primary mb-xs">Welcome Back</h2>
                 <p className="font-body-md text-body-md text-on-surface-variant">Access your profile and continue your journey.</p>
               </div>
-              {error && <p className="bg-error-container text-on-error-container p-sm rounded-lg font-body-sm mb-md">{error}</p>}
+              {error && <p className="rounded-lg bg-error-container text-on-error-container p-sm font-body-sm mb-md">{error}</p>}
               <form className="space-y-md" onSubmit={handleSignin}>
                 <div className="space-y-xs">
                   <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="email">Email Address</label>
@@ -165,7 +174,7 @@ export default function Login() {
                 <div className="space-y-xs">
                   <div className="flex items-center justify-between">
                     <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="password">Password</label>
-                    <a className="transition-colors font-body-sm text-body-sm text-primary hover:text-secondary-fixed-dim" href="#">Forgot password?</a>
+                    <Link className="transition-colors font-body-sm text-body-sm text-primary hover:text-secondary-fixed-dim" to="/forgot-password">Forgot password?</Link>
                   </div>
                   <div className="relative rounded-lg form-glow">
                     <span className="absolute -translate-y-1/2 material-symbols-outlined left-sm top-1/2 text-outline">lock</span>

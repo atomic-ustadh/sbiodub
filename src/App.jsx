@@ -13,12 +13,13 @@ import TermsOfService from './pages/TermsOfService'
 import Donate from './pages/Donate'
 import Profile from './pages/Profile'
 import Receipts from './pages/Receipts'
+import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 
 export default function App() {
   const location = useLocation()
-  const isAuthPage = location.pathname === '/login'
-  const isNotFound = !['/', '/about', '/login', '/events', '/join', '/resources', '/privacy', '/terms', '/donate', '/profile', '/receipts'].includes(location.pathname) && !location.pathname.startsWith('/resources/')
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/forgot-password'
+  const isNotFound = !['/', '/about', '/login', '/events', '/join', '/resources', '/privacy', '/terms', '/donate', '/profile', '/receipts', '/forgot-password'].includes(location.pathname) && !location.pathname.startsWith('/resources/')
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/" element={<><Navbar active="home" /><Home /></>} />
         <Route path="/about" element={<><Navbar active="about" /><About /></>} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/events" element={<><Navbar active="events" /><Events /></>} />
         <Route path="/join" element={<><Navbar active="membership" /><Join /></>} />
         <Route path="/resources" element={<><Navbar active="resources" /><Resources /></>} />
