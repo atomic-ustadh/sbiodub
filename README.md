@@ -1,8 +1,8 @@
-# Noor Youth / SBIO
+# Leadership Course Abuja (LCA)
 
-A modern web platform for a Muslim youth organization (branded **Noor Youth**, with **LCA Abuja** in the navigation). The site showcases the organization's mission, events, resources, membership, and donation flows, with a member area for managing a profile, bookmarks, RSVPs, donations, and payment methods.
+A modern web platform for Leadership Course, Abuja. The site showcases the organization's mission, events, resources, membership, and donation flows, with a member area for managing a profile, bookmarks, RSVPs, donations, and payment methods.
 
-Built as a client-side single-page application with React, Vite, React Router, and Tailwind CSS v4. There is no backend — authentication and member data are persisted in the browser via `localStorage`.
+Built as a client-side single-page application with React, Vite, React Router, and Tailwind CSS v4. There is no backend for now — authentication and member data are persisted in the browser via `localStorage`.
 
 ## Features
 
@@ -154,4 +154,4 @@ The UI follows the **Emerald & Gold** system documented in [`design.md`](./desig
 
 ## License
 
-No license has been specified for this project.
+No license has been specified for this project yet. Development still ongoing.
