@@ -1,25 +1,25 @@
 const team = [
   {
-    name: 'Ahmad Khan',
+    name: 'Abu Hanifah',
     role: 'Executive Director',
     desc: 'Visionary leader with 10+ years in youth development and community organizing.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDUSeWtEUFlCGH9I9t-Kq7DmJUqiC6uTPKevKSTEF_dgrRXTDVkKMogB3Og_E7KMmITHf9OFNOeaJscO-y-uD_kLOfImjt76IEnbPCjTflRsft4T4IlKSXasJy1oKR9gpNju6B6nSaVIiQGe7Ut5yBnJ-N7ElIj0v-vQxaL4HtySI6hRS9FnjGBsXZqQ3gBQKyav3oUVUR6_qGLjTv5I2EERnEFaLk3ZF_Ik15YF0NYilbWeicZNsUGAgYnmUTCCrHJZFG8PvwcMl7l',
   },
   {
-    name: 'Layla Hassan',
-    role: 'Head of Education',
+    name: 'Barr. Sakeenah',
+    role: 'Head of Activities & Programs',
     desc: 'Educational strategist focused on curriculum development and mentorship programs.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBG-i2SJIRcbXflMsbgKRyRwsf4jxNVUjFihojkeiDZh92QVePPqH3ZN06DXIzLXeGesUDYlXOx_cX9m681pGhHo9ow_yKBg4EDB_jGBuw81PgRX9B3IkTJzBuTcTsMBSN5qI-8D9-yaN2Fy6BN2Y7AVHUA96iWeAeh1KcMP3aDn5o3MbmRueYzGv0FqEquy_oB0blijw-kgtql7a6L2gRaE6Gw7CpPEDiEO-HX4HRCcK3O0OTBjXYiTaiPBhSFf-wo-aypWCy87UR',
   },
   {
-    name: 'Omar Zaid',
-    role: 'Operations Manager',
+    name: 'Abdurrahman Abdurraheem',
+    role: 'Community Manager',
     desc: 'Ensuring the smooth execution of global initiatives and logistical excellence.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCiip831uhko3JSSQzWhuYtgcF5pakdaAJhy9pPBK_VKLex09EgO0LLcJjI8ePgpSM8_sKq-om6hTOZ2xEqhgv2AjNFR7IYFenln2j93BljF0wmqTmHdiCR5ZPTholNWF4lbHOvGpuHbGm7E_PHN0ptJ8DjgoCh_6Ryz6XCHGDUN1w4A3_NSL-L4dYbmRM3IQJ2mZEA1jI52W3-LaEweAB10XOI2AvU7XmOqb0E8Yw2bcouK4Lf_IUT_EoMPwk4txSEMuqoPbDKsxrp',
   },
   {
-    name: 'Sara Mahmoud',
-    role: 'Community Engagement',
+    name: 'Ummu Aadil',
+    role: 'Welfare and Wellness Coordinator',
     desc: 'Building bridges and fostering partnerships with local and international communities.',
     img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAktPXcrDU85ELEGqhOYWMJXWhLU0zz3utVZX8r1zY_aTD_Z-mHWPnELeNE-8FMNxla-s3fforQts1RVHAbr315pIYjo8Wx19zrCjYocs9g2kzu3hiUcc2rjzkhyVqowz1aPgOgRvR53PzmzYwjVmNuJGvs6VqlqvR0gMgXoyTC0xyIunc-B-sIbku-FVKzak-9JT0s0jdpErxjsCCNXZFS5Aa_kKYKZe4qmfUVnYKf-mvziHnPNFUNRkhQVZ_-9AbvIzMyGi3gzpp',
   },
@@ -70,10 +70,10 @@ export default function About() {
         <div className="relative z-10 w-full mx-auto max-w-container-max px-gutter">
           <div className="max-w-128">
             <h1 className="font-display-lg text-display-lg text-secondary-fixed mb-md">
-              Standard Bearers Islamic Organization
+              Leadership Course Abuja
             </h1>
             <p className="leading-relaxed font-body-lg text-body-lg text-on-primary/90 mb-lg">
-              Standard Bearers Islamic Organization is more than an organization; it&rsquo;s a movement dedicated to nurturing the spiritual and
+              Leadership Course Abuja is more than an organization; it&rsquo;s a movement dedicated to nurturing the spiritual and
               professional growth of young Muslims globally.
             </p>
             <div className="flex flex-wrap gap-md">
@@ -137,7 +137,7 @@ export default function About() {
         <div className="absolute inset-0 geometric-pattern" />
         <div className="relative z-10 mx-auto max-w-container-max px-gutter">
           <div className="text-center mb-xl">
-            <h2 className="font-headline-md text-headline-md text-primary mb-sm">The Pillars of Noor</h2>
+            <h2 className="font-headline-md text-headline-md text-primary mb-sm">The Pillars of LCA</h2>
             <p className="mx-auto font-body-md text-body-md text-on-surface-variant max-w-144">
               Our actions are guided by a core set of principles that define our culture and commitment to our members.
             </p>

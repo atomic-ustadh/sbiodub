@@ -7,7 +7,7 @@ const links = [
   { label: "About", key: "about", to: "/about" },
   { label: "Events", key: "events", to: "/events" },
   { label: "Resources", key: "resources", to: "/resources" },
-  { label: "Membership", key: "membership", to: "/join" },
+  /**{ label: "Membership", key: "membership", to: "/join" },**/
 ];
 
 export default function Navbar({ active }) {
@@ -22,7 +22,7 @@ export default function Navbar({ active }) {
           className="font-headline-sm text-headline-sm text-primary font-bold"
           onClick={() => setMenuOpen(false)}
         >
-          Noor Youth
+          Leadership Course, Abuja
         </Link>
         <div className="hidden md:flex items-center gap-8">
           {links.map(({ label, key, to }) => (

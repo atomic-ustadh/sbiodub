@@ -54,7 +54,7 @@ export default function Platform() {
         <div className="relative z-10 grid items-center mx-auto max-w-container-max px-gutter lg:grid-cols-2 gap-xl">
           {/* Hero text */}
           <div className="text-left space-y-md">
-            <h1 className="font-display-lg text-display-lg-mobile md:text-display-lg text-on-primary">
+            <h1 className="font-display-md text-display-lg-mobile md:text-display-lg text-on-primary">
               Empowering the{" "}
               <span className="text-secondary-fixed">Next Generation</span> of
               Muslim Leaders
@@ -69,7 +69,7 @@ export default function Platform() {
                 Join the Movement
               </button>
               <button className="border border-primary-fixed text-on-primary-container font-button text-button px-lg py-md rounded-lg shadow-lg hover:translate-y-0.5 transition-all">
-                About SBIO
+                About LCA
               </button>
             </div>
           </div>

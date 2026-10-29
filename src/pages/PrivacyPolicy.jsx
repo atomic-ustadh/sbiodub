@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
           <section>
             <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">1. Introduction</h2>
             <p className="text-on-surface-variant font-body-md leading-relaxed">
-              Noor Youth Organization ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+              Leadership Course Abuja ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
             </p>
           </section>
 
@@ -84,7 +84,7 @@ export default function PrivacyPolicy() {
             <p className="text-on-surface-variant font-body-md leading-relaxed">
               If you have any questions about this Privacy Policy, please contact us at:
               <br />
-              Email: privacy@nooryouth.org
+              Email: privacy@leadershipcourseabuja.org
               <br />
               Phone: 09065750161
               <br />

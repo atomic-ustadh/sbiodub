@@ -53,7 +53,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="text-center border-t border-white/10 py-md px-gutter font-body-sm text-on-primary/60">
-        Noor Youth Organization &copy; {new Date().getFullYear()}. All rights reserved.
+        Leadership Course Abuja &copy; {new Date().getFullYear()}. All rights reserved.
       </div>
     </footer>
   )

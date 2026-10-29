@@ -23,7 +23,7 @@ export default function TermsOfService() {
           <section>
             <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">1. Acceptance of Terms</h2>
             <p className="text-on-surface-variant font-body-md leading-relaxed">
-              By accessing or using the Noor Youth Organization website and services, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use our services.
+              By accessing or using the Leadership Course Abuja website and services, you agree to be bound by these Terms of Service. If you do not agree with any part of these terms, you may not use our services.
             </p>
           </section>
 
@@ -51,21 +51,21 @@ export default function TermsOfService() {
           <section>
             <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">4. Intellectual Property</h2>
             <p className="text-on-surface-variant font-body-md leading-relaxed">
-              All content on this website, including text, graphics, logos, images, and resources, is the property of Noor Youth Organization unless otherwise stated. You may not reproduce, distribute, or create derivative works without our explicit permission.
+              All content on this website, including text, graphics, logos, images, and resources, is the property of Leadership Course Abuja unless otherwise stated. You may not reproduce, distribute, or create derivative works without our explicit permission.
             </p>
           </section>
 
           <section>
             <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">5. Event Participation</h2>
             <p className="text-on-surface-variant font-body-md leading-relaxed">
-              By registering for our events, you agree to abide by our event guidelines and code of conduct. Noor Youth Organization reserves the right to refuse entry or remove participants who violate these guidelines without refund.
+              By registering for our events, you agree to abide by our event guidelines and code of conduct. Leadership Course Abuja reserves the right to refuse entry or remove participants who violate these guidelines without refund.
             </p>
           </section>
 
           <section>
             <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">6. Limitation of Liability</h2>
             <p className="text-on-surface-variant font-body-md leading-relaxed">
-              Noor Youth Organization shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our services or participation in our programs. Our total liability shall not exceed the amount you have paid to us, if any, in the past twelve months.
+              Leadership Course Abuja shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of our services or participation in our programs. Our total liability shall not exceed the amount you have paid to us, if any, in the past twelve months.
             </p>
           </section>
 
@@ -81,7 +81,7 @@ export default function TermsOfService() {
             <p className="text-on-surface-variant font-body-md leading-relaxed">
               For questions about these Terms of Service, please contact us at:
               <br />
-              Email: legal@nooryouth.org
+              Email: legal@leadershipcourseabuja.org
               <br />
               Phone: 09065750161
               <br />
