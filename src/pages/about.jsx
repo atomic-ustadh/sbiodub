@@ -1,27 +1,29 @@
+import { abu_hanifah, barr_sakeenah, arahman_arahim, umm_aadil } from '../assets'
+
 const team = [
   {
     name: 'Abu Hanifah',
     role: 'Executive Director',
     desc: 'Visionary leader with 10+ years in youth development and community organizing.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDUSeWtEUFlCGH9I9t-Kq7DmJUqiC6uTPKevKSTEF_dgrRXTDVkKMogB3Og_E7KMmITHf9OFNOeaJscO-y-uD_kLOfImjt76IEnbPCjTflRsft4T4IlKSXasJy1oKR9gpNju6B6nSaVIiQGe7Ut5yBnJ-N7ElIj0v-vQxaL4HtySI6hRS9FnjGBsXZqQ3gBQKyav3oUVUR6_qGLjTv5I2EERnEFaLk3ZF_Ik15YF0NYilbWeicZNsUGAgYnmUTCCrHJZFG8PvwcMl7l',
+    img: {abu_hanifah},
   },
   {
     name: 'Barr. Sakeenah',
     role: 'Head of Activities & Programs',
     desc: 'Educational strategist focused on curriculum development and mentorship programs.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCBG-i2SJIRcbXflMsbgKRyRwsf4jxNVUjFihojkeiDZh92QVePPqH3ZN06DXIzLXeGesUDYlXOx_cX9m681pGhHo9ow_yKBg4EDB_jGBuw81PgRX9B3IkTJzBuTcTsMBSN5qI-8D9-yaN2Fy6BN2Y7AVHUA96iWeAeh1KcMP3aDn5o3MbmRueYzGv0FqEquy_oB0blijw-kgtql7a6L2gRaE6Gw7CpPEDiEO-HX4HRCcK3O0OTBjXYiTaiPBhSFf-wo-aypWCy87UR',
+    img: {barr_sakeenah},
   },
   {
     name: 'Abdurrahman Abdurraheem',
     role: 'Community Manager',
     desc: 'Ensuring the smooth execution of global initiatives and logistical excellence.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCiip831uhko3JSSQzWhuYtgcF5pakdaAJhy9pPBK_VKLex09EgO0LLcJjI8ePgpSM8_sKq-om6hTOZ2xEqhgv2AjNFR7IYFenln2j93BljF0wmqTmHdiCR5ZPTholNWF4lbHOvGpuHbGm7E_PHN0ptJ8DjgoCh_6Ryz6XCHGDUN1w4A3_NSL-L4dYbmRM3IQJ2mZEA1jI52W3-LaEweAB10XOI2AvU7XmOqb0E8Yw2bcouK4Lf_IUT_EoMPwk4txSEMuqoPbDKsxrp',
+    img: {arahman_arahim},
   },
   {
     name: 'Ummu Aadil',
     role: 'Welfare and Wellness Coordinator',
     desc: 'Building bridges and fostering partnerships with local and international communities.',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBAktPXcrDU85ELEGqhOYWMJXWhLU0zz3utVZX8r1zY_aTD_Z-mHWPnELeNE-8FMNxla-s3fforQts1RVHAbr315pIYjo8Wx19zrCjYocs9g2kzu3hiUcc2rjzkhyVqowz1aPgOgRvR53PzmzYwjVmNuJGvs6VqlqvR0gMgXoyTC0xyIunc-B-sIbku-FVKzak-9JT0s0jdpErxjsCCNXZFS5Aa_kKYKZe4qmfUVnYKf-mvziHnPNFUNRkhQVZ_-9AbvIzMyGi3gzpp',
+    img: {umm_aadil},
   },
 ]
 
@@ -114,7 +116,7 @@ export default function About() {
             <h2 className="font-headline-md text-headline-md text-primary mb-md">Our Journey &amp; Vision</h2>
             <div className="leading-relaxed space-y-md text-on-surface-variant font-body-md text-body-md">
               <p>
-                Founded by a group of passionate educators and community leaders, Noor Youth began as a small weekend
+                Founded by a group of passionate educators and community leaders, LCA began as a small weekend
                 workshop in a local community center. Our goal was simple: to create a space where young Muslims could
                 explore their identity without compromise.
               </p>
@@ -205,9 +207,9 @@ export default function About() {
       <section className="relative overflow-hidden py-xl bg-primary text-on-primary">
         <div className="absolute inset-0 geometric-pattern opacity-10" />
         <div className="relative z-10 mx-auto text-center max-w-container-max px-gutter">
-          <h2 className="font-headline-md text-headline-md text-secondary-fixed mb-md">Ready to join the movement?</h2>
+          <h2 className="font-headline-md text-headline-md text-secondary-fixed mb-md">Ready to join the LCA?</h2>
           <p className="max-w-2xl mx-auto font-body-lg text-body-lg mb-lg opacity-90">
-            Whether you&rsquo;re looking to learn, lead, or serve, there&rsquo;s a place for you in the Noor Youth
+            Whether you&rsquo;re looking to learn, lead, or serve, there&rsquo;s a place for you in the LCA 
             family. Together, we can light the way for the next generation.
           </p>
           <div className="flex flex-col items-center justify-center sm:flex-row gap-md">

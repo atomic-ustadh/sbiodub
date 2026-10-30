@@ -2,4 +2,7 @@ export { default as facebook } from './facebook.svg'
 export { default as instagram } from './instagram.svg'
 export { default as twitter } from './twitter-x.svg'
 export { default as whatsapp } from './whatsapp.svg'
-
+export {default as abu_hanifah} from './abu-hanifah.png'
+export {default as arahman_arahim} from './arahman-arahim.png'
+export {default as barr_sakeenah} from './barr-sakeenah.png'
+export {default as umm_aadil} from './umm-aadil.png'
