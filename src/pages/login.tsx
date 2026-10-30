@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type FormEvent } from 'react'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
@@ -14,13 +14,13 @@ export default function Login() {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [interest, setInterest] = useState('')
+  const [interest] = useState('')
   const [terms, setTerms] = useState(false)
   const [remember, setRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSignup = (e) => {
+  const handleSignup = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
     if (!fullName || !email || !password) return setError('Please fill in all fields')
@@ -30,7 +30,7 @@ export default function Login() {
     else setError(result.error)
   }
 
-  const handleSignin = (e) => {
+  const handleSignin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
     if (!email || !password) return setError('Please fill in all fields')

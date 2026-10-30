@@ -69,6 +69,8 @@ export default function Profile() {
 
   const bookmarkedPosts = posts.filter((p) => bookmarks.includes(p.slug));
 
+  if (!user) return null;
+
   return (
     <main className="min-h-screen pt-24 pb-xl bg-surface-container-low">
       <div className="mx-auto max-w-container-max px-gutter">

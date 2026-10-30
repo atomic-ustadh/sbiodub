@@ -15,9 +15,8 @@ export default function Donate() {
   const [amount, setAmount] = useState(10000);
   const [customAmount, setCustomAmount] = useState("");
   const [allocation, setAllocation] = useState("general");
-  const [step, setStep] = useState(1);
 
-  const selectAmount = (val) => {
+  const selectAmount = (val: number) => {
     setAmount(val);
     setCustomAmount("");
   };

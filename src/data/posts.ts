@@ -1,4 +1,25 @@
-const posts = [
+export type PostType = 'Guide' | 'Article' | 'Video'
+
+export type PostCategory =
+  | 'Faith & Spirit'
+  | 'Professional Skills'
+  | 'Mental Wellness'
+  | 'Community Action'
+
+export interface Post {
+  slug: string
+  title: string
+  category: PostCategory
+  type: PostType
+  image: string
+  excerpt: string
+  content: string
+  author: string
+  date: string
+  featured: boolean
+}
+
+const posts: Post[] = [
   {
     slug: "navigating-career-with-faith",
     title: "Navigating Your Career Path with Faith",

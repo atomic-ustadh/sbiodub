@@ -19,13 +19,13 @@ const styles = `
 `
 
 export default function NotFound() {
-  const floatingRef = useRef(null)
+  const floatingRef = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     const el = floatingRef.current
     if (!el) return
 
-    const onMouseMove = (e) => {
+    const onMouseMove = (e: MouseEvent) => {
       if (window.innerWidth < 768) return
       const x = (window.innerWidth / 2 - e.pageX) / 40
       const y = (window.innerHeight / 2 - e.pageY) / 40

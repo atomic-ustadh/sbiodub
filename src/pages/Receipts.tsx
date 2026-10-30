@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { useAuth, type Donation } from '../context/AuthContext'
 
-function ReceiptRow({ d }) {
+function ReceiptRow({ d }: { d: Donation }) {
   return (
     <div className="border border-outline-variant rounded-lg p-md bg-surface-container-lowest print:border print:shadow-none">
       <div className="flex items-center justify-between mb-sm">

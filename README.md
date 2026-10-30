@@ -24,6 +24,7 @@ Built as a client-side single-page application with React, Vite, React Router, a
 | Tool | Purpose |
 | --- | --- |
 | React 19 | UI library |
+| TypeScript | Static typing |
 | Vite 6 | Dev server and build tool |
 | React Router DOM 7 | Client-side routing |
 | Tailwind CSS 4 (`@tailwindcss/vite`) | Styling and design tokens |
@@ -58,39 +59,41 @@ The production output is written to `dist/`.
 ```
 .
 ├── index.html                 # HTML entry point, fonts, root div
-├── vite.config.js             # Vite + React + Tailwind plugins
+├── vite.config.ts             # Vite + React + Tailwind plugins
+├── tsconfig.json              # TypeScript configuration
 ├── design.md                  # "Emerald & Gold" design system spec
 ├── public/                    # Static assets (404 background, social icons)
 └── src/
-    ├── main.jsx               # App bootstrap: Router + AuthProvider
-    ├── App.jsx                # Route table using layout routes
+    ├── main.tsx               # App bootstrap: Router + AuthProvider
+    ├── App.tsx                # Route table using layout routes
+    ├── vite-env.d.ts          # Vite client types
     ├── index.css              # Tailwind theme tokens, utilities, animations
     ├── components/
-    │   ├── SiteLayout.jsx     # Navbar + page outlet + footer
-    │   ├── ProtectedRoute.jsx # Redirects logged-out users to login
-    │   ├── Navbar.jsx         # Responsive sticky navigation
-    │   ├── Footer.jsx         # Footer with newsletter signup
-    │   └── SubscribeForm.jsx  # Reusable newsletter form
+    │   ├── SiteLayout.tsx     # Navbar + page outlet + footer
+    │   ├── ProtectedRoute.tsx # Redirects logged-out users to login
+    │   ├── Navbar.tsx         # Responsive sticky navigation
+    │   ├── Footer.tsx         # Footer with newsletter signup
+    │   └── SubscribeForm.tsx  # Reusable newsletter form
     ├── context/
-    │   └── AuthContext.jsx    # Auth + member data via localStorage
+    │   └── AuthContext.tsx    # Auth + member data via localStorage
     ├── data/
-    │   └── posts.js           # Static blog/resource content
+    │   └── posts.ts           # Static blog/resource content + types
     ├── assets/                # SVG social icons
     └── pages/
-        ├── index.jsx          # Home
-        ├── about.jsx          # About
-        ├── login.jsx          # Login / signup
-        ├── ForgotPassword.jsx
-        ├── Join.jsx           # Multi-step membership flow
-        ├── Events.jsx         # Events + RSVP
-        ├── Resources.jsx      # Resource/article listing
-        ├── BlogPost.jsx       # Individual article
-        ├── Donate.jsx         # Donation flow
-        ├── Profile.jsx        # Member dashboard
-        ├── Receipts.jsx       # Donation receipts
-        ├── PrivacyPolicy.jsx
-        ├── TermsOfService.jsx
-        └── NotFound.jsx       # 404
+        ├── index.tsx          # Home
+        ├── about.tsx          # About
+        ├── login.tsx          # Login / signup
+        ├── ForgotPassword.tsx
+        ├── Join.tsx           # Multi-step membership flow
+        ├── Events.tsx         # Events + RSVP
+        ├── Resources.tsx      # Resource/article listing
+        ├── BlogPost.tsx       # Individual article
+        ├── Donate.tsx         # Donation flow
+        ├── Profile.tsx        # Member dashboard
+        ├── Receipts.tsx       # Donation receipts
+        ├── PrivacyPolicy.tsx
+        ├── TermsOfService.tsx
+        └── NotFound.tsx       # 404
 ```
 
 ## Routes
@@ -106,15 +109,15 @@ The production output is written to `dist/`.
 | `/resources` | Resources | |
 | `/resources/:slug` | Blog Post | |
 | `/donate` | Donate | |
-| `/profile` | Profile | Requires a logged-in session for data |
-| `/receipts` | Receipts | |
+| `/profile` | Profile | Protected; requires login |
+| `/receipts` | Receipts | Protected; requires login |
 | `/privacy` | Privacy Policy | |
 | `/terms` | Terms of Service | |
 | `*` | Not Found | No footer |
 
 ## Data & Authentication
 
-`AuthContext` (`src/context/AuthContext.jsx`) provides:
+`AuthContext` (`src/context/AuthContext.tsx`) provides:
 
 - `signup`, `login`, `logout`, `updateProfile`
 - bookmarks: `toggleBookmark`, `isBookmarked`
@@ -135,7 +138,7 @@ All state is scoped per user and stored under these `localStorage` keys:
 
 > **Note:** This is a front-end demo. Passwords are stored in plain text in `localStorage`, and donations/payments are simulated. Replace `AuthContext` and the payment flows with a real backend and secure authentication before production use.
 
-Static articles live in `src/data/posts.js`; event data is defined inline in `src/pages/Events.jsx`.
+Static articles live in `src/data/posts.ts`; event data is defined inline in `src/pages/Events.tsx`.
 
 ## Design System
 
@@ -151,7 +154,8 @@ The UI follows the **Emerald & Gold** system documented in [`design.md`](./desig
 | Command | Description |
 | --- | --- |
 | `npm run dev` | Start the Vite dev server |
-| `npm run build` | Build for production into `dist/` |
+| `npm run build` | Type-check and build for production into `dist/` |
+| `npm run typecheck` | Run TypeScript without emitting files |
 | `npm run preview` | Preview the production build locally |
 
 ## License

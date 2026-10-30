@@ -1,11 +1,26 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, type FormEvent } from "react"
 import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
+
+type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
+type EventFilter = "All Events" | EventCategory
+type EventView = "grid" | "calendar"
+
+interface CommunityEvent {
+  id: string
+  img: string
+  category: EventCategory
+  date: string
+  time: string
+  title: string
+  desc: string
+  location: string
+}
 
 let idCounter = 0
 const nextId = () => `event_${++idCounter}`
 
-const events = [
+const events: CommunityEvent[] = [
   {
     id: nextId(),
     img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB-jUxRJ-jmVQf4tFVucHtZHbG6Rydt4bke3ZWoYuL8dr3wYbdbY4HwRK1x1MDL_g8MxJM5ze9yRlKGRJQCpE_QG1eIosGfElnfJs_1SINdWVLd4_bnqWittrcwxr3AFtxHbN3cTPmSIYNjs-TcXxn8BZ7piaxxDQqIf_EKtfV_dif3fKlkkpvGomNBdh_XWIdmo8O4p0uuN7CL03I_NXiFIfpVIZ0tlYqVPO_ju7NhvoB8JmcBdesV9jI9WPT5cChgWV5A2Jqy2Wh8",
@@ -68,7 +83,7 @@ const events = [
   },
 ];
 
-const categories = [
+const categories: EventFilter[] = [
   "All Events",
   "Social",
   "Educational",
@@ -76,14 +91,14 @@ const categories = [
   "Sports",
 ];
 
-const categoryColors = {
+const categoryColors: Record<EventCategory, string> = {
   Educational: "bg-secondary-container text-on-secondary-container",
   Social: "bg-primary-fixed text-on-primary-fixed-variant",
   Sports: "bg-tertiary-fixed text-on-tertiary-fixed-variant",
   Spiritual: "bg-secondary text-on-secondary",
 };
 
-const dotColors = {
+const dotColors: Record<EventCategory, string> = {
   Educational: "bg-secondary-container",
   Social: "bg-primary-fixed",
   Sports: "bg-tertiary-fixed",
@@ -92,9 +107,9 @@ const dotColors = {
 
 export default function Events() {
   const { user, addRsvp, rsvps } = useAuth()
-  const [activeCategory, setActiveCategory] = useState("All Events");
-  const [view, setView] = useState("grid");
-  const [rsvpEvent, setRsvpEvent] = useState(null);
+  const [activeCategory, setActiveCategory] = useState<EventFilter>("All Events");
+  const [view, setView] = useState<EventView>("grid");
+  const [rsvpEvent, setRsvpEvent] = useState<CommunityEvent | null>(null);
   const [rsvpName, setRsvpName] = useState(user?.name || '');
   const [rsvpEmail, setRsvpEmail] = useState(user?.email || '');
   const [rsvpPhone, setRsvpPhone] = useState(user?.phone || '');
@@ -104,7 +119,7 @@ export default function Events() {
     return () => { document.body.style.overflow = '' }
   }, [])
 
-  const openRsvp = (event) => {
+  const openRsvp = (event: CommunityEvent) => {
     if (!user) return alert('Please log in to register for events.')
     setRsvpEvent(event)
     setRsvpName(user.name || '')
@@ -119,8 +134,9 @@ export default function Events() {
     document.body.style.overflow = ''
   }
 
-  const handleRsvpSubmit = (e) => {
+  const handleRsvpSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (!rsvpEvent) return
     addRsvp({
       id: rsvpEvent.id,
       title: rsvpEvent.title,
@@ -136,7 +152,7 @@ export default function Events() {
     setTimeout(() => setRsvpMessage(''), 3000)
   }
 
-  const isRsvped = (eventId) => rsvps.some((e) => e.id === eventId)
+  const isRsvped = (eventId: string) => rsvps.some((e) => e.id === eventId)
 
   const filtered =
     activeCategory === "All Events"
@@ -174,7 +190,7 @@ export default function Events() {
             </div>
             <select
               value={activeCategory}
-              onChange={(e) => setActiveCategory(e.target.value)}
+              onChange={(e) => setActiveCategory(e.target.value as EventFilter)}
               className="w-full px-4 py-2 border rounded-lg outline-none md:hidden bg-surface/20 text-on-primary border-white/20 font-button text-button focus:ring-2 focus:ring-secondary"
             >
               {categories.map((cat) => (
@@ -294,7 +310,7 @@ export default function Events() {
             <div className="relative">
               <div className="absolute left-4.75 top-0 bottom-0 w-0.5 bg-outline-variant" />
               <div className="space-y-lg">
-                {filtered.map((event, i) => (
+                {filtered.map((event) => (
                   <div key={event.title} className="relative pl-14">
                     <div
                       className={`absolute left-3 top-6 w-3.5 h-3.5 rounded-full border-4 border-surface ${dotColors[event.category]} ring-2 ring-outline-variant`}

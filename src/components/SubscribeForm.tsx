@@ -1,4 +1,8 @@
-export default function SubscribeForm({ variant = 'default' }) {
+interface SubscribeFormProps {
+  variant?: 'default' | 'footer'
+}
+
+export default function SubscribeForm({ variant = 'default' }: SubscribeFormProps) {
   return (
     <div className={variant === 'footer' ? 'flex' : 'flex flex-col sm:flex-row gap-sm justify-center'}>
       <input
