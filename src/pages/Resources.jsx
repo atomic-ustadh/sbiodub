@@ -91,9 +91,6 @@ export default function Resources() {
                     arrow_forward
                   </span>
                 </span>
-                <span className="font-label-md text-label-md text-outline">
-                  {featured.readTime}
-                </span>
               </div>
             </div>
           </Link>
@@ -171,9 +168,6 @@ export default function Resources() {
                       {post.type === 'Video' ? 'play_arrow' : post.type === 'Guide' ? 'description' : 'open_in_new'}
                     </span>
                   </span>
-                  <span className="text-outline font-label-md text-label-md">
-                    {post.readTime}
-                  </span>
                 </div>
               </div>
             </Link>
@@ -198,11 +192,6 @@ export default function Resources() {
           </div>
         </div>
       </section>
-
-      {/* FAB */}
-      <button className="fixed z-40 flex items-center justify-center transition-all rounded-full shadow-lg bottom-gutter right-gutter bg-secondary text-on-secondary w-14 h-14 hover:scale-110 active:scale-95">
-        <span className="material-symbols-outlined">help</span>
-      </button>
     </main>
   )
 }
