@@ -29,7 +29,7 @@ const team = [
 
 const values = [
   {
-    icon: 'temple_hindu',
+    icon: 'mosque',
     title: 'Faith',
     desc: 'Centering the Quran and Sunnah in everything we do, providing a spiritual compass for the modern world.',
     className: 'md:col-span-2 border-l-4 border-primary',

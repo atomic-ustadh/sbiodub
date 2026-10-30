@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const links = [
-  { label: "Home", key: "home", to: "/" },
-  { label: "About", key: "about", to: "/about" },
-  { label: "Events", key: "events", to: "/events" },
-  { label: "Resources", key: "resources", to: "/resources" },
-  /**{ label: "Membership", key: "membership", to: "/join" },**/
+  { label: "Home", to: "/" },
+  { label: "About", to: "/about" },
+  { label: "Events", to: "/events" },
+  { label: "Resources", to: "/resources" },
+  { label: "Membership", to: "/join" },
 ];
 
-export default function Navbar({ active }) {
+export default function Navbar() {
   const { user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -25,18 +25,19 @@ export default function Navbar({ active }) {
           Leadership Course, Abuja
         </Link>
         <div className="hidden md:flex items-center gap-8">
-          {links.map(({ label, key, to }) => (
-            <Link
-              key={key}
+          {links.map(({ label, to }) => (
+            <NavLink
+              key={to}
               to={to}
-              className={
-                active === key
+              end={to === "/"}
+              className={({ isActive }) =>
+                isActive
                   ? "font-body-md text-body-md text-primary border-b-2 border-secondary font-bold pb-1"
                   : "font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors"
               }
             >
               {label}
-            </Link>
+            </NavLink>
           ))}
         </div>
         <div className="flex items-center gap-sm">
@@ -73,20 +74,21 @@ export default function Navbar({ active }) {
       </div>
       {menuOpen && (
         <div className="md:hidden bg-surface/95 backdrop-blur-xl border-t border-outline-variant">
-          {links.map(({ label, key, to }) => (
-            <Link
-              key={key}
+          {links.map(({ label, to }) => (
+            <NavLink
+              key={to}
               to={to}
+              end={to === "/"}
               onClick={() => setMenuOpen(false)}
-              className={
+              className={({ isActive }) =>
                 "block px-gutter py-4 font-body-md text-body-md " +
-                (active === key
+                (isActive
                   ? "text-primary border-l-4 border-secondary font-bold bg-primary-fixed/10"
                   : "text-on-surface-variant hover:text-primary transition-colors")
               }
             >
               {label}
-            </Link>
+            </NavLink>
           ))}
           {user ? (
             <Link to="/profile" onClick={() => setMenuOpen(false)} className="block px-gutter py-4 font-body-md text-body-md text-primary font-bold border-l-4 border-secondary">Profile</Link>

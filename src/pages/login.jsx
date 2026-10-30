@@ -1,10 +1,15 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { signup, login } = useAuth()
+  const from = location.state?.from
+  const redirectTo = typeof from === 'string' && from.startsWith('/') && !from.startsWith('//')
+    ? from
+    : '/profile'
   const [mode, setMode] = useState('signin')
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -21,7 +26,7 @@ export default function Login() {
     if (!fullName || !email || !password) return setError('Please fill in all fields')
     if (!terms) return setError('Please agree to the Terms of Service')
     const result = signup({ name: fullName, email, password, interests: interest ? [interest] : [] })
-    if (result.ok) navigate('/profile')
+    if (result.ok) navigate(redirectTo, { replace: true })
     else setError(result.error)
   }
 
@@ -30,7 +35,7 @@ export default function Login() {
     setError('')
     if (!email || !password) return setError('Please fill in all fields')
     const result = login(email, password)
-    if (result.ok) navigate('/profile')
+    if (result.ok) navigate(redirectTo, { replace: true })
     else setError(result.error)
   }
 
@@ -49,7 +54,7 @@ export default function Login() {
           <div className="relative z-10 text-center px-gutter md:text-left max-w-120">
             <div className="mb-md mt-md">
               <span className="inline-block rounded-full px-sm py-xs bg-secondary text-on-secondary font-label-md text-label-md mb-sm">
-                Noor Youth Community
+                LCA, Abuja Community
               </span>
               <h1 className="leading-tight font-display-lg text-display-lg-mobile md:text-display-lg text-secondary-fixed">
                 Illuminate Your Potential.
@@ -77,7 +82,7 @@ export default function Login() {
                 />
             </div>
             <p className="font-body-sm text-body-sm text-on-primary/80">
-              Join 2,000+ youth members
+              Join 500+ youth members
             </p>
           </div>
         </div>
@@ -103,7 +108,7 @@ export default function Login() {
           {mode === 'signup' ? (
             <>
               <div className="mb-lg mt-md">
-                <h2 className="font-bold font-headline-md text-headline-md text-primary mb-xs">Noor Youth</h2>
+                <h2 className="font-bold font-headline-md text-headline-md text-primary mb-xs">LCA, Abuja</h2>
                 <p className="font-body-md text-body-md text-on-surface-variant">Create your account to join the community.</p>
               </div>
               {error && <p className="rounded-lg bg-error-container text-on-error-container p-sm font-body-sm mb-md">{error}</p>}
@@ -153,7 +158,7 @@ export default function Login() {
                 </p>
               </div>
               <div className="text-center mt-md mb-md">
-                <p className="font-body-sm text-body-sm text-outline">&copy; 2026 Noor Youth Organization. All rights reserved.</p>
+                <p className="font-body-sm text-body-sm text-outline">&copy; 2026 LCA, Abuja. All rights reserved.</p>
               </div>
             </>
           ) : (

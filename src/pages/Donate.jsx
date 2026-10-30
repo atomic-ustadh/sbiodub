@@ -269,7 +269,7 @@ export default function Donate() {
             </span>
             <p className="italic leading-relaxed font-body-md text-body-md text-on-surface-variant mb-sm">
               "I never imagined my small monthly donation could fund an entire
-              leadership workshop. Noor Youth showed me exactly where my money
+              leadership workshop. LCA, Abuja showed me exactly where my money
               went."
             </p>
             <p className="font-button text-button text-primary">— Fatima B.</p>
@@ -290,7 +290,7 @@ export default function Donate() {
             {[
               {
                 q: "Is my donation tax-deductible?",
-                a: "Yes, Noor Youth Organization is a registered nonprofit. You will receive a tax-deductible receipt for your contribution.",
+                a: "Yes, LCA, Abuja is a registered nonprofit. You will receive a tax-deductible receipt for your contribution.",
               },
               {
                 q: "Can I donate Zakat here?",

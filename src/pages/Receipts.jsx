@@ -5,7 +5,7 @@ function ReceiptRow({ d }) {
   return (
     <div className="border border-outline-variant rounded-lg p-md bg-surface-container-lowest print:border print:shadow-none">
       <div className="flex items-center justify-between mb-sm">
-        <span className="font-headline-sm text-headline-sm text-primary">Noor Youth Organization</span>
+        <span className="font-headline-sm text-headline-sm text-primary">LCA, Abuja</span>
         <span className="font-body-sm text-body-sm text-on-surface-variant">Receipt #{d.id?.slice(0, 8)}</span>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-md font-body-md">

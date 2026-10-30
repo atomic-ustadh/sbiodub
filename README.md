@@ -1,4 +1,4 @@
-# Leadership Course Abuja (LCA)
+# LCA, Abuja
 
 A modern web platform for Leadership Course, Abuja. The site showcases the organization's mission, events, resources, membership, and donation flows, with a member area for managing a profile, bookmarks, RSVPs, donations, and payment methods.
 
@@ -63,9 +63,11 @@ The production output is written to `dist/`.
 ├── public/                    # Static assets (404 background, social icons)
 └── src/
     ├── main.jsx               # App bootstrap: Router + AuthProvider
-    ├── App.jsx                # Route table and layout (Navbar/Footer)
+    ├── App.jsx                # Route table using layout routes
     ├── index.css              # Tailwind theme tokens, utilities, animations
     ├── components/
+    │   ├── SiteLayout.jsx     # Navbar + page outlet + footer
+    │   ├── ProtectedRoute.jsx # Redirects logged-out users to login
     │   ├── Navbar.jsx         # Responsive sticky navigation
     │   ├── Footer.jsx         # Footer with newsletter signup
     │   └── SubscribeForm.jsx  # Reusable newsletter form
@@ -124,12 +126,12 @@ All state is scoped per user and stored under these `localStorage` keys:
 
 | Key | Contents |
 | --- | --- |
-| `sbio_session` | Currently logged-in user |
-| `sbio_users` | Registered users (including demo passwords) |
-| `sbio_bookmarks` | Saved article slugs per user |
-| `sbio_rsvps` | RSVP'd events per user |
-| `sbio_donations` | Donation history per user |
-| `sbio_cards` | Saved payment methods per user |
+| `lca_session` | Currently logged-in user |
+| `lca_users` | Registered users (including demo passwords) |
+| `lca_bookmarks` | Saved article slugs per user |
+| `lca_rsvps` | RSVP'd events per user |
+| `lca_donations` | Donation history per user |
+| `lca_cards` | Saved payment methods per user |
 
 > **Note:** This is a front-end demo. Passwords are stored in plain text in `localStorage`, and donations/payments are simulated. Replace `AuthContext` and the payment flows with a real backend and secure authentication before production use.
 

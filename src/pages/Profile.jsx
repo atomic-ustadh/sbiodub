@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import posts from "../data/posts";
 
@@ -12,6 +12,7 @@ const tabs = [
 ];
 
 export default function Profile() {
+  const navigate = useNavigate();
   const {
     user,
     updateProfile,
@@ -68,24 +69,6 @@ export default function Profile() {
 
   const bookmarkedPosts = posts.filter((p) => bookmarks.includes(p.slug));
 
-  if (!user) {
-    return (
-      <main className="flex items-center justify-center min-h-screen px-gutter">
-        <div className="text-center space-y-md">
-          <h1 className="font-headline-md text-headline-md text-primary">
-            Please log in
-          </h1>
-          <Link
-            to="/login"
-            className="inline-block rounded-lg bg-primary text-on-primary px-lg py-md font-button"
-          >
-            Go to Login
-          </Link>
-        </div>
-      </main>
-    );
-  }
-
   return (
     <main className="min-h-screen pt-24 pb-xl bg-surface-container-low">
       <div className="mx-auto max-w-container-max px-gutter">
@@ -109,7 +92,10 @@ export default function Profile() {
             </button>
           ))}
           <button
-            onClick={() => logout()}
+            onClick={() => {
+              logout();
+              navigate("/", { replace: true });
+            }}
             className="ml-auto font-button text-button px-md py-sm rounded-t-lg text-error hover:opacity-80 transition-all"
           >
             Log Out

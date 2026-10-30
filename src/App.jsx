@@ -1,6 +1,6 @@
-import { Routes, Route, useLocation } from 'react-router-dom'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
+import { Routes, Route } from 'react-router-dom'
+import SiteLayout from './components/SiteLayout'
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/index'
 import About from './pages/about'
 import Login from './pages/login'
@@ -17,29 +17,26 @@ import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 
 export default function App() {
-  const location = useLocation()
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/forgot-password'
-  const isNotFound = !['/', '/about', '/login', '/events', '/join', '/resources', '/privacy', '/terms', '/donate', '/profile', '/receipts', '/forgot-password'].includes(location.pathname) && !location.pathname.startsWith('/resources/')
-
   return (
-    <div className="min-h-screen flex flex-col">
-      <Routes>
-        <Route path="/" element={<><Navbar active="home" /><Home /></>} />
-        <Route path="/about" element={<><Navbar active="about" /><About /></>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/events" element={<><Navbar active="events" /><Events /></>} />
-        <Route path="/join" element={<><Navbar active="membership" /><Join /></>} />
-        <Route path="/resources" element={<><Navbar active="resources" /><Resources /></>} />
-        <Route path="/resources/:slug" element={<><Navbar /><BlogPost /></>} />
-        <Route path="/privacy" element={<><Navbar /><PrivacyPolicy /></>} />
-        <Route path="/terms" element={<><Navbar /><TermsOfService /></>} />
-        <Route path="/donate" element={<><Navbar /><Donate /></>} />
-        <Route path="/profile" element={<><Navbar /><Profile /></>} />
-        <Route path="/receipts" element={<><Navbar /><Receipts /></>} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      {!isAuthPage && !isNotFound && <Footer />}
-    </div>
+    <Routes>
+      <Route element={<SiteLayout />}>
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="events" element={<Events />} />
+        <Route path="join" element={<Join />} />
+        <Route path="resources" element={<Resources />} />
+        <Route path="resources/:slug" element={<BlogPost />} />
+        <Route path="privacy" element={<PrivacyPolicy />} />
+        <Route path="terms" element={<TermsOfService />} />
+        <Route path="donate" element={<Donate />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="profile" element={<Profile />} />
+          <Route path="receipts" element={<Receipts />} />
+        </Route>
+      </Route>
+      <Route path="login" element={<Login />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   )
 }

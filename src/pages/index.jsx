@@ -1,28 +1,29 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { home_hero } from '../assets'
 
 // Testimonials data — displayed in the "Impact Stories" carousel section
 const testimonials = [
   {
-    quote: 'Noor Youth provided me with more than just a place to hang out; it gave me a purpose. I found mentors who looked like me and friends who shared my values. It has completely transformed my outlook on my role in society.',
+    quote: 'LCA, Abuja provided me with more than just a place to hang out; it gave me a purpose. I found mentors who looked like me and friends who shared my values. It has completely transformed my outlook on my role in society.',
     name: 'Sara Al-Farsi',
     title: 'Member since 2021',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
   },
   {
-    quote: 'Before joining, I felt disconnected from my faith and my community. Noor Youth gave me a brotherhood that pushed me to grow spiritually and professionally. I went from being shy to leading our monthly community service projects.',
+    quote: 'Before joining, I felt disconnected from my faith and my community. LCA, Abuja gave me a brotherhood that pushed me to grow spiritually and professionally. I went from being shy to leading our monthly community service projects.',
     name: 'Ahmed Hassan',
     title: 'Member since 2020',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
   },
   {
-    quote: 'The workshops and mentorship programs here are unmatched. I secured my first internship using skills I learned from a Noor Youth professional development session. This community genuinely invests in your future.',
+    quote: 'The workshops and mentorship programs here are unmatched. I secured my first internship using skills I learned from a professional development session with LCA, Abuja. This community genuinely invests in your future.',
     name: 'Layla Rahman',
     title: 'Member since 2022',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
   },
   {
-    quote: 'What I love most about Noor Youth is that it is a judgment-free zone where you can ask hard questions about faith, life, and purpose. The leaders are approachable, and the community genuinely cares about each member.',
+    quote: 'What I love most about LCA, Abuja is that it is a judgment-free zone where you can ask hard questions about faith, life, and purpose. The leaders are approachable, and the community genuinely cares about each member.',
     name: 'Yusuf Patel',
     title: 'Member since 2023',
     image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
@@ -79,7 +80,7 @@ export default function Platform() {
               <img
                 className="object-cover w-full h-full"
                 alt="A diverse group of energetic young adults collaborating"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDW1wZVJsltSdAHvUqqMXsfag_jEwiLzM4se6Nhzh8hEP7WkUy7HRWb1sxXp8yAXs3BEV9bayxyDW2xd2fN8P6mkp_d6dB8KZrTuiKLIxUU28DsCMkGslCc3OFjltqhR571QiuL6eYNtrdkucPvokkOB7erByTGWbpU4lbYI-8D12rVpvr7KS6qOzzKSbcSihqnm0nwkLbgCaxztITnJVkB1scKRt1dWw4DDCa5J72DkxnN4r_UHxtMH2luQt9xQBPXTEfnp2pFlMJp"
+                src={home_hero}
               />
             </div>
             {/* Floating stat card */}
@@ -121,7 +122,7 @@ export default function Platform() {
                 desc: "Fostering lifelong bonds through brotherhood and sisterhood in a safe, inclusive environment.",
               },
               {
-                icon: "temple_hindu",
+                icon: "mosque",
                 title: "Faith",
                 desc: "Deepening our connection to Allah through spiritual growth, education, and shared reflection.",
                 bg: "bg-secondary-fixed/30",

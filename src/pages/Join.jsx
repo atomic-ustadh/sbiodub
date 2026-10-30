@@ -38,14 +38,14 @@ export default function Join() {
     ? 'Tell us about yourself so we can get to know you better.'
     : step === 2
       ? 'Select how you would like to participate in our community.'
-      : 'Review your selection and join the Noor Youth family.'
+      : 'Review your selection and join the LCA, Abuja family.'
 
   return (
     <main className="pt-[80px] min-h-screen relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#735c00 0.5px, transparent 0.5px)', backgroundSize: '24px 24px', opacity: 0.05 }} />
       <section className="mx-auto max-w-container-max px-gutter py-xl">
         <div className="text-center mb-xl md:text-left">
-          <h1 className="font-display-lg text-display-lg text-primary mb-md">Become a Part of Noor Youth</h1>
+          <h1 className="font-display-lg text-display-lg text-primary mb-md">Become a Part of LCA, Abuja</h1>
           <p className="max-w-2xl font-body-lg text-body-lg text-on-surface-variant">Shape the future of our community through active engagement, spiritual development, and collaborative service.</p>
         </div>
         <div className="grid items-start grid-cols-1 lg:grid-cols-2 gap-xl">

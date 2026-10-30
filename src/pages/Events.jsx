@@ -44,7 +44,7 @@ const events = [
     time: "7:00 PM",
     title: "Reflections & Chai",
     desc: "An evening of spiritual storytelling and reflection accompanied by artisan chai. A chance to slow down and find inner peace.",
-    location: "Noor Youth Lounge",
+    location: "LCA, Abuja Lounge",
   },
   {
     id: nextId(),
@@ -227,7 +227,7 @@ export default function Events() {
 
       {/* Grid View */}
       {view === "grid" && (
-        <main
+        <div
           className="mx-auto py-xl px-gutter max-w-container-max"
           id="event-grid"
         >
@@ -277,7 +277,7 @@ export default function Events() {
               </div>
             ))}
           </div>
-        </main>
+        </div>
       )}
 
       {/* Timeline View */}

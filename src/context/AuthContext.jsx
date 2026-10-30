@@ -2,9 +2,21 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 
 const AuthContext = createContext(null)
 
+const STORAGE_PREFIX = 'lca_'
+const LEGACY_STORAGE_PREFIX = 'sbio_'
+
 function load(key, fallback) {
   try {
-    const raw = localStorage.getItem(key)
+    const currentKey = `${STORAGE_PREFIX}${key}`
+    const legacyKey = `${LEGACY_STORAGE_PREFIX}${key}`
+    let raw = localStorage.getItem(currentKey)
+    if (raw === null) {
+      raw = localStorage.getItem(legacyKey)
+      if (raw !== null) {
+        localStorage.setItem(currentKey, raw)
+        localStorage.removeItem(legacyKey)
+      }
+    }
     return raw ? JSON.parse(raw) : fallback
   } catch {
     return fallback
@@ -12,23 +24,23 @@ function load(key, fallback) {
 }
 
 function save(key, data) {
-  localStorage.setItem(key, JSON.stringify(data))
+  localStorage.setItem(`${STORAGE_PREFIX}${key}`, JSON.stringify(data))
 }
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => load('sbio_session', null))
-  const [users, setUsers] = useState(() => load('sbio_users', []))
-  const [bookmarks, setBookmarks] = useState(() => load('sbio_bookmarks', {}))
-  const [rsvps, setRsvps] = useState(() => load('sbio_rsvps', {}))
-  const [donations, setDonations] = useState(() => load('sbio_donations', {}))
-  const [cards, setCards] = useState(() => load('sbio_cards', {}))
+  const [user, setUser] = useState(() => load('session', null))
+  const [users, setUsers] = useState(() => load('users', []))
+  const [bookmarks, setBookmarks] = useState(() => load('bookmarks', {}))
+  const [rsvps, setRsvps] = useState(() => load('rsvps', {}))
+  const [donations, setDonations] = useState(() => load('donations', {}))
+  const [cards, setCards] = useState(() => load('cards', {}))
 
-  useEffect(() => { save('sbio_session', user) }, [user])
-  useEffect(() => { save('sbio_users', users) }, [users])
-  useEffect(() => { save('sbio_bookmarks', bookmarks) }, [bookmarks])
-  useEffect(() => { save('sbio_rsvps', rsvps) }, [rsvps])
-  useEffect(() => { save('sbio_donations', donations) }, [donations])
-  useEffect(() => { save('sbio_cards', cards) }, [cards])
+  useEffect(() => { save('session', user) }, [user])
+  useEffect(() => { save('users', users) }, [users])
+  useEffect(() => { save('bookmarks', bookmarks) }, [bookmarks])
+  useEffect(() => { save('rsvps', rsvps) }, [rsvps])
+  useEffect(() => { save('donations', donations) }, [donations])
+  useEffect(() => { save('cards', cards) }, [cards])
 
   const signup = useCallback(({ name, email, password, phone, interests }) => {
     if (users.find((u) => u.email === email)) {

@@ -38,7 +38,7 @@ export default function ForgotPassword() {
                   <span className="material-symbols-outlined text-primary text-[32px]">lock_reset</span>
                 </div>
                 <h1 className="font-headline-md text-headline-md text-primary mb-sm">Forgot Password</h1>
-                <p className="font-body-md text-body-md text-on-surface-variant">Enter the email address associated with your Noor Youth account, <br /> and we&rsquo;ll send you a link to reset your password.</p>
+                <p className="font-body-md text-body-md text-on-surface-variant">Enter the email address associated with your LCA, Abuja account, <br /> and we&rsquo;ll send you a link to reset your password.</p>
               </div>
               {error && <p className="rounded-lg bg-error-container text-on-error-container p-sm font-body-sm mb-md">{error}</p>}
               <form className="space-y-md" onSubmit={handleSubmit}>
