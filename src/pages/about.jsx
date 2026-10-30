@@ -1,29 +1,29 @@
-import { abu_hanifah, barr_sakeenah, arahman_arahim, umm_aadil } from '../assets'
+import { abu_hanifah, barr_sakeenah, arahman_arahim, umm_aadil, about_hero, about_integrity, about_journey } from '../assets'
 
 const team = [
   {
     name: 'Abu Hanifah',
     role: 'Executive Director',
     desc: 'Visionary leader with 10+ years in youth development and community organizing.',
-    img: {abu_hanifah},
+    img: abu_hanifah,
   },
   {
     name: 'Barr. Sakeenah',
     role: 'Head of Activities & Programs',
     desc: 'Educational strategist focused on curriculum development and mentorship programs.',
-    img: {barr_sakeenah},
+    img: barr_sakeenah,
   },
   {
     name: 'Abdurrahman Abdurraheem',
     role: 'Community Manager',
     desc: 'Ensuring the smooth execution of global initiatives and logistical excellence.',
-    img: {arahman_arahim},
+    img: arahman_arahim,
   },
   {
     name: 'Ummu Aadil',
     role: 'Welfare and Wellness Coordinator',
     desc: 'Building bridges and fostering partnerships with local and international communities.',
-    img: {umm_aadil},
+    img: umm_aadil,
   },
 ]
 
@@ -51,7 +51,7 @@ const values = [
     title: 'Integrity',
     desc: 'Upholding the highest moral and ethical standards in all interactions, fostering trust and transparency within our organization.',
     className: 'md:col-span-4 border-b-4 border-secondary-fixed',
-    img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC-Fm_J5UxEKsh-8YQ8PFYJ76rroVquGWAbocVig1NU0iOYkRnHc6txTtEx0t9fcLJfDWocEV3cZ5yB8SxTJCN-ZbtYv9I9UWzKNiCSkra2vKHlEKgIeGKt4RfkDNQzNYCffYOC-BjOLGnVHQ6GQPj2K3M3KG5275uyn6qM9zqtvAWmilabnh_FWzQy9f3Xgg1Bqu1vP7g-eR8hJ209yKLrJiklsf6dHRj7tu5RFD8EWRJSZZdp_tXE3uQNVcj9PAN1fqTRRGuRGNS5',
+    img: about_integrity,
   },
 ]
 
@@ -64,7 +64,7 @@ export default function About() {
           <img
             className="w-full h-full object-cover brightness-[0.4]"
             alt="Youth community"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDe7YbXNf2juFPO93gBGS2JACQLbaEeVG0sA58zohoNdthmx0f_2DCynOM6aMnaVMtDJxkLJylSdaU3R_tDLIV68a5c-SI92ksDoNHDV2P4Wcz-yViBGs_L_PsPBiTbOMiuc88FKuHMc1y9EcC6UUj7Gx3Yhsc67Um_WYJA8df2vTzpIkO4eysexCQkkxRz1zL2mmT9a4N-etaB6TEH7galYXcCowbJKbuVRuKzmgCLKR1AWNAX2CLD69oNGCVeaNx52bHxb3XLyXqX"
+            src={about_hero}
           />
           <div className="absolute inset-0 bg-linear-to-r from-primary/80 to-transparent" />
           <div className="absolute inset-0 geometric-pattern" />
@@ -105,7 +105,7 @@ export default function About() {
             <img
               className="relative z-10 shadow-lg rounded-xl"
               alt="Our founding story"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCbYg4mT67vyMn029RViU6c5I6xrB6NHx42rQ4PTl0bdk4rJzVqyPxs04cm0xAmOkBMg6iRm_AvUqBTX1r-jEePOI0b3R-zaQrjn97VJkppB2euJEhbtAVgDGJJ1Q2eARHeNQw4U4TDlwRcR1FHb2b-Itv7_VbKw_lUHMjr8wqQaNs_ActKP6NvwfVu_N5wcPcEw_tvm8ujw1wz00_Rpfmq9qRo9Jj94k6vj-va1Tm1eKQTpS2B6FSqLUCvXFHVJZhAmwhLyP4Lf_mG"
+              src={about_journey}
             />
             <div className="absolute w-32 h-32 rounded-full -bottom-4 -right-4 bg-secondary-fixed/20 -z-10 blur-2xl" />
           </div>
@@ -178,10 +178,10 @@ export default function About() {
                 Meet the dedicated individuals working behind the scenes to drive our mission forward.
               </p>
             </div>
-            <button className="flex items-center transition-colors gap-xs font-button text-button text-primary hover:text-secondary-fixed-dim">
+            {/*<button className="flex items-center transition-colors gap-xs font-button text-button text-primary hover:text-secondary-fixed-dim">
               Join the Leadership
               <span className="material-symbols-outlined">chevron_right</span>
-            </button>
+            </button> */}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
             {team.map((m) => (
