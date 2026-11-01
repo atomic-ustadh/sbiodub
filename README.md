@@ -14,10 +14,11 @@ This is a **client-side demo, not a production application**. There is no backen
 - **About page** — static hero, story, values, team profiles and CTA sections.
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
 - **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
-- **Events** — six hard-coded events (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login, is stored per user, prevents duplicates, and can be cancelled from the profile.
-- **Resources** — four hard-coded articles with category filters, a featured article, article detail pages, and bookmark toggling for logged-in users.
+- **Events** — six hard-coded events (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
+- **Resources** — four hard-coded articles with category filters, a featured article, article detail pages, and bookmark toggling. Save icons are visible to everyone; logged-out users see a login modal.
 - **Profile dashboard** — edit name, phone and interests; view bookmarks; view and cancel RSVPs; view a donations table; add/remove mock payment methods; log out.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
+- **Shared login modal** — `LoginModal` gates bookmarking and event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
 - **Legal and utility pages** — privacy policy, terms of service, and a placeholder FAQ page.
 - **Design system** — "Emerald & Gold" tokens and utilities in `src/index.css`.
 
@@ -32,14 +33,14 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Home/About CTAs** — several buttons (e.g. "Join the Movement", "About LCA", "Register Now", "Become a Volunteer", "Make a Donation") are placeholders with no navigation or action.
 - **Terms links on signup** — point to `#` instead of `/terms` and `/privacy`.
 - **FAQ page** — placeholder only; it currently says no FAQs are available.
-- **404 background image** — references `../public/404bg.png`, which does not resolve to the public asset at runtime. The correct URL would be `/404bg.png`.
+- **404 background image** — uses the relative path `../404bg.png`; this resolves correctly for top-level unmatched URLs but can break for deeper unmatched paths where `/404bg.png` would be safer.
 
 ### Known limitations
 
 - No backend, database, email delivery or payment gateway.
 - Passwords are stored in plain text in `localStorage`; all member data is user-editable.
 - Event and article content is hard-coded in source; there is no CMS or admin interface.
-- The 404, privacy and terms pages use the current date for "Last Updated".
+- The privacy and terms pages use the current date for "Last Updated".
 - No automated tests, linting configuration or CI.
 - Images are largely hotlinked from third-party Google URLs.
 
@@ -53,6 +54,19 @@ This is a **client-side demo, not a production application**. There is no backen
 | React Router DOM 7 | Client-side routing |
 | Tailwind CSS 4 (`@tailwindcss/vite`) | Styling and design tokens |
 | Google Fonts | Playfair Display, Plus Jakarta Sans, Material Symbols |
+
+## Architecture
+
+This is a client-side single-page application. There is no server, API layer or database.
+
+- **Bootstrap:** `src/main.tsx` mounts React inside `BrowserRouter` and `AuthProvider`, then renders the route table in `src/App.tsx`.
+- **Layouts:** Most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer` + floating FAQ link). Auth pages and the 404 page render standalone.
+- **Route guards:** `ProtectedRoute` wraps `/profile` and `/receipts`, redirecting guests to `/login` with a return path.
+- **State:** `AuthContext` is the single source of client state for the session, users, bookmarks, RSVPs, donations and saved cards, persisted per user in `localStorage`.
+- **Content:** Articles are hard-coded in `src/data/posts.ts`; events, testimonials, team members and home-page previews are defined inline in their pages.
+- **Shared UI:** `LoginModal` is reused for bookmark and RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
+- **Styling:** Tailwind CSS theme tokens and utilities live in `src/index.css`, following the `design.md` "Emerald & Gold" system.
+- **Deployment:** Netlify builds with Vite and rewrites all routes to `index.html` for client-side routing.
 
 ## Getting Started
 
@@ -96,10 +110,11 @@ The production output is written to `dist/`.
     ├── vite-env.d.ts          # Vite client types
     ├── index.css              # Tailwind theme tokens, utilities, animations
     ├── components/
-    │   ├── SiteLayout.tsx     # Navbar + page outlet + footer + FAQ button
+    │   ├── SiteLayout.tsx     # Navbar + page outlet + footer + FAQ link
     │   ├── ProtectedRoute.tsx # Redirects logged-out users to login
     │   ├── Navbar.tsx         # Responsive sticky navigation
     │   ├── Footer.tsx         # Footer with newsletter UI
+    │   ├── LoginModal.tsx     # Shared login prompt for gated actions
     │   └── SubscribeForm.tsx  # Presentational newsletter form
     ├── context/
     │   └── AuthContext.tsx    # Auth + member data via localStorage
@@ -124,6 +139,8 @@ The production output is written to `dist/`.
         └── NotFound.tsx       # 404
 ```
 
+> Local note: `src/content/`, `src/content/resources/`, `src/lib/` and `src/schemas/` exist in some working copies as empty placeholder directories. They contain no code and are not tracked by git.
+
 ## Routes
 
 | Path | Page | Notes |
@@ -135,14 +152,14 @@ The production output is written to `dist/`.
 | `/events` | Events | Hard-coded events; RSVP requires login |
 | `/join` | Membership | Three-step form; role is not persisted |
 | `/resources` | Resources | Category filters work; search does not |
-| `/resources/:slug` | Blog Post | Bookmarking for logged-in users |
+| `/resources/:slug` | Blog Post | Save icon shown; guests get a login modal |
 | `/donate` | Donate | Presentational; no submission |
 | `/profile` | Profile | Protected; requires login |
 | `/receipts` | Receipts | Protected; requires login |
 | `/privacy` | Privacy Policy | |
 | `/terms` | Terms of Service | |
 | `/faq` | FAQ | Placeholder page |
-| `*` | Not Found | Standalone layout; background image path is currently broken |
+| `*` | Not Found | Standalone layout; background image uses a relative path |
 
 ## Data & Authentication
 
