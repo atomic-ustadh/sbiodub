@@ -9,7 +9,7 @@ This is a **client-side demo, not a production application**. There is no backen
 ### Working
 
 - **Routing** — React Router with a shared site layout, standalone auth pages, protected routes, and a custom 404 page.
-- **Responsive shell** — sticky desktop/mobile navigation, active link states, footer, and a floating FAQ button (the button renders but has no action).
+- **Responsive shell** — sticky desktop/mobile navigation, active link states, footer, and a floating FAQ button that links to `/faq`.
 - **Home page** — hero, core pillars, three hard-coded event preview cards, a working testimonial carousel, and static CTA sections.
 - **About page** — static hero, story, values, team profiles and CTA sections.
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
@@ -18,7 +18,7 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Resources** — four hard-coded articles with category filters, a featured article, article detail pages, and bookmark toggling for logged-in users.
 - **Profile dashboard** — edit name, phone and interests; view bookmarks; view and cancel RSVPs; view a donations table; add/remove mock payment methods; log out.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
-- **Legal pages** — privacy policy and terms of service.
+- **Legal and utility pages** — privacy policy, terms of service, and a placeholder FAQ page.
 - **Design system** — "Emerald & Gold" tokens and utilities in `src/index.css`.
 
 ### UI-only or non-functional
@@ -31,7 +31,7 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Membership flow** — `/join` is a three-step form, but the selected role ("Member" or "Volunteer") is not saved, no phone/terms data is collected, and the result is simply a local account.
 - **Home/About CTAs** — several buttons (e.g. "Join the Movement", "About LCA", "Register Now", "Become a Volunteer", "Make a Donation") are placeholders with no navigation or action.
 - **Terms links on signup** — point to `#` instead of `/terms` and `/privacy`.
-- **Floating FAQ button** — no click handler.
+- **FAQ page** — placeholder only; it currently says no FAQs are available.
 - **404 background image** — references `../public/404bg.png`, which does not resolve to the public asset at runtime. The correct URL would be `/404bg.png`.
 
 ### Known limitations
@@ -120,6 +120,7 @@ The production output is written to `dist/`.
         ├── Receipts.tsx       # Donation receipts
         ├── PrivacyPolicy.tsx
         ├── TermsOfService.tsx
+        ├── Faq.tsx            # Placeholder FAQ page
         └── NotFound.tsx       # 404
 ```
 
@@ -140,6 +141,7 @@ The production output is written to `dist/`.
 | `/receipts` | Receipts | Protected; requires login |
 | `/privacy` | Privacy Policy | |
 | `/terms` | Terms of Service | |
+| `/faq` | FAQ | Placeholder page |
 | `*` | Not Found | Standalone layout; background image path is currently broken |
 
 ## Data & Authentication

@@ -10,6 +10,7 @@ import Resources from './pages/Resources'
 import BlogPost from './pages/BlogPost'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
+import Faq from './pages/Faq'
 import Donate from './pages/Donate'
 import Profile from './pages/Profile'
 import Receipts from './pages/Receipts'
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="resources/:slug" element={<BlogPost />} />
         <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="terms" element={<TermsOfService />} />
+        <Route path="faq" element={<Faq />} />
         <Route path="donate" element={<Donate />} />
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<Profile />} />
