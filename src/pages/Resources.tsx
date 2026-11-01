@@ -1,39 +1,44 @@
-import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import SubscribeForm from '../components/SubscribeForm'
-import posts from '../data/posts'
+import { useState, type MouseEvent } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import SubscribeForm from "../components/SubscribeForm";
+import LoginModal from "../components/LoginModal";
+import posts from "../data/posts";
 
 const categories = [
-  'All Resources',
-  'Faith & Spirit',
-  'Professional Skills',
-  'Mental Wellness',
-  'Community Action',
-]
+  "All Resources",
+  "Faith & Spirit",
+  "Professional Skills",
+  "Mental Wellness",
+  "Community Action",
+];
 
 export default function Resources() {
-  const { user, isBookmarked, toggleBookmark } = useAuth()
-  const [activeCat, setActiveCat] = useState('All Resources')
+  const { user, isBookmarked, toggleBookmark } = useAuth();
+  const { pathname } = useLocation();
+  const [activeCat, setActiveCat] = useState("All Resources");
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const filtered = activeCat === 'All Resources'
-    ? posts
-    : posts.filter((p) => p.category === activeCat)
+  const handleBookmark = (e: MouseEvent<HTMLButtonElement>, slug: string) => {
+    e.preventDefault();
+    if (!user) {
+      setShowLoginModal(true);
+      return;
+    }
+    toggleBookmark(slug);
+  };
 
-  const featured = posts.find((p) => p.featured)
+  const filtered =
+    activeCat === "All Resources"
+      ? posts
+      : posts.filter((p) => p.category === activeCat);
+
+  const featured = posts.find((p) => p.featured);
 
   return (
     <main className="pt-24 pb-xl">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary py-xl mb-xl">
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              "url(https://lh3.googleusercontent.com/aida-public/AB6AXuChevT9sfRU9Ibfph95Q509PSc9OXi2yVQxLCrqY6O2oRm10toAW3HLv4r1t7g29h1lVMNf4aO2IjZ7VJgWg0RTd-0-_RNa3zpd2PXUOAA0bfXFBTkn1AyXlC-Z-K0Cxo_AD3hgjFFGTUAurvRIIMD4ou8NwptmedqJPhn1Fxsq1vkYrzWD8V9xTxJ35qHohkEa1TcEBTg6xq5-osxeDZaFR52cGrzoD5C4hh2RYMoeQYrM0t54vZTZLATsa0cbq9q1I7IeQnSUeNQ5)",
-            opacity: 0.05,
-          }}
-        />
+      <section className="relative overflow-hidden bg-primary py-md mb-xl">
         <div className="relative z-10 px-2 mx-auto text-center max-w-container-max">
           <h1 className="font-display-lg text-display-lg md:text-display-lg text-secondary-fixed-dim mb-md">
             Empowerment Resources
@@ -42,18 +47,24 @@ export default function Resources() {
             Discover a curated library of guides, articles, and videos designed
             to fuel your spiritual, professional, and personal growth.
           </p>
-          <div className="relative mx-auto max-w-144 group">
-            <input
-              className="w-full px-12 py-4 transition-all border rounded-full shadow-lg bg-surface-container-lowest border-outline/30 focus:ring-2 focus:ring-secondary focus:outline-none text-on-surface"
-              placeholder="Search for faith, career, or mental health topics..."
-              type="text"
-            />
-            <span className="absolute -translate-y-1/2 material-symbols-outlined left-4 top-1/2 text-primary">
-              search
-            </span>
-            <button className="absolute px-6 py-2 transition-colors -translate-y-1/2 rounded-full right-2 top-1/2 bg-secondary text-on-primary font-button text-button hover:bg-primary">
-              Find
-            </button>
+        </div>
+
+        {/* Filters */}
+        <div className="mx-auto max-w-container-max px-gutter mb-lg">
+          <div className="flex flex-wrap items-center gap-sm">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveCat(cat)}
+                className={
+                  activeCat === cat
+                    ? "bg-primary text-on-primary px-6 py-2 rounded-full font-button text-button"
+                    : "bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-button text-button hover:bg-surface-variant transition-colors"
+                }
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
       </section>
@@ -97,81 +108,77 @@ export default function Resources() {
         </section>
       )}
 
-      {/* Filters */}
-      <section className="mx-auto max-w-container-max px-gutter mb-lg">
-        <div className="flex flex-wrap items-center gap-sm">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setActiveCat(cat)}
-              className={
-                activeCat === cat
-                  ? "bg-primary text-on-primary px-6 py-2 rounded-full font-button text-button"
-                  : "bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-button text-button hover:bg-surface-variant transition-colors"
-              }
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-      </section>
-
       {/* Resource Grid */}
       <section className="mx-auto max-w-container-max px-gutter">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
-          {filtered.filter((p) => !p.featured).map((post) => (
-            <Link
-              key={post.slug}
-              to={`/resources/${post.slug}`}
-              className="flex flex-col overflow-hidden transition-all border rounded-lg bg-surface-container-lowest border-outline-variant hover:shadow-lg group"
-            >
-              <div className="relative overflow-hidden aspect-video">
-                <img
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                  alt={post.title}
-                  src={post.image}
-                />
-                <div className="absolute flex bottom-2 left-2 gap-xs">
-                  <span className={`px-3 py-1 rounded font-label-md text-label-md ${
-                    post.type === 'Video'
-                      ? 'bg-tertiary text-on-tertiary'
-                      : 'bg-secondary text-on-secondary'
-                  }`}>
-                    {post.type}
-                  </span>
-                </div>
-                {user && (
+          {filtered
+            .filter((p) => !p.featured)
+            .map((post) => (
+              <Link
+                key={post.slug}
+                to={`/resources/${post.slug}`}
+                className="flex flex-col overflow-hidden transition-all border rounded-lg bg-surface-container-lowest border-outline-variant hover:shadow-lg group"
+              >
+                <div className="relative overflow-hidden aspect-video">
+                  <img
+                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                    alt={post.title}
+                    src={post.image}
+                  />
+                  <div className="absolute flex bottom-2 left-2 gap-xs">
+                    <span
+                      className={`px-3 py-1 rounded font-label-md text-label-md ${
+                        post.type === "Video"
+                          ? "bg-tertiary text-on-tertiary"
+                          : "bg-secondary text-on-secondary"
+                      }`}
+                    >
+                      {post.type}
+                    </span>
+                  </div>
                   <button
-                    onClick={(e) => { e.preventDefault(); toggleBookmark(post.slug) }}
+                    onClick={(e) => handleBookmark(e, post.slug)}
+                    aria-label={
+                      isBookmarked(post.slug) ? "Remove bookmark" : "Save post"
+                    }
                     className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface/80 backdrop-blur-sm flex items-center justify-center hover:bg-surface transition-all"
                   >
-                    <span className={`material-symbols-outlined text-sm ${isBookmarked(post.slug) ? 'text-secondary-fixed-dim' : 'text-on-surface-variant'}`}>
-                      {isBookmarked(post.slug) ? 'bookmark' : 'bookmark_border'}
+                    <span
+                      className={`material-symbols-outlined text-sm ${isBookmarked(post.slug) ? "text-secondary-fixed-dim" : "text-on-surface-variant"}`}
+                    >
+                      {isBookmarked(post.slug) ? "bookmark" : "bookmark_border"}
                     </span>
                   </button>
-                )}
-              </div>
-              <div className="flex flex-col p-md grow">
-                <span className="text-secondary font-label-md text-label-md mb-xs">
-                  {post.category}
-                </span>
-                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm">
-                  {post.title}
-                </h3>
-                <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg line-clamp-3">
-                  {post.excerpt}
-                </p>
-                <div className="flex items-center justify-between mt-auto border-t pt-md border-outline-variant">
-                  <span className="flex items-center gap-1 text-primary font-button text-button">
-                    {post.type === 'Video' ? 'Watch Now' : post.type === 'Guide' ? 'Read Guide' : 'Learn More'}{" "}
-                    <span className="text-sm material-symbols-outlined">
-                      {post.type === 'Video' ? 'play_arrow' : post.type === 'Guide' ? 'description' : 'open_in_new'}
-                    </span>
-                  </span>
                 </div>
-              </div>
-            </Link>
-          ))}
+                <div className="flex flex-col p-md grow">
+                  <span className="text-secondary font-label-md text-label-md mb-xs">
+                    {post.category}
+                  </span>
+                  <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm">
+                    {post.title}
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg line-clamp-3">
+                    {post.excerpt}
+                  </p>
+                  <div className="flex items-center justify-between mt-auto border-t pt-md border-outline-variant">
+                    <span className="flex items-center gap-1 text-primary font-button text-button">
+                      {post.type === "Video"
+                        ? "Watch Now"
+                        : post.type === "Guide"
+                          ? "Read Guide"
+                          : "Learn More"}{" "}
+                      <span className="text-sm material-symbols-outlined">
+                        {post.type === "Video"
+                          ? "play_arrow"
+                          : post.type === "Guide"
+                            ? "description"
+                            : "open_in_new"}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
         </div>
       </section>
 
@@ -192,6 +199,12 @@ export default function Resources() {
           </div>
         </div>
       </section>
+
+      <LoginModal
+        open={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        from={pathname}
+      />
     </main>
-  )
+  );
 }

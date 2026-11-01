@@ -10,6 +10,8 @@ const links = [
   { label: "Membership", to: "/join" },
 ];
 
+const mobileLinks = [...links, { label: "Donate", to: "/donate" }];
+
 export default function Navbar() {
   const { user } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false);
@@ -74,7 +76,7 @@ export default function Navbar() {
       </div>
       {menuOpen && (
         <div className="md:hidden bg-surface/95 backdrop-blur-xl border-t border-outline-variant">
-          {links.map(({ label, to }) => (
+          {mobileLinks.map(({ label, to }) => (
             <NavLink
               key={to}
               to={to}
@@ -90,11 +92,6 @@ export default function Navbar() {
               {label}
             </NavLink>
           ))}
-          {user ? (
-            <Link to="/profile" onClick={() => setMenuOpen(false)} className="block px-gutter py-4 font-body-md text-body-md text-primary font-bold border-l-4 border-secondary">Profile</Link>
-          ) : (
-            <Link to="/login" onClick={() => setMenuOpen(false)} className="block px-gutter py-4 font-body-md text-body-md text-primary font-bold border-l-4 border-secondary">Login</Link>
-          )}
         </div>
       )}
     </nav>

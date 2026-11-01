@@ -44,7 +44,7 @@ export default function NotFound() {
         <img
           alt="Serene spiritual path illustration"
           className="object-cover object-center w-full h-full opacity-30 md:opacity-90"
-          src="../public/404bg.png"
+          src="../404bg.png"
         />
       </div>
       <div className="absolute inset-0 pointer-events-none geometric-pattern opacity-20" />

@@ -1,6 +1,8 @@
 import { useState, useEffect, type FormEvent } from "react"
+import { useLocation } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
+import LoginPrompt from "../components/LoginModal"
 
 type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
 type EventFilter = "All Events" | EventCategory
@@ -107,8 +109,10 @@ const dotColors: Record<EventCategory, string> = {
 
 export default function Events() {
   const { user, addRsvp, rsvps } = useAuth()
+  const { pathname } = useLocation()
   const [activeCategory, setActiveCategory] = useState<EventFilter>("All Events");
   const [view, setView] = useState<EventView>("grid");
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
   const [rsvpEvent, setRsvpEvent] = useState<CommunityEvent | null>(null);
   const [rsvpName, setRsvpName] = useState(user?.name || '');
   const [rsvpEmail, setRsvpEmail] = useState(user?.email || '');
@@ -120,7 +124,10 @@ export default function Events() {
   }, [])
 
   const openRsvp = (event: CommunityEvent) => {
-    if (!user) return alert('Please log in to register for events.')
+    if (!user) {
+      setShowLoginPrompt(true)
+      return
+    }
     setRsvpEvent(event)
     setRsvpName(user.name || '')
     setRsvpEmail(user.email || '')
@@ -409,6 +416,15 @@ export default function Events() {
           {rsvpMessage}
         </div>
       )}
+
+      <LoginPrompt
+        open={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        from={pathname}
+        title="Log in to register"
+        description="Please log in to register for this event. Your RSVP'd events will appear in your profile."
+        icon="event"
+      />
     </main>
   );
 }
