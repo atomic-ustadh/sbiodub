@@ -48,17 +48,6 @@ export interface Donation extends DonationInput {
   date: string
 }
 
-export interface CardInput {
-  last4: string
-  brand: string
-  name: string
-  expiry: string
-}
-
-export interface SavedCard extends CardInput {
-  id: string
-}
-
 export type AuthResult = { ok: true } | { ok: false; error: string }
 
 interface AuthContextValue {
@@ -73,9 +62,6 @@ interface AuthContextValue {
   cancelRsvp: (eventId: string) => void
   donations: Donation[]
   addDonation: (donation: DonationInput) => void
-  cards: SavedCard[]
-  addCard: (card: CardInput) => void
-  removeCard: (cardId: string) => void
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -110,13 +96,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [users, setUsers] = useState<StoredUser[]>(() => load('users', []))
   const [rsvps, setRsvps] = useState<Record<string, Rsvp[]>>(() => load('rsvps', {}))
   const [donations, setDonations] = useState<Record<string, Donation[]>>(() => load('donations', {}))
-  const [cards, setCards] = useState<Record<string, SavedCard[]>>(() => load('cards', {}))
 
   useEffect(() => { save('session', user) }, [user])
   useEffect(() => { save('users', users) }, [users])
   useEffect(() => { save('rsvps', rsvps) }, [rsvps])
   useEffect(() => { save('donations', donations) }, [donations])
-  useEffect(() => { save('cards', cards) }, [cards])
+  useEffect(() => {
+    localStorage.removeItem('lca_cards')
+    localStorage.removeItem('sbio_cards')
+  }, [])
 
   const signup = useCallback(({ name, email, password, phone, interests }: SignupInput): AuthResult => {
     if (users.find((u) => u.email === email)) {
@@ -189,22 +177,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     })
   }, [user])
 
-  const addCard = useCallback((card: CardInput) => {
-    if (!user) return
-    setCards((prev) => {
-      const list = prev[user.id] || []
-      return { ...prev, [user.id]: [...list, { id: crypto.randomUUID(), ...card }] }
-    })
-  }, [user])
-
-  const removeCard = useCallback((cardId: string) => {
-    if (!user) return
-    setCards((prev) => {
-      const list = (prev[user.id] || []).filter((c) => c.id !== cardId)
-      return { ...prev, [user.id]: list }
-    })
-  }, [user])
-
   return (
     <AuthContext.Provider value={{
       user, users, signup, login, logout, updateProfile,
@@ -212,8 +184,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addRsvp, cancelRsvp,
       donations: user ? (donations[user.id] || []) : [],
       addDonation,
-      cards: user ? (cards[user.id] || []) : [],
-      addCard, removeCard,
     }}>
       {children}
     </AuthContext.Provider>

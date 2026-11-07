@@ -1,8 +1,8 @@
 # LCA, Abuja
 
-A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a browser-only member area for managing a profile, RSVPs, saved payment methods and receipts.
+A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a browser-only member area for managing a profile, RSVPs and receipts.
 
-This is a **client-side demo, not a production application**. There is no backend, no server-side authentication, and no real payment processing. Account data, passwords, RSVPs, donations and card metadata are stored in the browser via `localStorage`. Several UI elements (notably the donation submission, newsletter forms, resource search and some calls to action) are presentational only.
+This is a **client-side demo, not a production application**. There is no backend, no server-side authentication, and no real payment processing. Account data, passwords, RSVPs and donation records are stored in the browser via `localStorage`. The donation page uses manual bank transfer and WhatsApp confirmation, not a payment gateway. Several UI elements (notably the newsletter form, resource search and some calls to action) are presentational only.
 
 ## Implementation Status
 
@@ -10,22 +10,22 @@ This is a **client-side demo, not a production application**. There is no backen
 
 - **Routing** — React Router with a shared site layout, standalone auth pages, protected routes, and a custom 404 page.
 - **Responsive shell** — sticky desktop/mobile navigation, active link states, footer, and a floating FAQ button that links to `/faq`.
-- **Home page** — hero, core pillars, three hard-coded event preview cards, a working testimonial carousel, and static CTA sections.
-- **About page** — static hero, story, values, team profiles and CTA sections.
+- **Home page** — hero, core pillars, up to three CMS-driven upcoming events, a CMS-driven testimonial carousel, and static CTA sections.
+- **About page** — static hero, story and values, plus CMS-driven leadership profiles.
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
 - **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
 - **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
 - **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
-- **Content management** — resources and events live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
-- **Profile dashboard** — edit name, phone and interests; view and cancel RSVPs; view a donations table; add/remove mock payment methods; log out.
+- **Content management** — resources, events, testimonials, leadership profiles, FAQ entries and legal pages live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
+- **Profile dashboard** — edit name, phone and interests; view and cancel RSVPs; see a donation-history placeholder; log out.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
 - **Shared login modal** — `LoginModal` gates event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
-- **Legal and utility pages** — privacy policy, terms of service, and a placeholder FAQ page.
+- **Legal and utility pages** — CMS-driven privacy policy, terms of service, and FAQ accordion.
 - **Design system** — "Emerald & Gold" tokens and utilities in `src/index.css`.
 
 ### UI-only or non-functional
 
-- **Donation submission** — the `/donate` page lets users choose frequency, amount, allocation, donor details and a payment method, but nothing is submitted. The page does not read the donor fields, payment-method buttons have no selection state, and the donate button has no handler. The `addDonation` function exists in `AuthContext` but is not called anywhere, so donation history and receipts contain no user-created data.
+- **Donation confirmation** — the `/donate` page uses manual bank transfer. Donors choose an amount and allocation, copy the configured bank details, then open WhatsApp with a prefilled message and attach their bank receipt. Nothing is persisted by the site, so donation history and receipts still contain no user-created data. Bank and WhatsApp details are configured in `src/config/donation.ts`.
 - **Newsletter subscription** — `SubscribeForm` renders an email input and button but does not submit, validate or persist anything.
 - **Resource search** — the search field and "Find" button on `/resources` are decorative; only category filters work.
 - **Event search** — not implemented; only category filtering exists.
@@ -64,8 +64,8 @@ This is a client-side single-page application. There is no server, API layer or 
 - **Bootstrap:** `src/main.tsx` mounts React inside `BrowserRouter` and `AuthProvider`, then renders the route table in `src/App.tsx`.
 - **Layouts:** Most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer` + floating FAQ link). Auth pages and the 404 page render standalone.
 - **Route guards:** `ProtectedRoute` wraps `/profile` and `/receipts`, redirecting guests to `/login` with a return path.
-- **State:** `AuthContext` is the single source of client state for the session, users, RSVPs, donations and saved cards, persisted per user in `localStorage`.
-- **Content:** Resources and events are JSON files under `src/content/`, loaded and validated at build time by `src/lib/content.ts`. Testimonials, team members and home-page previews are still defined inline in their pages.
+- **State:** `AuthContext` is the single source of client state for the session, users, RSVPs and donations, persisted per user in `localStorage`.
+- **Content:** Resources, events, testimonials, leadership, FAQ and legal content are JSON files under `src/content/`, loaded efficiently by `src/lib/content.ts` and validated when the app runs.
 - **Shared UI:** `LoginModal` is used for RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
 - **Styling:** Tailwind CSS theme tokens and utilities live in `src/index.css`, following the `design.md` "Emerald & Gold" system.
 - **Deployment:** Netlify builds with Vite and rewrites all routes to `index.html` for client-side routing.
@@ -175,16 +175,16 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 | `/about` | About | |
 | `/login` | Login / Signup | Standalone layout, no navbar/footer |
 | `/forgot-password` | Forgot Password | Standalone layout; mock only |
-| `/events` | Events | Hard-coded events; RSVP requires login |
+| `/events` | Events | CMS events split into upcoming/past; RSVP requires login |
 | `/join` | Membership | Three-step form; role is not persisted |
 | `/resources` | Resources | Category filters work; search does not |
 | `/resources/:slug` | Blog Post | Article detail with generated title hero |
-| `/donate` | Donate | Presentational; no submission |
+| `/donate` | Donate | Manual bank transfer; opens WhatsApp |
 | `/profile` | Profile | Protected; requires login |
 | `/receipts` | Receipts | Protected; requires login |
 | `/privacy` | Privacy Policy | |
 | `/terms` | Terms of Service | |
-| `/faq` | FAQ | Placeholder page |
+| `/faq` | FAQ | CMS-driven accordion |
 | `*` | Not Found | Standalone layout; background image uses a relative path |
 
 ## Data & Authentication
@@ -194,7 +194,6 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 - `signup`, `login`, `logout`, `updateProfile`
 - RSVPs: `addRsvp`, `cancelRsvp`
 - donations: `addDonation` (defined but unused)
-- payment methods: `addCard`, `removeCard`
 
 All state is scoped per user and stored under these `localStorage` keys:
 
@@ -204,13 +203,12 @@ All state is scoped per user and stored under these `localStorage` keys:
 | `lca_users` | Registered users, including plain-text passwords |
 | `lca_rsvps` | RSVP'd events per user |
 | `lca_donations` | Donation history per user (empty without direct manipulation) |
-| `lca_cards` | Saved card metadata per user (brand, last four digits, name, expiry) |
 
-On load, the app migrates legacy `sbio_*` keys to the equivalent `lca_*` keys.
+On load, the app migrates legacy `sbio_*` keys to the equivalent `lca_*` keys. The site does not collect or store card details; the `/donate` page uses manual bank transfer.
 
-> **Security note:** This is a front-end demo. Passwords are stored in plain text, and donations/payments are simulated or purely visual. Do not use this implementation for real accounts, donations or payment data. A real backend with secure authentication and a payment provider is required before production use.
+> **Security note:** This is a front-end demo. Passwords are stored in plain text, and donation records are simulated or purely visual. Do not use this implementation for real accounts, donations or payment data. A real backend with secure authentication and a payment provider is required before production use.
 
-Resources live in `src/content/resources/` and events in `src/content/events/`. Both are loaded and validated by `src/lib/content.ts`. Testimonials, team members and home-page event previews are still defined inline in their respective page files.
+All CMS collections live under `src/content/` and are loaded and validated by `src/lib/content.ts`.
 
 ## Design System
 
