@@ -11,7 +11,6 @@ export interface Post {
   title: string
   category: PostCategory
   type: PostType
-  image: string
   excerpt: string
   content: string
   author: string
@@ -124,7 +123,6 @@ function toPost(filePath: string, value: unknown): Post {
     title: requireString(value, "title", context),
     category: requireEnum(value, "category", POST_CATEGORIES, context),
     type: requireEnum(value, "type", POST_TYPES, context),
-    image: requireString(value, "image", context),
     excerpt: requireString(value, "excerpt", context),
     content: requireString(value, "content", context),
     author: requireString(value, "author", context),

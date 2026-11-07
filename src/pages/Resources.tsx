@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SubscribeForm from "../components/SubscribeForm";
-import { posts } from "../lib/content";
+import { posts, formatContentDate, type PostType } from "../lib/content";
 
 const categories = [
   "All Resources",
@@ -10,6 +10,18 @@ const categories = [
   "Mental Wellness",
   "Community Action",
 ];
+
+const typeIcons: Record<PostType, string> = {
+  Guide: "menu_book",
+  Article: "article",
+  Video: "play_circle",
+};
+
+const typeBadgeClasses: Record<PostType, string> = {
+  Guide: "bg-secondary text-on-secondary",
+  Article: "bg-secondary-container text-on-secondary-container",
+  Video: "bg-tertiary text-on-tertiary",
+};
 
 export default function Resources() {
   const [activeCat, setActiveCat] = useState("All Resources");
@@ -62,28 +74,39 @@ export default function Resources() {
             to={`/resources/${featured.slug}`}
             className="flex flex-col overflow-hidden transition-shadow duration-500 border shadow-md md:flex-row bg-surface-container-lowest rounded-xl border-outline-variant hover:shadow-xl"
           >
-            <div className="relative md:w-1/2 min-h-75">
-              <img
-                className="absolute inset-0 object-cover w-full h-full"
-                alt={featured.title}
-                src={featured.image}
-              />
-              <div className="absolute top-4 left-4">
-                <span className="px-4 py-1 rounded-full shadow-sm bg-secondary-container text-on-secondary-container font-label-md text-label-md">
-                  Featured Guide
-                </span>
+            <div className="relative flex items-end overflow-hidden md:w-1/2 min-h-75 bg-primary">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,214,91,0.2),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(149,211,186,0.22),transparent_45%)]" />
+              <span className="absolute -right-4 -top-6 material-symbols-outlined text-[160px] text-on-primary/10">
+                {typeIcons[featured.type]}
+              </span>
+              <div className="relative z-10 p-lg">
+                <div className="flex flex-wrap items-center gap-xs mb-md">
+                  <span className="px-4 py-1 rounded-full shadow-sm bg-secondary-container text-on-secondary-container font-label-md text-label-md">
+                    Featured {featured.type}
+                  </span>
+                  <span className="px-4 py-1 rounded-full bg-on-primary/10 text-on-primary font-label-md text-label-md backdrop-blur-sm">
+                    {featured.category}
+                  </span>
+                </div>
+                <h2 className="font-headline-md text-headline-md text-on-primary">
+                  {featured.title}
+                </h2>
               </div>
             </div>
             <div className="flex flex-col justify-center md:w-1/2 p-lg">
-              <h2 className="font-headline-md text-headline-md text-primary mb-md">
-                {featured.title}
-              </h2>
-              <p className="font-body-md text-body-md text-on-surface-variant mb-lg">
+              <p className="font-body-md text-body-md text-on-surface-variant mb-md">
                 {featured.excerpt}
               </p>
+              <div className="flex flex-wrap items-center gap-sm mb-lg text-body-sm text-on-surface-variant">
+                <span>By {featured.author}</span>
+                <span className="w-1 h-1 rounded-full bg-outline" />
+                <span>{formatContentDate(featured.date)}</span>
+              </div>
               <div className="flex items-center gap-md">
                 <span className="flex items-center gap-2 px-8 py-3 rounded-lg bg-primary text-on-primary font-button text-button group">
-                  Read Guide{" "}
+                  {featured.type === "Video"
+                    ? "Watch Now"
+                    : `Read ${featured.type}`}{" "}
                   <span className="transition-transform material-symbols-outlined group-hover:translate-x-1">
                     arrow_forward
                   </span>
@@ -105,31 +128,28 @@ export default function Resources() {
                 to={`/resources/${post.slug}`}
                 className="flex flex-col overflow-hidden transition-all border rounded-lg bg-surface-container-lowest border-outline-variant hover:shadow-lg group"
               >
-                <div className="relative overflow-hidden aspect-video">
-                  <img
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                    alt={post.title}
-                    src={post.image}
-                  />
-                  <div className="absolute flex bottom-2 left-2 gap-xs">
-                    <span
-                      className={`px-3 py-1 rounded font-label-md text-label-md ${
-                        post.type === "Video"
-                          ? "bg-tertiary text-on-tertiary"
-                          : "bg-secondary text-on-secondary"
-                      }`}
-                    >
-                      {post.type}
-                    </span>
+                <div className="relative flex items-end overflow-hidden aspect-video bg-primary">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,214,91,0.16),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(149,211,186,0.18),transparent_45%)]" />
+                  <span className="absolute -right-3 -top-5 material-symbols-outlined text-[120px] text-on-primary/10">
+                    {typeIcons[post.type]}
+                  </span>
+                  <div className="relative z-10 w-full p-md">
+                    <div className="flex flex-wrap items-center gap-xs mb-sm">
+                      <span
+                        className={`px-3 py-1 rounded font-label-md text-label-md ${typeBadgeClasses[post.type]}`}
+                      >
+                        {post.type}
+                      </span>
+                      <span className="px-3 py-1 rounded bg-on-primary/10 text-on-primary font-label-md text-label-md backdrop-blur-sm">
+                        {post.category}
+                      </span>
+                    </div>
+                    <h3 className="font-headline-sm text-headline-sm text-on-primary line-clamp-3">
+                      {post.title}
+                    </h3>
                   </div>
                 </div>
                 <div className="flex flex-col p-md grow">
-                  <span className="text-secondary font-label-md text-label-md mb-xs">
-                    {post.category}
-                  </span>
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface mb-sm">
-                    {post.title}
-                  </h3>
                   <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg line-clamp-3">
                     {post.excerpt}
                   </p>

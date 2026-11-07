@@ -41,11 +41,6 @@ content:
             - Guide
             - Article
             - Video
-      - name: image
-        label: Cover image
-        type: image
-        options:
-          categories: [image]
       - name: excerpt
         label: Summary
         type: text

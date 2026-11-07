@@ -109,7 +109,7 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 - New content is stored as JSON in `src/content/resources/` or `src/content/events/`. The filename becomes the resource slug or event fallback ID.
 - Keep an event's **Stable ID** unchanged once people have RSVP'd. New events can leave it empty; the filename is used.
 - Dates use `YYYY-MM-DD` and are formatted for display in the app.
-- Image fields use uploaded `/media/...` paths. Existing images live in `public/media/resources/` and `public/media/events/`.
+- Event image fields use uploaded `/media/...` paths. Existing images live in `public/media/events/`. Resources are text-only and render a generated title panel instead of a cover image.
 - Content is compiled at build time. Edits are not visible until the commit triggers a successful Netlify deploy.
 - To see CMS edits locally, pull the latest commit before running `npm run dev`.
 
@@ -178,7 +178,7 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 | `/events` | Events | Hard-coded events; RSVP requires login |
 | `/join` | Membership | Three-step form; role is not persisted |
 | `/resources` | Resources | Category filters work; search does not |
-| `/resources/:slug` | Blog Post | Save icon shown; guests get a login modal |
+| `/resources/:slug` | Blog Post | Article detail with generated title hero |
 | `/donate` | Donate | Presentational; no submission |
 | `/profile` | Profile | Protected; requires login |
 | `/receipts` | Receipts | Protected; requires login |

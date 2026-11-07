@@ -1,5 +1,11 @@
 import { useParams, Link } from 'react-router-dom'
-import { posts, formatContentDate } from '../lib/content'
+import { posts, formatContentDate, type PostType } from '../lib/content'
+
+const typeIcons: Record<PostType, string> = {
+  Guide: 'menu_book',
+  Article: 'article',
+  Video: 'play_circle',
+}
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -20,26 +26,24 @@ export default function BlogPost() {
     <main className="pt-18 pb-xl">
       <article>
         {/* Hero */}
-        <div className="relative overflow-hidden h-96 md:h-144">
-          <img
-            className="object-cover w-full h-full"
-            src={post.image}
-            alt={post.title}
-          />
-          <div className="absolute inset-0 bg-gradient-t from-black/70 via-black/20 to-transparent" />
-          <div className="absolute bottom-0 left-0 right-0 mx-auto p-gutter max-w-container-max">
-            <div className="flex gap-xs mb-md">
+        <div className="relative overflow-hidden bg-primary">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,214,91,0.18),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(149,211,186,0.2),transparent_45%)]" />
+          <span className="absolute -right-8 -top-10 material-symbols-outlined text-[220px] text-on-primary/10">
+            {typeIcons[post.type]}
+          </span>
+          <div className="relative z-10 mx-auto max-w-container-max px-gutter py-16 md:py-24">
+            <div className="flex flex-wrap items-center gap-xs mb-md">
               <span className="px-3 py-1 rounded bg-secondary text-on-secondary font-label-md text-label-md">
                 {post.type}
               </span>
-              <span className="px-3 py-1 rounded bg-surface/20 text-on-primary font-label-md text-label-md backdrop-blur-sm">
+              <span className="px-3 py-1 rounded bg-on-primary/10 text-on-primary font-label-md text-label-md backdrop-blur-sm">
                 {post.category}
               </span>
             </div>
-            <h1 className="font-display-lg text-display-lg text-on-primary mb-sm">
+            <h1 className="max-w-4xl font-display-lg text-display-lg text-on-primary mb-sm">
               {post.title}
             </h1>
-            <div className="flex items-center gap-md text-on-primary/80 font-body-sm">
+            <div className="flex flex-wrap items-center gap-md text-on-primary/80 font-body-sm">
               <span>By {post.author}</span>
               <span className="w-1 h-1 rounded-full bg-on-primary/40" />
               <span>{formatContentDate(post.date)}</span>
