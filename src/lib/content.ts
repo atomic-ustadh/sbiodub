@@ -36,6 +36,20 @@ export interface LeadershipProfile {
   order: number
 }
 
+export interface FaqItem {
+  slug: string
+  question: string
+  answer: string
+  order: number
+}
+
+export interface LegalPage {
+  slug: string
+  title: string
+  lastUpdated: string
+  content: string
+}
+
 export type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
 
 export interface CommunityEvent {
@@ -190,6 +204,36 @@ function toLeadershipProfile(
   }
 }
 
+function toFaqItem(filePath: string, value: unknown): FaqItem {
+  const context = `src/content/faq/${slugFromPath(filePath)}.json`
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  const order = value.order
+  if (typeof order !== "number" || !Number.isFinite(order)) {
+    throw new Error(`${context}: "order" must be a number`)
+  }
+  return {
+    slug: slugFromPath(filePath),
+    question: requireString(value, "question", context),
+    answer: requireString(value, "answer", context),
+    order,
+  }
+}
+
+function toLegalPage(filePath: string, value: unknown): LegalPage {
+  const context = `src/content/legal/${slugFromPath(filePath)}.json`
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  return {
+    slug: requireString(value, "slug", context),
+    title: requireString(value, "title", context),
+    lastUpdated: requireDate(value, "lastUpdated", context),
+    content: requireString(value, "content", context),
+  }
+}
+
 function toEvent(filePath: string, value: unknown): CommunityEvent {
   const context = `src/content/events/${slugFromPath(filePath)}.json`
   if (!isRecord(value)) {
@@ -232,6 +276,16 @@ const leadershipModules = import.meta.glob("../content/leadership/*.json", {
   import: "default",
 }) as Record<string, unknown>
 
+const faqModules = import.meta.glob("../content/faq/*.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, unknown>
+
+const legalModules = import.meta.glob("../content/legal/*.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, unknown>
+
 export const posts: Post[] = Object.entries(resourceModules)
   .map(([filePath, value]) => toPost(filePath, value))
   .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title))
@@ -250,8 +304,20 @@ export const leadershipProfiles: LeadershipProfile[] = Object.entries(
   .map(([filePath, value]) => toLeadershipProfile(filePath, value))
   .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
 
+export const faqItems: FaqItem[] = Object.entries(faqModules)
+  .map(([filePath, value]) => toFaqItem(filePath, value))
+  .sort((a, b) => a.order - b.order || a.question.localeCompare(b.question))
+
+export const legalPages: LegalPage[] = Object.entries(legalModules)
+  .map(([filePath, value]) => toLegalPage(filePath, value))
+  .sort((a, b) => a.title.localeCompare(b.title))
+
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((post) => post.slug === slug)
+}
+
+export function getLegalPageBySlug(slug: string): LegalPage | undefined {
+  return legalPages.find((page) => page.slug === slug)
 }
 
 export function formatContentDate(value: string): string {
