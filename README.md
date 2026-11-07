@@ -42,10 +42,9 @@ This is a **client-side demo, not a production application**. There is no backen
 - Passwords are stored in plain text in `localStorage`; all member data is user-editable.
 - Pages CMS edits require a Git commit and a rebuild; content is not updated instantly.
 - Resources and events are editable, but Home, About, Donate and Join copy still lives in source files.
-- Media uploads should go under `public/media`; existing images are still hotlinked from third-party Google URLs.
+- Uploaded media lives under `public/media` and is committed to the repository, increasing repo size over time.
 - The privacy and terms pages use the current date for "Last Updated".
 - No automated tests, linting configuration or CI.
-- Images are largely hotlinked from third-party Google URLs.
 
 ## Tech Stack
 
@@ -110,7 +109,7 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 - New content is stored as JSON in `src/content/resources/` or `src/content/events/`. The filename becomes the resource slug or event fallback ID.
 - Keep an event's **Stable ID** unchanged once people have RSVP'd. New events can leave it empty; the filename is used.
 - Dates use `YYYY-MM-DD` and are formatted for display in the app.
-- Image fields expect an uploaded `/media/...` path; existing external URLs are still supported until they are replaced.
+- Image fields use uploaded `/media/...` paths. Existing images live in `public/media/resources/` and `public/media/events/`.
 - Content is compiled at build time. Edits are not visible until the commit triggers a successful Netlify deploy.
 - To see CMS edits locally, pull the latest commit before running `npm run dev`.
 
