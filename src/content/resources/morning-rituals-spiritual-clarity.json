@@ -3,7 +3,7 @@
   "category": "Faith & Spirit",
   "type": "Video",
   "excerpt": "Discover the transformative power of a consistent morning routine rooted in spiritual mindfulness and gratitude.",
-  "content": "<div style=\"position:relative; padding-bottom:56.25%;height:0;overflow: hidden;margin-bottom:1.5rem;\">\n<iframe\nsrc=\"https://www.youtube.com/watch?v=ch6dBhfSm7w\"\ntitle=\"Video title\"\n0;\" style=\"position:absolute;top:0;left:0;width:100%;height:100%;border:\nallow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\"\nallowfullscreen\n></iframe>\n</div>",
+  "content": "<div style=\"position:relative; padding-bottom:56.25%;overflow: hidden;margin-bottom:1.5rem;\">\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/ch6dBhfSm7w?si=D5Nl45K76wl6lkif\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\n</div>",
   "author": "Ahmed Hassan",
   "date": "2026-06-08",
   "featured": false
