@@ -27,6 +27,15 @@ export interface Testimonial {
   order: number
 }
 
+export interface LeadershipProfile {
+  slug: string
+  name: string
+  role: string
+  description: string
+  image: string
+  order: number
+}
+
 export type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
 
 export interface CommunityEvent {
@@ -159,6 +168,28 @@ function toTestimonial(filePath: string, value: unknown): Testimonial {
   }
 }
 
+function toLeadershipProfile(
+  filePath: string,
+  value: unknown,
+): LeadershipProfile {
+  const context = `src/content/leadership/${slugFromPath(filePath)}.json`
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  const order = value.order
+  if (typeof order !== "number" || !Number.isFinite(order)) {
+    throw new Error(`${context}: "order" must be a number`)
+  }
+  return {
+    slug: slugFromPath(filePath),
+    name: requireString(value, "name", context),
+    role: requireString(value, "role", context),
+    description: requireString(value, "description", context),
+    image: requireString(value, "image", context),
+    order,
+  }
+}
+
 function toEvent(filePath: string, value: unknown): CommunityEvent {
   const context = `src/content/events/${slugFromPath(filePath)}.json`
   if (!isRecord(value)) {
@@ -196,6 +227,11 @@ const testimonialModules = import.meta.glob("../content/testimonials/*.json", {
   import: "default",
 }) as Record<string, unknown>
 
+const leadershipModules = import.meta.glob("../content/leadership/*.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, unknown>
+
 export const posts: Post[] = Object.entries(resourceModules)
   .map(([filePath, value]) => toPost(filePath, value))
   .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title))
@@ -206,6 +242,12 @@ export const events: CommunityEvent[] = Object.entries(eventModules)
 
 export const testimonials: Testimonial[] = Object.entries(testimonialModules)
   .map(([filePath, value]) => toTestimonial(filePath, value))
+  .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
+
+export const leadershipProfiles: LeadershipProfile[] = Object.entries(
+  leadershipModules,
+)
+  .map(([filePath, value]) => toLeadershipProfile(filePath, value))
   .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
 
 export function getPostBySlug(slug: string): Post | undefined {

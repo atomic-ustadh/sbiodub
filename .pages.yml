@@ -164,3 +164,41 @@ content:
         type: number
         required: true
         description: Lower numbers appear first in the carousel.
+
+  - name: leadership
+    label: Leadership
+    type: collection
+    path: src/content/leadership
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: name
+      fields: [name, role, order]
+      sort: [name, role, order]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: name
+        label: Name
+        type: string
+        required: true
+      - name: role
+        label: Role
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true
+      - name: image
+        label: Portrait
+        type: image
+        required: true
+        options:
+          categories: [image]
+      - name: order
+        label: Display order
+        type: number
+        required: true
+        description: Lower numbers appear first on the About page.

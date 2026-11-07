@@ -1,31 +1,5 @@
-import { abu_hanifah, barr_sakeenah, arahman_arahim, umm_aadil, about_hero, about_integrity, about_journey } from '../assets'
-
-const team = [
-  {
-    name: 'Abu Hanifah',
-    role: 'Executive Director',
-    desc: 'Visionary leader with 10+ years in youth development and community organizing.',
-    img: abu_hanifah,
-  },
-  {
-    name: 'Barr. Sakeenah',
-    role: 'Head of Activities & Programs',
-    desc: 'Educational strategist focused on curriculum development and mentorship programs.',
-    img: barr_sakeenah,
-  },
-  {
-    name: 'Abdurrahman Abdurraheem',
-    role: 'Community Manager',
-    desc: 'Ensuring the smooth execution of global initiatives and logistical excellence.',
-    img: arahman_arahim,
-  },
-  {
-    name: 'Ummu Aadil',
-    role: 'Welfare and Wellness Coordinator',
-    desc: 'Building bridges and fostering partnerships with local and international communities.',
-    img: umm_aadil,
-  },
-]
+import { about_hero, about_integrity, about_journey } from '../assets'
+import { leadershipProfiles } from '../lib/content'
 
 const values = [
   {
@@ -184,19 +158,19 @@ export default function About() {
             </button> */}
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
-            {team.map((m) => (
-              <div key={m.name} className="group">
+            {leadershipProfiles.map((member) => (
+              <div key={member.slug} className="group">
                 <div className="relative overflow-hidden rounded-lg mb-sm">
                   <img
                     className="object-cover w-full transition-transform duration-500 aspect-square group-hover:scale-110"
-                    alt={m.name}
-                    src={m.img}
+                    alt={member.name}
+                    src={member.image}
                   />
                   <div className="absolute inset-0 transition-opacity opacity-0 bg-primary/20 group-hover:opacity-100" />
                 </div>
-                <h4 className="font-headline-sm text-headline-sm text-primary">{m.name}</h4>
-                <p className="uppercase text-secondary font-label-md text-label-md mb-xs">{m.role}</p>
-                <p className="text-on-surface-variant font-body-sm">{m.desc}</p>
+                <h4 className="font-headline-sm text-headline-sm text-primary">{member.name}</h4>
+                <p className="uppercase text-secondary font-label-md text-label-md mb-xs">{member.role}</p>
+                <p className="text-on-surface-variant font-body-sm">{member.description}</p>
               </div>
             ))}
           </div>
