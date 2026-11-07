@@ -68,9 +68,6 @@ interface AuthContextValue {
   login: (email: string, password: string) => AuthResult
   logout: () => void
   updateProfile: (updates: ProfileUpdates) => void
-  bookmarks: string[]
-  toggleBookmark: (slug: string) => void
-  isBookmarked: (slug: string) => boolean
   rsvps: Rsvp[]
   addRsvp: (event: RsvpInput) => void
   cancelRsvp: (eventId: string) => void
@@ -111,14 +108,12 @@ function save<T>(key: string, data: T) {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => load('session', null))
   const [users, setUsers] = useState<StoredUser[]>(() => load('users', []))
-  const [bookmarks, setBookmarks] = useState<Record<string, string[]>>(() => load('bookmarks', {}))
   const [rsvps, setRsvps] = useState<Record<string, Rsvp[]>>(() => load('rsvps', {}))
   const [donations, setDonations] = useState<Record<string, Donation[]>>(() => load('donations', {}))
   const [cards, setCards] = useState<Record<string, SavedCard[]>>(() => load('cards', {}))
 
   useEffect(() => { save('session', user) }, [user])
   useEffect(() => { save('users', users) }, [users])
-  useEffect(() => { save('bookmarks', bookmarks) }, [bookmarks])
   useEffect(() => { save('rsvps', rsvps) }, [rsvps])
   useEffect(() => { save('donations', donations) }, [donations])
   useEffect(() => { save('cards', cards) }, [cards])
@@ -169,20 +164,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser((prev) => prev ? { ...prev, ...updates } : prev)
   }, [user])
 
-  const toggleBookmark = useCallback((slug: string) => {
-    if (!user) return
-    setBookmarks((prev) => {
-      const list = prev[user.id] || []
-      const next = list.includes(slug) ? list.filter((s) => s !== slug) : [...list, slug]
-      return { ...prev, [user.id]: next }
-    })
-  }, [user])
-
-  const isBookmarked = useCallback((slug: string) => {
-    if (!user) return false
-    return (bookmarks[user.id] || []).includes(slug)
-  }, [user, bookmarks])
-
   const addRsvp = useCallback((eventData: RsvpInput) => {
     if (!user) return
     setRsvps((prev) => {
@@ -227,8 +208,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider value={{
       user, users, signup, login, logout, updateProfile,
-      bookmarks: user ? (bookmarks[user.id] || []) : [],
-      toggleBookmark, isBookmarked,
       rsvps: user ? (rsvps[user.id] || []) : [],
       addRsvp, cancelRsvp,
       donations: user ? (donations[user.id] || []) : [],

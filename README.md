@@ -1,8 +1,8 @@
 # LCA, Abuja
 
-A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a browser-only member area for managing a profile, bookmarks, RSVPs, saved payment methods and receipts.
+A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a browser-only member area for managing a profile, RSVPs, saved payment methods and receipts.
 
-This is a **client-side demo, not a production application**. There is no backend, no server-side authentication, and no real payment processing. Account data, passwords, RSVPs, bookmarks, donations and card metadata are stored in the browser via `localStorage`. Several UI elements (notably the donation submission, newsletter forms, resource search and some calls to action) are presentational only.
+This is a **client-side demo, not a production application**. There is no backend, no server-side authentication, and no real payment processing. Account data, passwords, RSVPs, donations and card metadata are stored in the browser via `localStorage`. Several UI elements (notably the donation submission, newsletter forms, resource search and some calls to action) are presentational only.
 
 ## Implementation Status
 
@@ -15,11 +15,11 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
 - **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
 - **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
-- **Resources** — four articles loaded from JSON content files, with category filters, a featured article, article detail pages, and bookmark toggling. Save icons are visible to everyone; logged-out users see a login modal.
+- **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
 - **Content management** — resources and events live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
-- **Profile dashboard** — edit name, phone and interests; view bookmarks; view and cancel RSVPs; view a donations table; add/remove mock payment methods; log out.
+- **Profile dashboard** — edit name, phone and interests; view and cancel RSVPs; view a donations table; add/remove mock payment methods; log out.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
-- **Shared login modal** — `LoginModal` gates bookmarking and event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
+- **Shared login modal** — `LoginModal` gates event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
 - **Legal and utility pages** — privacy policy, terms of service, and a placeholder FAQ page.
 - **Design system** — "Emerald & Gold" tokens and utilities in `src/index.css`.
 
@@ -64,9 +64,9 @@ This is a client-side single-page application. There is no server, API layer or 
 - **Bootstrap:** `src/main.tsx` mounts React inside `BrowserRouter` and `AuthProvider`, then renders the route table in `src/App.tsx`.
 - **Layouts:** Most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer` + floating FAQ link). Auth pages and the 404 page render standalone.
 - **Route guards:** `ProtectedRoute` wraps `/profile` and `/receipts`, redirecting guests to `/login` with a return path.
-- **State:** `AuthContext` is the single source of client state for the session, users, bookmarks, RSVPs, donations and saved cards, persisted per user in `localStorage`.
+- **State:** `AuthContext` is the single source of client state for the session, users, RSVPs, donations and saved cards, persisted per user in `localStorage`.
 - **Content:** Resources and events are JSON files under `src/content/`, loaded and validated at build time by `src/lib/content.ts`. Testimonials, team members and home-page previews are still defined inline in their pages.
-- **Shared UI:** `LoginModal` is reused for bookmark and RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
+- **Shared UI:** `LoginModal` is used for RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
 - **Styling:** Tailwind CSS theme tokens and utilities live in `src/index.css`, following the `design.md` "Emerald & Gold" system.
 - **Deployment:** Netlify builds with Vite and rewrites all routes to `index.html` for client-side routing.
 
@@ -192,7 +192,6 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 `AuthContext` (`src/context/AuthContext.tsx`) provides:
 
 - `signup`, `login`, `logout`, `updateProfile`
-- bookmarks: `toggleBookmark`, `isBookmarked`
 - RSVPs: `addRsvp`, `cancelRsvp`
 - donations: `addDonation` (defined but unused)
 - payment methods: `addCard`, `removeCard`
@@ -203,7 +202,6 @@ All state is scoped per user and stored under these `localStorage` keys:
 | --- | --- |
 | `lca_session` | Currently logged-in user |
 | `lca_users` | Registered users, including plain-text passwords |
-| `lca_bookmarks` | Saved article slugs per user |
 | `lca_rsvps` | RSVP'd events per user |
 | `lca_donations` | Donation history per user (empty without direct manipulation) |
 | `lca_cards` | Saved card metadata per user (brand, last four digits, name, expiry) |

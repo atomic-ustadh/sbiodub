@@ -1,8 +1,6 @@
-import { useState, type MouseEvent } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import SubscribeForm from "../components/SubscribeForm";
-import LoginModal from "../components/LoginModal";
 import { posts } from "../lib/content";
 
 const categories = [
@@ -14,19 +12,7 @@ const categories = [
 ];
 
 export default function Resources() {
-  const { user, isBookmarked, toggleBookmark } = useAuth();
-  const { pathname } = useLocation();
   const [activeCat, setActiveCat] = useState("All Resources");
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
-  const handleBookmark = (e: MouseEvent<HTMLButtonElement>, slug: string) => {
-    e.preventDefault();
-    if (!user) {
-      setShowLoginModal(true);
-      return;
-    }
-    toggleBookmark(slug);
-  };
 
   const filtered =
     activeCat === "All Resources"
@@ -136,19 +122,6 @@ export default function Resources() {
                       {post.type}
                     </span>
                   </div>
-                  <button
-                    onClick={(e) => handleBookmark(e, post.slug)}
-                    aria-label={
-                      isBookmarked(post.slug) ? "Remove bookmark" : "Save post"
-                    }
-                    className="absolute top-2 right-2 w-8 h-8 rounded-full bg-surface/80 backdrop-blur-sm flex items-center justify-center hover:bg-surface transition-all"
-                  >
-                    <span
-                      className={`material-symbols-outlined text-sm ${isBookmarked(post.slug) ? "text-secondary-fixed-dim" : "text-on-surface-variant"}`}
-                    >
-                      {isBookmarked(post.slug) ? "bookmark" : "bookmark_border"}
-                    </span>
-                  </button>
                 </div>
                 <div className="flex flex-col p-md grow">
                   <span className="text-secondary font-label-md text-label-md mb-xs">
@@ -199,12 +172,6 @@ export default function Resources() {
           </div>
         </div>
       </section>
-
-      <LoginModal
-        open={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        from={pathname}
-      />
     </main>
   );
 }

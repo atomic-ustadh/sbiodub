@@ -1,14 +1,8 @@
-import { useState } from 'react'
-import { useParams, Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import LoginModal from '../components/LoginModal'
+import { useParams, Link } from 'react-router-dom'
 import { posts, formatContentDate } from '../lib/content'
 
 export default function BlogPost() {
-  const { user, isBookmarked, toggleBookmark } = useAuth()
   const { slug } = useParams()
-  const { pathname } = useLocation()
-  const [showLoginModal, setShowLoginModal] = useState(false)
   const post = posts.find((p) => p.slug === slug)
 
   if (!post) {
@@ -20,14 +14,6 @@ export default function BlogPost() {
         </Link>
       </main>
     )
-  }
-
-  const handleBookmark = () => {
-    if (!user) {
-      setShowLoginModal(true)
-      return
-    }
-    toggleBookmark(post.slug)
   }
 
   return (
@@ -57,11 +43,6 @@ export default function BlogPost() {
               <span>By {post.author}</span>
               <span className="w-1 h-1 rounded-full bg-on-primary/40" />
               <span>{formatContentDate(post.date)}</span>
-              <span className="w-1 h-1 rounded-full bg-on-primary/40" />
-              <button onClick={handleBookmark} className="flex items-center gap-xs hover:text-white transition-colors">
-                <span className="material-symbols-outlined text-sm">{isBookmarked(post.slug) ? 'bookmark' : 'bookmark_border'}</span>
-                {isBookmarked(post.slug) ? 'Saved' : 'Save'}
-              </button>
             </div>
           </div>
         </div>
@@ -103,12 +84,6 @@ export default function BlogPost() {
           </div>
         </div>
       </section>
-
-      <LoginModal
-        open={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        from={pathname}
-      />
     </main>
   )
 }

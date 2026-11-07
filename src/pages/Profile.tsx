@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { posts, formatContentDate } from "../lib/content";
+import { formatContentDate } from "../lib/content";
 
 const tabs = [
   "Edit Profile",
-  "Bookmarks",
   "My Events",
   "Donations",
   "Payment Methods",
@@ -16,7 +15,6 @@ export default function Profile() {
   const {
     user,
     updateProfile,
-    bookmarks,
     rsvps,
     cancelRsvp,
     donations,
@@ -66,8 +64,6 @@ export default function Profile() {
     setCardCvv("");
     setShowCardForm(false);
   };
-
-  const bookmarkedPosts = posts.filter((p) => bookmarks.includes(p.slug));
 
   if (!user) return null;
 
@@ -181,42 +177,6 @@ export default function Profile() {
               >
                 {saved ? "Saved!" : "Save Changes"}
               </button>
-            </div>
-          )}
-
-          {tab === "Bookmarks" && (
-            <div>
-              {bookmarkedPosts.length === 0 ? (
-                <p className="text-on-surface-variant font-body-md">
-                  No bookmarked resources yet.
-                </p>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-md">
-                  {bookmarkedPosts.map((p) => (
-                    <Link
-                      key={p.slug}
-                      to={`/resources/${p.slug}`}
-                      className="overflow-hidden transition-all border rounded-lg border-outline-variant hover:shadow-lg bg-surface-container-lowest group"
-                    >
-                      <div className="overflow-hidden aspect-video">
-                        <img
-                          src={p.image}
-                          alt={p.title}
-                          className="object-cover w-full h-full transition-transform group-hover:scale-105"
-                        />
-                      </div>
-                      <div className="p-md">
-                        <h3 className="font-headline-sm text-headline-sm text-primary mb-sm">
-                          {p.title}
-                        </h3>
-                        <p className="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
-                          {p.excerpt}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
             </div>
           )}
 

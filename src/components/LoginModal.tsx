@@ -14,9 +14,9 @@ export default function LoginPrompt({
   open,
   onClose,
   from,
-  title = 'Log in to save',
-  description = 'Please log in to save this post. Your saved posts will appear in your profile.',
-  icon = 'bookmark',
+  title = 'Log in to continue',
+  description = 'Please log in to continue. You will be returned to this page after signing in.',
+  icon = 'login',
 }: LoginPromptProps) {
   const navigate = useNavigate()
   const dialogRef = useRef<HTMLDivElement>(null)
