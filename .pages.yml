@@ -13,7 +13,7 @@ content:
     view:
       primary: title
       fields: [title, category, date, featured]
-      sort: [date, title]
+      sort: [date, title, category]
       default:
         sort: date
         order: desc
@@ -50,6 +50,7 @@ content:
       - name: content
         label: Body
         type: rich-text
+        required: true
         options:
           format: html
           switcher: true
@@ -57,6 +58,7 @@ content:
       - name: author
         label: Author
         type: string
+        required: true
       - name: date
         label: Publish date
         type: date
@@ -102,6 +104,7 @@ content:
       - name: image
         label: Cover image
         type: image
+        required: true
         options:
           categories: [image]
       - name: date
