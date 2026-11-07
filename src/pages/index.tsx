@@ -1,39 +1,16 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { home_hero } from '../assets'
-
-// Testimonials data — displayed in the "Impact Stories" carousel section
-const testimonials = [
-  {
-    quote: 'LCA, Abuja provided me with more than just a place to hang out; it gave me a purpose. I found mentors who looked like me and friends who shared my values. It has completely transformed my outlook on my role in society.',
-    name: 'Sara Al-Farsi',
-    title: 'Member since 2021',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
-  },
-  {
-    quote: 'Before joining, I felt disconnected from my faith and my community. LCA, Abuja gave me a brotherhood that pushed me to grow spiritually and professionally. I went from being shy to leading our monthly community service projects.',
-    name: 'Ahmed Hassan',
-    title: 'Member since 2020',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
-  },
-  {
-    quote: 'The workshops and mentorship programs here are unmatched. I secured my first internship using skills I learned from a professional development session with LCA, Abuja. This community genuinely invests in your future.',
-    name: 'Layla Rahman',
-    title: 'Member since 2022',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
-  },
-  {
-    quote: 'What I love most about LCA, Abuja is that it is a judgment-free zone where you can ask hard questions about faith, life, and purpose. The leaders are approachable, and the community genuinely cares about each member.',
-    name: 'Yusuf Patel',
-    title: 'Member since 2023',
-    image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCVGjjnZZd6Oc0JXrtfMw2JfDbK-_ELOAiz211YSjCJpdz9ZivkWYp5lmDCtX8R2jtR7c3kvigwOKwfrMDR_YH0yXWqWMtka8J10yQZXr26nsCNk-2Qo2X6iU354Vx1eM2g_5-28iso1DHIOi9ol3gT_OWR2aU_XAc7uHcliW3tUI06J3EDVztbsDcP7nNXsr4zqedswLCRGReauNI0OyuIH8E44Lr7FVCUo_Up8FIRwM5TwAZuD7HdCCmthZDkEg29BpCguUyU6fBW',
-  },
-]
+import { events, formatContentDate, getTodayIsoDate, testimonials } from '../lib/content'
 
 export default function Platform() {
   // Track which testimonial is currently shown in the carousel
   const [current, setCurrent] = useState(0)
-  const t = testimonials[current]
+  const t = testimonials[current] ?? testimonials[0]
+  const today = getTodayIsoDate()
+  const upcomingEvents = events
+    .filter((event) => event.date >= today)
+    .slice(0, 3)
 
   return (
     <main className="pt-18">
@@ -188,72 +165,66 @@ export default function Platform() {
               <span className="material-symbols-outlined">arrow_forward</span>
             </Link>
           </div>
-          {/* Map over events array to render 3 event cards */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-md">
-            {[
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCZg8D9d2eomHs4DeCSjHbhkU4W3iRz-FjEdJ37AK7zWLmRO-toJV4JzJB_btVSHRD3wr65Tl7mb-huHyZU1n-paFlDqjJ-TA7RD8cryJt-aL6Nt0NQT6z7cqQ4rIwOkyA3shvv2_DVG6GYZhFtoSYyhOVnv8B1EF-HbG9vAiU7RL_P2xqo25jUJQ2pvmWfzoJdqqHALuus6Wjd9ZOjON2uPTkbQfdQpZ0I2hcMaff5Yh-LyFYkUb-I2lcy0Udnsq7FkkBUFiSbuXkb",
-                tag: "Education",
-                date: "Sat, Oct 12 \u2022 6:00 PM",
-                title: "Youth Leadership Workshop",
-                desc: "Develop practical leadership skills rooted in Islamic ethics and modern management principles.",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBzHdsd0cbuAeHZJLm3ngRRkYh2ISr2o6QmidaMZ6n10fRMDomHUd7LmlVq4Bv9XGYPOt6MAsZAldzdSuJxB_nFmxjtlmoIGtVmtSv2ujcbg5JmC5cI5pwGtUDwB0jYSjQoKDpjH3JGWpIKJDYEtT950WaFsWtTOVoVFiXT72mMcTQSg3HeNg_bBXH2uLI0K41EBjGFC4VCzDBWTZT-l0YF_8dQVKFFLwcQuS31Kq6d9WE-BMnkwkVodLEKPG7zBNF5tSBqfUVDB0YG",
-                tag: "Social",
-                date: "Fri, Oct 18 \u2022 7:30 PM",
-                title: "Community BBQ & Games",
-                desc: "A casual evening of food, fun, and networking with fellow youth in the local park.",
-              },
-              {
-                img: "https://lh3.googleusercontent.com/aida-public/AB6AXuDJQL1CtdYO_MLvj-BZp16IiY2HjPufmRDB-L-vIplr4yklOEokcS6gciNYeX_PNJ2PLgz6xg_LNervVd-lgTeE6FZSEUO7RO2fx4gSbbsCrBm_rIN8sS4eyI_V1yT_k5piFczzFiYHGBL3n0pE15R3VRn73-bUThJx59jXmBQi9km-u53RTrJCNXpu5GhNMhu0tZ3hkQpCriOXW0n9phYAWLyqsefNSHMvc0iNzy-CE2w6BPxHYOHMJY6zrfYeNnZRF7LbsleQoU61",
-                tag: "Spirituality",
-                date: "Sun, Oct 20 \u2022 10:00 AM",
-                title: "Tafsir for Today's World",
-                desc: "Exploring Quranic insights and their relevance to the challenges of the 21st century.",
-              },
-            ].map(({ img, tag, date, title, desc }) => (
-              <div
-                key={title}
-                className="overflow-hidden transition-shadow bg-white shadow-sm rounded-xl hover:shadow-xl group"
+          {upcomingEvents.length === 0 ? (
+            <div className="py-xl text-center bg-white border rounded-xl border-outline-variant">
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                No upcoming events are scheduled right now.
+              </p>
+              <Link
+                to="/events"
+                className="inline-flex items-center mt-md font-button text-button text-primary hover:underline gap-xs"
               >
-                {/* Event card image with tag overlay */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                    alt={title}
-                    src={img}
-                  />
-                  <div className="absolute rounded-full top-md left-md bg-secondary-container text-on-secondary-container px-sm py-xs font-label-md text-label-md">
-                    {tag}
+                View past events
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </Link>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-md">
+              {upcomingEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className="overflow-hidden transition-shadow bg-white shadow-sm rounded-xl hover:shadow-xl group"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      alt={event.title}
+                      src={event.img}
+                    />
+                    <div className="absolute rounded-full top-md left-md bg-secondary-container text-on-secondary-container px-sm py-xs font-label-md text-label-md">
+                      {event.category}
+                    </div>
+                  </div>
+                  <div className="p-md space-y-sm">
+                    <div className="flex items-center text-sm text-secondary gap-xs">
+                      <span className="text-sm material-symbols-outlined">
+                        calendar_today
+                      </span>
+                      <span>{formatContentDate(event.date)} &middot; {event.time}</span>
+                    </div>
+                    <h4 className="font-headline-sm text-headline-sm text-primary">
+                      {event.title}
+                    </h4>
+                    <p className="text-sm font-body-sm text-on-surface-variant line-clamp-2">
+                      {event.desc}
+                    </p>
+                    <Link
+                      to="/events"
+                      className="block w-full text-center transition-colors border-2 rounded-lg mt-md py-sm border-primary text-primary font-button hover:bg-primary hover:text-white"
+                    >
+                      Register Now
+                    </Link>
                   </div>
                 </div>
-                {/* Event card details */}
-                <div className="p-md space-y-sm">
-                  <div className="flex items-center text-sm text-secondary gap-xs">
-                    <span className="text-sm material-symbols-outlined">
-                      calendar_today
-                    </span>
-                    <span>{date}</span>
-                  </div>
-                  <h4 className="font-headline-sm text-headline-sm text-primary">
-                    {title}
-                  </h4>
-                  <p className="text-sm font-body-sm text-on-surface-variant line-clamp-2">
-                    {desc}
-                  </p>
-                  <button className="w-full transition-colors border-2 rounded-lg mt-md py-sm border-primary text-primary font-button hover:bg-primary hover:text-white">
-                    Register Now
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
       {/* ===== Impact Stories (Testimonials Carousel) Section ===== */}
-      <section className="relative overflow-hidden bg-white py-xl">
+      {t && (
+        <section className="relative overflow-hidden bg-white py-xl">
         {/* Decorative blurred background circles */}
         <div className="absolute top-0 right-0 w-64 h-64 translate-x-1/2 -translate-y-1/2 rounded-full bg-primary-fixed/10 blur-3xl" />
         <div className="absolute bottom-0 left-0 -translate-x-1/2 translate-y-1/2 rounded-full w-96 h-96 bg-secondary-fixed/10 blur-3xl" />
@@ -313,7 +284,8 @@ export default function Platform() {
             </div>
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {/* ===== Get Involved (CTA) Section ===== */}
       <section className="py-xl">

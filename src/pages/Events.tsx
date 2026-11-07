@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
 import LoginPrompt from "../components/LoginModal"
 
-import { events, formatContentDate, type CommunityEvent, type EventCategory } from "../lib/content"
+import { events, formatContentDate, getTodayIsoDate, type CommunityEvent, type EventCategory } from "../lib/content"
 
 type EventFilter = "All Events" | EventCategory
 type EventView = "grid" | "calendar"
@@ -29,13 +29,6 @@ const dotColors: Record<EventCategory, string> = {
   Sports: "bg-tertiary-fixed",
   Spiritual: "bg-secondary",
 };
-
-function getTodayIsoDate(): string {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  const day = String(now.getDate()).padStart(2, "0");
-  return `${now.getFullYear()}-${month}-${day}`;
-}
 
 export default function Events() {
   const { user, addRsvp, rsvps } = useAuth()

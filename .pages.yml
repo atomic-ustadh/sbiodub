@@ -125,3 +125,42 @@ content:
         label: Description
         type: text
         required: true
+
+  - name: testimonials
+    label: Testimonials
+    type: collection
+    path: src/content/testimonials
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: name
+      fields: [name, title, order]
+      sort: [name, order]
+      default:
+        sort: order
+        order: asc
+    fields:
+      - name: name
+        label: Name
+        type: string
+        required: true
+      - name: title
+        label: Subtitle
+        type: string
+        required: true
+        description: e.g. Member since 2021
+      - name: quote
+        label: Quote
+        type: text
+        required: true
+      - name: image
+        label: Portrait
+        type: image
+        required: true
+        options:
+          categories: [image]
+      - name: order
+        label: Display order
+        type: number
+        required: true
+        description: Lower numbers appear first in the carousel.

@@ -18,6 +18,15 @@ export interface Post {
   featured: boolean
 }
 
+export interface Testimonial {
+  slug: string
+  name: string
+  title: string
+  quote: string
+  image: string
+  order: number
+}
+
 export type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
 
 export interface CommunityEvent {
@@ -131,6 +140,25 @@ function toPost(filePath: string, value: unknown): Post {
   }
 }
 
+function toTestimonial(filePath: string, value: unknown): Testimonial {
+  const context = `src/content/testimonials/${slugFromPath(filePath)}.json`
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  const order = value.order
+  if (typeof order !== "number" || !Number.isFinite(order)) {
+    throw new Error(`${context}: "order" must be a number`)
+  }
+  return {
+    slug: slugFromPath(filePath),
+    name: requireString(value, "name", context),
+    title: requireString(value, "title", context),
+    quote: requireString(value, "quote", context),
+    image: requireString(value, "image", context),
+    order,
+  }
+}
+
 function toEvent(filePath: string, value: unknown): CommunityEvent {
   const context = `src/content/events/${slugFromPath(filePath)}.json`
   if (!isRecord(value)) {
@@ -163,6 +191,11 @@ const eventModules = import.meta.glob("../content/events/*.json", {
   import: "default",
 }) as Record<string, unknown>
 
+const testimonialModules = import.meta.glob("../content/testimonials/*.json", {
+  eager: true,
+  import: "default",
+}) as Record<string, unknown>
+
 export const posts: Post[] = Object.entries(resourceModules)
   .map(([filePath, value]) => toPost(filePath, value))
   .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title))
@@ -170,6 +203,10 @@ export const posts: Post[] = Object.entries(resourceModules)
 export const events: CommunityEvent[] = Object.entries(eventModules)
   .map(([filePath, value]) => toEvent(filePath, value))
   .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title))
+
+export const testimonials: Testimonial[] = Object.entries(testimonialModules)
+  .map(([filePath, value]) => toTestimonial(filePath, value))
+  .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
 
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((post) => post.slug === slug)
@@ -183,4 +220,11 @@ export function formatContentDate(value: string): string {
   const day = Number(match[3])
   if (month < 1 || month > 12) return value
   return `${MONTHS[month - 1]} ${day}, ${year}`
+}
+
+export function getTodayIsoDate(): string {
+  const now = new Date()
+  const month = String(now.getMonth() + 1).padStart(2, "0")
+  const day = String(now.getDate()).padStart(2, "0")
+  return `${now.getFullYear()}-${month}-${day}`
 }
