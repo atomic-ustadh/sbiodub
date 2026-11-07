@@ -30,6 +30,13 @@ const dotColors: Record<EventCategory, string> = {
   Spiritual: "bg-secondary",
 };
 
+function getTodayIsoDate(): string {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
 export default function Events() {
   const { user, addRsvp, rsvps } = useAuth()
   const { pathname } = useLocation()
@@ -89,6 +96,128 @@ export default function Events() {
       ? events
       : events.filter((e) => e.category === activeCategory);
 
+  const today = getTodayIsoDate();
+  const upcoming = filtered.filter((event) => event.date >= today);
+  const past = filtered
+    .filter((event) => event.date < today)
+    .sort((a, b) => b.date.localeCompare(a.date));
+
+  const renderGridEvents = (items: CommunityEvent[], isPast: boolean) => (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+      {items.map((event) => (
+        <div
+          key={event.id}
+          className="group bg-white rounded-xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant hover:shadow-xl transition-all duration-300"
+        >
+          <div className="relative h-56 overflow-hidden">
+            <img
+              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+              alt={event.title}
+              src={event.img}
+            />
+            <div
+              className={`absolute top-4 left-4 ${categoryColors[event.category]} px-3 py-1 rounded-full font-label-md text-label-md`}
+            >
+              {event.category}
+            </div>
+          </div>
+          <div className="p-md">
+            <div className="flex items-center gap-2 mb-2 text-primary font-label-md text-label-md">
+              <span className="material-symbols-outlined text-[18px]">
+                calendar_today
+              </span>
+              <span>{formatContentDate(event.date)}</span>
+              <span className="mx-1 text-outline">&bull;</span>
+              <span>{event.time}</span>
+            </div>
+            <h3 className="mb-3 font-headline-sm text-headline-sm text-on-surface">
+              {event.title}
+            </h3>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-md">
+              {event.desc}
+            </p>
+            <div className="flex items-center gap-2 text-on-surface-variant font-body-sm mb-lg">
+              <span className="material-symbols-outlined text-[18px]">
+                location_on
+              </span>
+              <span>{event.location}</span>
+            </div>
+            {isPast ? (
+              <button disabled className="w-full py-3 rounded-lg font-button text-button bg-surface-container-high text-on-surface-variant cursor-not-allowed">
+                Event ended
+              </button>
+            ) : (
+              <button onClick={() => openRsvp(event)} className="w-full py-3 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
+                {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
+              </button>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  const renderTimelineEvents = (items: CommunityEvent[], isPast: boolean) => (
+    <div className="relative">
+      <div className="absolute left-4.75 top-0 bottom-0 w-0.5 bg-outline-variant" />
+      <div className="space-y-lg">
+        {items.map((event) => (
+          <div key={event.id} className="relative pl-14">
+            <div
+              className={`absolute left-3 top-6 w-3.5 h-3.5 rounded-full border-4 border-surface ${dotColors[event.category]} ring-2 ring-outline-variant`}
+            />
+            <div className="transition-all duration-300 bg-white border shadow-sm rounded-xl border-outline-variant p-md hover:shadow-lg">
+              <div className="flex flex-col md:flex-row gap-md">
+                <div className="md:w-1/4">
+                  <div
+                    className={`inline-block px-3 py-1 rounded-full font-label-md text-label-md mb-2 ${categoryColors[event.category]}`}
+                  >
+                    {event.category}
+                  </div>
+                  <div className="flex items-center gap-2 text-primary font-label-md text-label-md">
+                    <span className="material-symbols-outlined text-[18px]">
+                      calendar_today
+                    </span>
+                    <span>{formatContentDate(event.date)}</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1 text-primary font-label-md text-label-md">
+                    <span className="material-symbols-outlined text-[18px]">
+                      schedule
+                    </span>
+                    <span>{event.time}</span>
+                  </div>
+                </div>
+                <div className="md:w-3/4">
+                  <h3 className="mb-2 font-headline-sm text-headline-sm text-on-surface">
+                    {event.title}
+                  </h3>
+                  <p className="mb-3 font-body-sm text-body-sm text-on-surface-variant">
+                    {event.desc}
+                  </p>
+                  <div className="flex items-center gap-2 mb-4 text-on-surface-variant font-body-sm">
+                    <span className="material-symbols-outlined text-[18px]">
+                      location_on
+                    </span>
+                    <span>{event.location}</span>
+                  </div>
+                  {isPast ? (
+                    <span className="inline-block px-6 py-2 rounded-lg font-button text-button bg-surface-container text-on-surface-variant">
+                      Event ended
+                    </span>
+                  ) : (
+                    <button onClick={() => openRsvp(event)} className="px-6 py-2 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
+                      {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <main className="pt-16">
       {/* Hero */}
@@ -96,7 +225,7 @@ export default function Events() {
         <div className="absolute inset-0 geometric-pattern" />
         <div className="relative z-10 mx-auto text-center max-w-container-max">
           <h1 className="mb-4 font-display-lg text-display-lg text-on-primary">
-            Upcoming Events & Workshops
+            Events & Workshops
           </h1>
           <p className="max-w-2xl mx-auto font-body-lg text-body-lg text-on-primary-container/90 mb-lg">
             Discover opportunities to learn, connect, and grow. Join our vibrant
@@ -177,52 +306,45 @@ export default function Events() {
           className="mx-auto py-xl px-gutter max-w-container-max"
           id="event-grid"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
-            {filtered.map((event) => (
-              <div
-                key={event.title}
-                className="group bg-white rounded-xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant hover:shadow-xl transition-all duration-300"
-              >
-                <div className="relative h-56 overflow-hidden">
-                  <img
-                    className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                    alt={event.title}
-                    src={event.img}
-                  />
-                  <div
-                    className={`absolute top-4 left-4 ${categoryColors[event.category]} px-3 py-1 rounded-full font-label-md text-label-md`}
-                  >
-                    {event.category}
-                  </div>
-                </div>
-                <div className="p-md">
-                  <div className="flex items-center gap-2 mb-2 text-primary font-label-md text-label-md">
-                    <span className="material-symbols-outlined text-[18px]">
-                      calendar_today
-                    </span>
-                    <span>{formatContentDate(event.date)}</span>
-                    <span className="mx-1 text-outline">&bull;</span>
-                    <span>{event.time}</span>
-                  </div>
-                  <h3 className="mb-3 font-headline-sm text-headline-sm text-on-surface">
-                    {event.title}
-                  </h3>
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mb-md">
-                    {event.desc}
+          {filtered.length === 0 ? (
+            <p className="py-xl text-center text-on-surface-variant">
+              No events match this category.
+            </p>
+          ) : (
+            <>
+              <section>
+                <div className="mb-lg">
+                  <h2 className="font-headline-md text-headline-md text-on-surface">
+                    Upcoming Events
+                  </h2>
+                  <p className="mt-xs text-on-surface-variant">
+                    Events that have not happened yet.
                   </p>
-                  <div className="flex items-center gap-2 text-on-surface-variant font-body-sm mb-lg">
-                    <span className="material-symbols-outlined text-[18px]">
-                      location_on
-                    </span>
-                    <span>{event.location}</span>
-                  </div>
-                  <button onClick={() => openRsvp(event)} className="w-full py-3 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
-                    {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
-                  </button>
                 </div>
-              </div>
-            ))}
-          </div>
+                {upcoming.length === 0 ? (
+                  <p className="py-lg text-center text-on-surface-variant">
+                    No upcoming events match this filter.
+                  </p>
+                ) : (
+                  renderGridEvents(upcoming, false)
+                )}
+              </section>
+
+              {past.length > 0 && (
+                <section className="mt-xl border-t border-outline-variant pt-xl">
+                  <div className="mb-lg">
+                    <h2 className="font-headline-md text-headline-md text-on-surface">
+                      Past Events
+                    </h2>
+                    <p className="mt-xs text-on-surface-variant">
+                      Events that have already taken place.
+                    </p>
+                  </div>
+                  {renderGridEvents(past, true)}
+                </section>
+              )}
+            </>
+          )}
         </div>
       )}
 
@@ -237,57 +359,28 @@ export default function Events() {
               No events match this category.
             </p>
           ) : (
-            <div className="relative">
-              <div className="absolute left-4.75 top-0 bottom-0 w-0.5 bg-outline-variant" />
-              <div className="space-y-lg">
-                {filtered.map((event) => (
-                  <div key={event.title} className="relative pl-14">
-                    <div
-                      className={`absolute left-3 top-6 w-3.5 h-3.5 rounded-full border-4 border-surface ${dotColors[event.category]} ring-2 ring-outline-variant`}
-                    />
-                    <div className="transition-all duration-300 bg-white border shadow-sm rounded-xl border-outline-variant p-md hover:shadow-lg">
-                      <div className="flex flex-col md:flex-row gap-md">
-                        <div className="md:w-1/4">
-                          <div
-                            className={`inline-block px-3 py-1 rounded-full font-label-md text-label-md mb-2 ${categoryColors[event.category]}`}
-                          >
-                            {event.category}
-                          </div>
-                          <div className="flex items-center gap-2 text-primary font-label-md text-label-md">
-                            <span className="material-symbols-outlined text-[18px]">
-                              calendar_today
-                            </span>
-                            <span>{formatContentDate(event.date)}</span>
-                          </div>
-                          <div className="flex items-center gap-2 mt-1 text-primary font-label-md text-label-md">
-                            <span className="material-symbols-outlined text-[18px]">
-                              schedule
-                            </span>
-                            <span>{event.time}</span>
-                          </div>
-                        </div>
-                        <div className="md:w-3/4">
-                          <h3 className="mb-2 font-headline-sm text-headline-sm text-on-surface">
-                            {event.title}
-                          </h3>
-                          <p className="mb-3 font-body-sm text-body-sm text-on-surface-variant">
-                            {event.desc}
-                          </p>
-                          <div className="flex items-center gap-2 mb-4 text-on-surface-variant font-body-sm">
-                            <span className="material-symbols-outlined text-[18px]">
-                              location_on
-                            </span>
-                            <span>{event.location}</span>
-                          </div>
-                          <button onClick={() => openRsvp(event)} className="px-6 py-2 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
-                            {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+            <div className="space-y-xl">
+              <section>
+                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-lg">
+                  Upcoming Events
+                </h3>
+                {upcoming.length === 0 ? (
+                  <p className="text-center text-on-surface-variant py-lg">
+                    No upcoming events match this filter.
+                  </p>
+                ) : (
+                  renderTimelineEvents(upcoming, false)
+                )}
+              </section>
+
+              {past.length > 0 && (
+                <section className="border-t border-outline-variant pt-xl">
+                  <h3 className="font-headline-sm text-headline-sm text-on-surface mb-lg">
+                    Past Events
+                  </h3>
+                  {renderTimelineEvents(past, true)}
+                </section>
+              )}
             </div>
           )}
         </div>
