@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import posts from "../data/posts";
+import { posts, formatContentDate } from "../lib/content";
 
 const tabs = [
   "Edit Profile",
@@ -238,7 +238,7 @@ export default function Profile() {
                           {event.title}
                         </h3>
                         <p className="font-body-sm text-body-sm text-on-surface-variant">
-                          {event.date} &middot; {event.time}
+                          {formatContentDate(event.date)} &middot; {event.time}
                         </p>
                         <p className="font-body-sm text-body-sm text-on-surface-variant">
                           {event.location}

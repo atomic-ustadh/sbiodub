@@ -1,0 +1,129 @@
+media:
+  input: public/media
+  output: /media
+  rename: safe
+
+content:
+  - name: resources
+    label: Resources
+    type: collection
+    path: src/content/resources
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, category, date, featured]
+      sort: [date, title]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values:
+            - Faith & Spirit
+            - Professional Skills
+            - Mental Wellness
+            - Community Action
+      - name: type
+        label: Resource type
+        type: select
+        required: true
+        options:
+          values:
+            - Guide
+            - Article
+            - Video
+      - name: image
+        label: Cover image
+        type: image
+        options:
+          categories: [image]
+      - name: excerpt
+        label: Summary
+        type: text
+        required: true
+        options:
+          maxlength: 300
+      - name: content
+        label: Body
+        type: rich-text
+        options:
+          format: html
+          switcher: true
+          media: false
+      - name: author
+        label: Author
+        type: string
+      - name: date
+        label: Publish date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: featured
+        label: Featured
+        type: boolean
+
+  - name: events
+    label: Events
+    type: collection
+    path: src/content/events
+    format: json
+    filename: "{primary}.json"
+    view:
+      primary: title
+      fields: [title, category, date]
+      sort: [date, title]
+      default:
+        sort: date
+        order: asc
+    fields:
+      - name: id
+        label: Stable ID
+        type: string
+        description: Do not change existing IDs. Leave empty for new events; the filename will be used.
+      - name: title
+        label: Title
+        type: string
+        required: true
+      - name: category
+        label: Category
+        type: select
+        required: true
+        options:
+          values:
+            - Educational
+            - Social
+            - Sports
+            - Spiritual
+      - name: image
+        label: Cover image
+        type: image
+        options:
+          categories: [image]
+      - name: date
+        label: Event date
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: time
+        label: Time
+        type: string
+        required: true
+      - name: location
+        label: Location
+        type: string
+        required: true
+      - name: description
+        label: Description
+        type: text
+        required: true

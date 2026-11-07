@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import LoginModal from '../components/LoginModal'
-import posts from '../data/posts'
+import { posts, formatContentDate } from '../lib/content'
 
 export default function BlogPost() {
   const { user, isBookmarked, toggleBookmark } = useAuth()
@@ -56,7 +56,7 @@ export default function BlogPost() {
             <div className="flex items-center gap-md text-on-primary/80 font-body-sm">
               <span>By {post.author}</span>
               <span className="w-1 h-1 rounded-full bg-on-primary/40" />
-              <span>{post.date}</span>
+              <span>{formatContentDate(post.date)}</span>
               <span className="w-1 h-1 rounded-full bg-on-primary/40" />
               <button onClick={handleBookmark} className="flex items-center gap-xs hover:text-white transition-colors">
                 <span className="material-symbols-outlined text-sm">{isBookmarked(post.slug) ? 'bookmark' : 'bookmark_border'}</span>

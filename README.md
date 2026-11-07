@@ -14,8 +14,9 @@ This is a **client-side demo, not a production application**. There is no backen
 - **About page** — static hero, story, values, team profiles and CTA sections.
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
 - **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
-- **Events** — six hard-coded events (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
-- **Resources** — four hard-coded articles with category filters, a featured article, article detail pages, and bookmark toggling. Save icons are visible to everyone; logged-out users see a login modal.
+- **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
+- **Resources** — four articles loaded from JSON content files, with category filters, a featured article, article detail pages, and bookmark toggling. Save icons are visible to everyone; logged-out users see a login modal.
+- **Content management** — resources and events live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
 - **Profile dashboard** — edit name, phone and interests; view bookmarks; view and cancel RSVPs; view a donations table; add/remove mock payment methods; log out.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
 - **Shared login modal** — `LoginModal` gates bookmarking and event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
@@ -39,7 +40,9 @@ This is a **client-side demo, not a production application**. There is no backen
 
 - No backend, database, email delivery or payment gateway.
 - Passwords are stored in plain text in `localStorage`; all member data is user-editable.
-- Event and article content is hard-coded in source; there is no CMS or admin interface.
+- Pages CMS edits require a Git commit and a rebuild; content is not updated instantly.
+- Resources and events are editable, but Home, About, Donate and Join copy still lives in source files.
+- Media uploads should go under `public/media`; existing images are still hotlinked from third-party Google URLs.
 - The privacy and terms pages use the current date for "Last Updated".
 - No automated tests, linting configuration or CI.
 - Images are largely hotlinked from third-party Google URLs.
@@ -63,7 +66,7 @@ This is a client-side single-page application. There is no server, API layer or 
 - **Layouts:** Most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer` + floating FAQ link). Auth pages and the 404 page render standalone.
 - **Route guards:** `ProtectedRoute` wraps `/profile` and `/receipts`, redirecting guests to `/login` with a return path.
 - **State:** `AuthContext` is the single source of client state for the session, users, bookmarks, RSVPs, donations and saved cards, persisted per user in `localStorage`.
-- **Content:** Articles are hard-coded in `src/data/posts.ts`; events, testimonials, team members and home-page previews are defined inline in their pages.
+- **Content:** Resources and events are JSON files under `src/content/`, loaded and validated at build time by `src/lib/content.ts`. Testimonials, team members and home-page previews are still defined inline in their pages.
 - **Shared UI:** `LoginModal` is reused for bookmark and RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
 - **Styling:** Tailwind CSS theme tokens and utilities live in `src/index.css`, following the `design.md` "Emerald & Gold" system.
 - **Deployment:** Netlify builds with Vite and rewrites all routes to `index.html` for client-side routing.
@@ -92,16 +95,37 @@ npm run preview
 
 The production output is written to `dist/`.
 
+## Editing Content with Pages CMS
+
+Resources and events are managed through [Pages CMS](https://pagescms.org). The repository config lives in `.pages.yml`.
+
+1. Sign in at [app.pagescms.org](https://app.pagescms.org) with GitHub.
+2. Install the Pages CMS GitHub App on the account that owns this repository and grant it access to `sbiodub`.
+3. Open the repository and select the branch you want to edit (`Decap-CMS` while testing, `main` after merging).
+4. Edit entries under **Resources** or **Events** and save. Pages CMS commits the JSON change to GitHub.
+5. Netlify rebuilds and deploys the updated site.
+
+### Content rules
+
+- New content is stored as JSON in `src/content/resources/` or `src/content/events/`. The filename becomes the resource slug or event fallback ID.
+- Keep an event's **Stable ID** unchanged once people have RSVP'd. New events can leave it empty; the filename is used.
+- Dates use `YYYY-MM-DD` and are formatted for display in the app.
+- Image fields expect an uploaded `/media/...` path; existing external URLs are still supported until they are replaced.
+- Content is compiled at build time. Edits are not visible until the commit triggers a successful Netlify deploy.
+- To see CMS edits locally, pull the latest commit before running `npm run dev`.
+
 ## Project Structure
 
 ```
 .
 ├── index.html                 # HTML entry point, fonts, root div
+├── .pages.yml                 # Pages CMS collections and media config
 ├── vite.config.ts             # Vite + React + Tailwind plugins
 ├── tsconfig.json              # TypeScript configuration
 ├── design.md                  # "Emerald & Gold" design system spec
 ├── netlify.toml               # Netlify build and SPA redirect config
 ├── public/                    # Static assets served from the site root
+│   ├── media/                 # Pages CMS image uploads
 │   ├── 404bg.png
 │   └── facebook.svg
 └── src/
@@ -118,8 +142,11 @@ The production output is written to `dist/`.
     │   └── SubscribeForm.tsx  # Presentational newsletter form
     ├── context/
     │   └── AuthContext.tsx    # Auth + member data via localStorage
-    ├── data/
-    │   └── posts.ts           # Hard-coded article content + types
+    ├── content/
+    │   ├── resources/         # Editable resource posts (JSON)
+    │   └── events/            # Editable events (JSON)
+    ├── lib/
+    │   └── content.ts         # Content loader, types and validation
     ├── assets/                # Local images and social SVG icons
     └── pages/
         ├── index.tsx          # Home
@@ -186,7 +213,7 @@ On load, the app migrates legacy `sbio_*` keys to the equivalent `lca_*` keys.
 
 > **Security note:** This is a front-end demo. Passwords are stored in plain text, and donations/payments are simulated or purely visual. Do not use this implementation for real accounts, donations or payment data. A real backend with secure authentication and a payment provider is required before production use.
 
-Static articles live in `src/data/posts.ts`; events, testimonials, team members and home-page event previews are defined inline in their respective page files.
+Resources live in `src/content/resources/` and events in `src/content/events/`. Both are loaded and validated by `src/lib/content.ts`. Testimonials, team members and home-page event previews are still defined inline in their respective page files.
 
 ## Design System
 

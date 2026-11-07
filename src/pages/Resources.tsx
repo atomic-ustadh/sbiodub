@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import SubscribeForm from "../components/SubscribeForm";
 import LoginModal from "../components/LoginModal";
-import posts from "../data/posts";
+import { posts } from "../lib/content";
 
 const categories = [
   "All Resources",

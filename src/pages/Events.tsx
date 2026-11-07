@@ -4,87 +4,10 @@ import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
 import LoginPrompt from "../components/LoginModal"
 
-type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
+import { events, formatContentDate, type CommunityEvent, type EventCategory } from "../lib/content"
+
 type EventFilter = "All Events" | EventCategory
 type EventView = "grid" | "calendar"
-
-interface CommunityEvent {
-  id: string
-  img: string
-  category: EventCategory
-  date: string
-  time: string
-  title: string
-  desc: string
-  location: string
-}
-
-let idCounter = 0
-const nextId = () => `event_${++idCounter}`
-
-const events: CommunityEvent[] = [
-  {
-    id: nextId(),
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuB-jUxRJ-jmVQf4tFVucHtZHbG6Rydt4bke3ZWoYuL8dr3wYbdbY4HwRK1x1MDL_g8MxJM5ze9yRlKGRJQCpE_QG1eIosGfElnfJs_1SINdWVLd4_bnqWittrcwxr3AFtxHbN3cTPmSIYNjs-TcXxn8BZ7piaxxDQqIf_EKtfV_dif3fKlkkpvGomNBdh_XWIdmo8O4p0uuN7CL03I_NXiFIfpVIZ0tlYqVPO_ju7NhvoB8JmcBdesV9jI9WPT5cChgWV5A2Jqy2Wh8",
-    category: "Educational",
-    date: "Sept 24, 2024",
-    time: "10:00 AM",
-    title: "Leadership & Ethics Seminar",
-    desc: "Join us for an inspiring session on developing ethical leadership skills rooted in spiritual values for the modern professional landscape.",
-    location: "Main Community Hall, Central Hub",
-  },
-  {
-    id: nextId(),
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAW5xvn0cc3DgCVQg5bkF-Wi1CfkQS1UagvH6ty7hmRBIvFIQ7rsMEqdduYV8xhw6HRgBBIamWFFLiwqUVWvAhP__MQ_nuSWwgEzMaiHPxIbkRTwf50g-EfbpIgYwWAP0QhaF1Z4Yx0JNZaozFpNjKKCgcqVmKq_fnLO4g85Yq2DQFRbXBT8l4gI0U8frEgPl9ILdM9s2zv_UEwSd8Z_95fOKgFkOsQT6ayUfQLlb6hAbAjDE9j-gSNgx5ZFKyxIdBAxM1aSWRLN99c",
-    category: "Social",
-    date: "Oct 02, 2024",
-    time: "6:30 PM",
-    title: "Youth Networking BBQ",
-    desc: "A relaxed evening of food, games, and conversation. Connect with peers from various backgrounds in an informal, friendly setting.",
-    location: "Westside Park Pavilion",
-  },
-  {
-    id: nextId(),
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCLiwE-hlogQYChYrtc-oOGQYJ2PpMZUxgs4_xix-qqQ9knSg2xGW4FNy9Dy2uvie01vTu1iNcRSTmksFBSA8WRZ6Jxm0i5LjOiIXW0pJmlqSxsFuSwUnbMrUuII5kmH9o13hWoaiP6_kOnINMnlYbTduDelmy4GJDV6iXUO6dKDRKAvHXO-6EULBbqao0iZeZT7XC2UnwAuoJ_WdGCJ1_YCadNT4cz3Uzrs91ut1ZGPZsY8y5cQ5L5dxTbfrMaC4ENaBhHptl5mSE-",
-    category: "Sports",
-    date: "Oct 15, 2024",
-    time: "9:00 AM",
-    title: "Annual Soccer Tournament",
-    desc: "Lace up your boots for a day of friendly competition. Teams of all skill levels are welcome. Prizes for the winning team!",
-    location: "City Sports Complex, Arena B",
-  },
-  {
-    id: nextId(),
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCNH16vwhXGqaF1VAdBNpLF0kK7ikDFwh4s_UbcAMjSRdt5CYlZmFRz_-0Ygk-qKNMSf2HHXo1CCs0cLR49IPMzY2HXeOHMGGkXu3zS13EBLS8ojWFMO0fNdjsOYfA_4IV5BEnLUjj9gfEFCrK49hjXA4DfmcACs0xfgwAmgh1112UGtqQwW2hEooLe77--ck9vNO4uNag0azHcgoHEWwrT6qW4W24MRrHBSgEi9wAoXvwpc55E1Du3sw-jbOUUmfwFeJmr8i_mF2iR",
-    category: "Spiritual",
-    date: "Oct 22, 2024",
-    time: "7:00 PM",
-    title: "Reflections & Chai",
-    desc: "An evening of spiritual storytelling and reflection accompanied by artisan chai. A chance to slow down and find inner peace.",
-    location: "LCA, Abuja Lounge",
-  },
-  {
-    id: nextId(),
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuA_lomlikiWb98gUcitbAjAH5DCKxtr6GgYVNeBg-6wPs6Uusd46LUtO5VYvs--lQTs28HeBM_-hzzNc824BSwMXHzJFFKmE4I9Hhj9-0jWjs2l-ZaWBAgmoddRF6vlw6JIvBOfRv9EPxvhiIRs222c1uum9es4Z29n9GmkaBJANRxhyIAVmUE-O-qOSDTCJWRbH9Cv9eewgKS8N2Uo5QY_OVckLIKWbwxM02VrpwdeADBvEwaO5wuOwAcEQUqUQmZRotGVd3U9n00f",
-    category: "Educational",
-    date: "Nov 05, 2024",
-    time: "2:00 PM",
-    title: "Tech for Social Good Workshop",
-    desc: "Learn how to leverage modern technology and coding to solve real-world community problems in this hands-on workshop.",
-    location: "Innovation Lab, 3rd Floor",
-  },
-  {
-    id: nextId(),
-    img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCuZk5mgxsXwLg_nW2pjhNGHQUZslphTRkwD6Csi52ap6Pg1eb0Kdmac4wu4-K2GUWYK3JpsuTszkkNyaAexE1MlL-SVqUzwmWkFySLUDLci08WbA4DWsRPRIgOsVD1N7zd5ctUNJGyehqguF5yU_1wE8Q_m0ySJZYNQYmB3ZJjvQBhJW75zyoO34ewhKn9tRwv5yr-zdLdZDrHH8MAS45tSXjq2rBqIK6Vc31b74VHfZTHKZoFY69dGDCVAkiJsq16R4wWxsRoJzrv",
-    category: "Sports",
-    date: "Nov 12, 2024",
-    time: "7:30 AM",
-    title: "Sunrise Mountain Hike",
-    desc: "Experience the majesty of nature on our guided sunrise hike. Moderate difficulty. Perfect for building stamina and bonding.",
-    location: "North Ridge Trailhead",
-  },
-];
-
 const categories: EventFilter[] = [
   "All Events",
   "Social",
@@ -277,7 +200,7 @@ export default function Events() {
                     <span className="material-symbols-outlined text-[18px]">
                       calendar_today
                     </span>
-                    <span>{event.date}</span>
+                    <span>{formatContentDate(event.date)}</span>
                     <span className="mx-1 text-outline">&bull;</span>
                     <span>{event.time}</span>
                   </div>
@@ -334,7 +257,7 @@ export default function Events() {
                             <span className="material-symbols-outlined text-[18px]">
                               calendar_today
                             </span>
-                            <span>{event.date}</span>
+                            <span>{formatContentDate(event.date)}</span>
                           </div>
                           <div className="flex items-center gap-2 mt-1 text-primary font-label-md text-label-md">
                             <span className="material-symbols-outlined text-[18px]">
@@ -391,7 +314,7 @@ export default function Events() {
               <button onClick={closeRsvp} className="text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">close</span></button>
             </div>
             <p className="font-headline-sm text-headline-sm text-primary mb-sm">{rsvpEvent.title}</p>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg">{rsvpEvent.date} &middot; {rsvpEvent.time} &middot; {rsvpEvent.location}</p>
+            <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg">{formatContentDate(rsvpEvent.date)} &middot; {rsvpEvent.time} &middot; {rsvpEvent.location}</p>
             <form onSubmit={handleRsvpSubmit} className="space-y-md">
               <div>
                 <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Full Name</label>
