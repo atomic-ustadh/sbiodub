@@ -5,7 +5,6 @@ export interface User {
   name: string
   email: string
   phone: string
-  interests: string[]
 }
 
 export interface StoredUser extends User {
@@ -17,10 +16,9 @@ export interface SignupInput {
   email: string
   password: string
   phone?: string
-  interests?: string[]
 }
 
-export type ProfileUpdates = Partial<Pick<User, 'name' | 'email' | 'phone' | 'interests'>>
+export type ProfileUpdates = Partial<Pick<User, 'name' | 'email' | 'phone'>>
 
 export interface RsvpInput {
   id: string
@@ -106,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('sbio_cards')
   }, [])
 
-  const signup = useCallback(({ name, email, password, phone, interests }: SignupInput): AuthResult => {
+  const signup = useCallback(({ name, email, password, phone }: SignupInput): AuthResult => {
     if (users.find((u) => u.email === email)) {
       return { ok: false, error: 'Email already registered' }
     }
@@ -116,7 +114,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       password,
       phone: phone || '',
-      interests: interests || [],
     }
     setUsers((prev) => [...prev, newUser])
     setUser({
@@ -124,7 +121,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       name: newUser.name,
       email: newUser.email,
       phone: newUser.phone,
-      interests: newUser.interests,
     })
     return { ok: true }
   }, [users])
@@ -137,7 +133,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       name: found.name,
       email: found.email,
       phone: found.phone,
-      interests: found.interests,
     })
     return { ok: true }
   }, [users])

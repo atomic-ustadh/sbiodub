@@ -14,7 +14,6 @@ export default function Login() {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [interest] = useState('')
   const [terms, setTerms] = useState(false)
   const [remember, setRemember] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -25,7 +24,7 @@ export default function Login() {
     setError('')
     if (!fullName || !email || !password) return setError('Please fill in all fields')
     if (!terms) return setError('Please agree to the Terms of Service')
-    const result = signup({ name: fullName, email, password, interests: interest ? [interest] : [] })
+    const result = signup({ name: fullName, email, password })
     if (result.ok) navigate(redirectTo, { replace: true })
     else setError(result.error)
   }

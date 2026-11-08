@@ -21,21 +21,10 @@ export default function Profile() {
   const [tab, setTab] = useState("Edit Profile");
   const [name, setName] = useState(user?.name || "");
   const [phone, setPhone] = useState(user?.phone || "");
-  const [interests, setInterests] = useState(user?.interests || []);
-  const interestOptions = [
-    "Spiritual Growth",
-    "Community Service",
-    "Sports & Recreation",
-    "Education & Mentorship",
-    "Arts & Culture",
-    "Leadership Development",
-    "Social Events",
-    "Volunteering",
-  ];
   const [saved, setSaved] = useState(false);
 
   const handleSaveProfile = () => {
-    updateProfile({ name, phone, interests });
+    updateProfile({ name, phone });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -112,39 +101,6 @@ export default function Profile() {
                   placeholder="080 1234 5678"
                   className="w-full px-5 py-4 border rounded-xl text-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none"
                 />
-              </div>
-              <div>
-                <label className="block font-label-lg text-label-lg text-on-surface-variant mb-sm">
-                  Interests
-                </label>
-                <div className="grid grid-cols-2 gap-4">
-                  {interestOptions.map((opt) => (
-                    <label
-                      key={opt}
-                      className={`flex items-center gap-3 px-4 py-4 border rounded-xl cursor-pointer transition-all ${
-                        interests.includes(opt)
-                          ? 'border-secondary bg-secondary-fixed/10'
-                          : 'border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low'
-                      }`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={interests.includes(opt)}
-                        onChange={() =>
-                          setInterests((prev) =>
-                            prev.includes(opt)
-                              ? prev.filter((i) => i !== opt)
-                              : [...prev, opt],
-                          )
-                        }
-                        className="w-5 h-5 rounded accent-secondary shrink-0"
-                      />
-                      <span className="font-body-md text-body-md text-on-surface">
-                        {opt}
-                      </span>
-                    </label>
-                  ))}
-                </div>
               </div>
               <button
                 onClick={handleSaveProfile}

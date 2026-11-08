@@ -17,7 +17,7 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
 - **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
 - **Content management** — resources, events, testimonials, leadership profiles, FAQ entries, legal pages and the Donate page live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
-- **Profile dashboard** — edit name, phone and interests; view and cancel RSVPs; see a donation-history placeholder; log out.
+- **Profile dashboard** — edit name and phone; view and cancel RSVPs; see a donation-history placeholder; log out.
 - **Newsletter signup** — `SubscribeForm` posts to Netlify Forms; submissions are available in the Netlify dashboard after deployment.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
 - **Shared login modal** — `LoginModal` gates event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
