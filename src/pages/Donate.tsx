@@ -5,7 +5,6 @@ export default function Donate() {
   const [donorName, setDonorName] = useState("");
   const [donorEmail, setDonorEmail] = useState("");
   const [donorPhone, setDonorPhone] = useState("");
-  const [transferReference, setTransferReference] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
 
   const copyDetail = async (label: string, value: string) => {
@@ -23,12 +22,11 @@ export default function Donate() {
     !donationPage.whatsappNumber.startsWith("REPLACE_WITH_") &&
     whatsappNumber.length > 0;
   const whatsappMessage = [
-    "Hello LCA Abuja, I have made a donation.",
+    "Assalamu Alaikum LCA Abuja, I have made a donation.",
     `Name: ${donorName || "Not provided"}`,
     `Email: ${donorEmail || "Not provided"}`,
     `Phone: ${donorPhone || "Not provided"}`,
-    `Bank reference: ${transferReference || "Not provided"}`,
-    "Please find my transfer receipt attached.",
+    "I have attached my transfer receipt.",
   ].join("\n");
   const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
   const accountDetails = [
@@ -131,8 +129,9 @@ export default function Donate() {
               Confirm Your Donation on WhatsApp
             </h2>
             <p className="font-body-md text-body-md text-on-surface-variant mb-md">
-              After transferring, send your receipt to us on WhatsApp so we can
-              verify the payment and acknowledge your donation.
+              After transferring, tap the button below to open WhatsApp with
+              your details filled in. Attach your bank receipt in the chat
+              before sending so we can verify and acknowledge your donation.
             </p>
             <div className="grid sm:grid-cols-2 gap-md">
               <div>
@@ -169,18 +168,6 @@ export default function Donate() {
                   onChange={(e) => setDonorPhone(e.target.value)}
                   className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none"
                   placeholder="080 1234 5678"
-                />
-              </div>
-              <div>
-                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">
-                  Bank Reference
-                </label>
-                <input
-                  type="text"
-                  value={transferReference}
-                  onChange={(e) => setTransferReference(e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none"
-                  placeholder="From your bank receipt"
                 />
               </div>
             </div>

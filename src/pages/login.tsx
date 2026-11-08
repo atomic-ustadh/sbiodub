@@ -143,7 +143,7 @@ export default function Login() {
                   </div>
                   <div className="text-sm mb-lg">
                     <label className="font-body-sm text-body-sm text-on-surface-variant" htmlFor="terms">
-                      I agree to the <a className="font-bold text-primary hover:underline" href="#">Terms of Service</a> and <a className="font-bold text-primary hover:underline" href="#">Privacy Policy</a>.
+                      I agree to the <Link className="font-bold text-primary hover:underline" to="/terms">Terms of Service</Link> and <Link className="font-bold text-primary hover:underline" to="/privacy">Privacy Policy</Link>.
                     </label>
                   </div>
                 </div>

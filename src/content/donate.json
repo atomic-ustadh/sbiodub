@@ -27,15 +27,19 @@
   "faqs": [
     {
       "question": "How do I make a donation?",
-      "answer": "Transfer the amount to the bank account shown on this page, then send your bank transfer receipt to us on WhatsApp so we can verify it."
+      "answer": "Transfer the amount to the bank account shown on this page, then open WhatsApp from this page and attach your bank transfer receipt in the chat."
     },
     {
       "question": "Do you collect card details?",
       "answer": "No. We are currently using bank transfers only. Do not send card numbers, expiry dates, CVV codes, PINs, or banking passwords to anyone."
     },
     {
+      "question": "Do I need to send a transfer reference?",
+      "answer": "No. The bank receipt contains the transfer reference. Just attach the receipt in the WhatsApp chat."
+    },
+    {
       "question": "How do I get a donation receipt?",
-      "answer": "Send the transfer receipt from your bank app on WhatsApp. After we confirm the credit, we will acknowledge your donation. Contact us if you need a formal acknowledgement."
+      "answer": "Attach the transfer receipt from your bank app in the WhatsApp chat. After we confirm the credit, we will acknowledge your donation. Contact us if you need a formal acknowledgement."
     },
     {
       "question": "Can I donate monthly?",

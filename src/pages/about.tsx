@@ -176,26 +176,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="relative overflow-hidden py-xl bg-primary text-on-primary">
-        <div className="absolute inset-0 geometric-pattern opacity-10" />
-        <div className="relative z-10 mx-auto text-center max-w-container-max px-gutter">
-          <h2 className="font-headline-md text-headline-md text-secondary-fixed mb-md">Ready to join the LCA?</h2>
-          <p className="max-w-2xl mx-auto font-body-lg text-body-lg mb-lg opacity-90">
-            Whether you&rsquo;re looking to learn, lead, or serve, there&rsquo;s a place for you in the LCA 
-            family. Together, we can light the way for the next generation.
-          </p>
-          <div className="flex flex-col items-center justify-center sm:flex-row gap-md">
-            <button className="w-full transition-all scale-95 rounded-lg sm:w-auto bg-secondary text-on-secondary px-xl py-sm font-button text-button hover:bg-secondary-container active:scale-90">
-              Join Us Now
-            </button>
-            <button className="w-full transition-all scale-95 border-2 rounded-lg sm:w-auto border-on-primary px-xl py-sm font-button text-button hover:bg-on-primary hover:text-primary active:scale-90">
-              Volunteer with Us
-            </button>
-          </div>
-        </div>
-      </section>
     </main>
   )
 }

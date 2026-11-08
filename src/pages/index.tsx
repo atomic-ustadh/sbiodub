@@ -43,12 +43,18 @@ export default function Platform() {
               thrive and lead in a modern world.
             </p>
             <div className="flex flex-wrap gap-md pt-base">
-              <button className="bg-secondary-container text-on-secondary-container font-button text-button px-lg py-md rounded-lg shadow-lg hover:translate-y-0.5 transition-all">
+              <Link
+                to="/join"
+                className="bg-secondary-container text-on-secondary-container font-button text-button px-lg py-md rounded-lg shadow-lg hover:translate-y-0.5 transition-all"
+              >
                 Join the Movement
-              </button>
-              <button className="border border-primary-fixed text-on-primary-container font-button text-button px-lg py-md rounded-lg shadow-lg hover:translate-y-0.5 transition-all">
+              </Link>
+              <Link
+                to="/about"
+                className="border border-primary-fixed text-on-primary-container font-button text-button px-lg py-md rounded-lg shadow-lg hover:translate-y-0.5 transition-all"
+              >
                 About LCA
-              </button>
+              </Link>
             </div>
           </div>
           {/* Hero image with stat badge */}
@@ -301,12 +307,18 @@ export default function Platform() {
                 next generation of leaders.
               </p>
               <div className="flex flex-wrap gap-md pt-base">
-                <button className="transition-transform shadow-lg bg-secondary-fixed text-on-secondary-fixed font-button text-button px-lg py-md rounded-xl hover:scale-105">
-                  Become a Volunteer
-                </button>
-                <button className="transition-all border bg-surface/10 text-on-primary font-button text-button px-lg py-md rounded-xl backdrop-blur-md border-white/20 hover:bg-surface/20">
+                <Link
+                  to="/join"
+                  className="transition-transform shadow-lg bg-secondary-fixed text-on-secondary-fixed font-button text-button px-lg py-md rounded-xl hover:scale-105"
+                >
+                  Become a Member
+                </Link>
+                <Link
+                  to="/donate"
+                  className="transition-all border bg-surface/10 text-on-primary font-button text-button px-lg py-md rounded-xl backdrop-blur-md border-white/20 hover:bg-surface/20"
+                >
                   Make a Donation
-                </button>
+                </Link>
               </div>
             </div>
             {/* Decorative hexagon icons */}

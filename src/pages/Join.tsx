@@ -1,45 +1,6 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { Link } from 'react-router-dom'
 
 export default function Join() {
-  const navigate = useNavigate()
-  const { signup } = useAuth()
-  const [step, setStep] = useState(1)
-  const totalSteps = 3
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [role, setRole] = useState('Member')
-  const [error, setError] = useState('')
-
-  const next = () => {
-    setError('')
-    if (step === 1 && (!name || !email || !password)) {
-      return setError('Please fill in all fields')
-    }
-    if (step < totalSteps) setStep((s) => s + 1)
-  }
-
-  const prev = () => {
-    setError('')
-    if (step > 1) setStep((s) => s - 1)
-  }
-
-  const handleSubmit = () => {
-    setError('')
-    const result = signup({ name, email, password, interests: [] })
-    if (result.ok) navigate('/profile')
-    else setError(result.error)
-  }
-
-  const stepTitle = step === 1 ? 'Personal Details' : step === 2 ? 'Choose Your Path' : 'Finalize Registration'
-  const stepSubtitle = step === 1
-    ? 'Tell us about yourself so we can get to know you better.'
-    : step === 2
-      ? 'Select how you would like to participate in our community.'
-      : 'Review your selection and join the LCA, Abuja family.'
-
   return (
     <main className="pt-[80px] min-h-screen relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#735c00 0.5px, transparent 0.5px)', backgroundSize: '24px 24px', opacity: 0.05 }} />
@@ -79,82 +40,28 @@ export default function Join() {
             </div>
           </div>
 
-          <div className="border shadow-lg backdrop-blur-xl bg-white/70 border-slate-100/50 px-sm md:px-lg py-lg rounded-xl">
-            <div className="mb-lg">
-              <div className="flex items-center gap-xs mb-sm">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i <= step ? 'bg-primary' : 'bg-surface-variant'}`} />
-                ))}
-              </div>
-              <h2 className="font-headline-md text-headline-md text-primary">{stepTitle}</h2>
-              <p className="font-body-sm text-body-sm text-on-surface-variant">{stepSubtitle}</p>
+          <div className="border shadow-lg backdrop-blur-xl bg-white/70 border-slate-100/50 p-lg rounded-xl">
+            <div className="mx-auto mb-md flex h-16 w-16 items-center justify-center rounded-full bg-primary-fixed">
+              <span className="material-symbols-outlined text-3xl text-primary">login</span>
             </div>
-            {error && <p className="bg-error-container text-on-error-container p-sm rounded-lg font-body-sm mb-md">{error}</p>}
-
-            <form className="space-y-md" onSubmit={(e) => e.preventDefault()}>
-              {step === 1 && (
-                <div className="transition-all duration-400">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
-                    <div className="space-y-xs">
-                      <label className="font-label-md text-label-md text-on-surface-variant">Full Name</label>
-                      <input className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary" placeholder="Enter your name" type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                    </div>
-                    <div className="space-y-xs">
-                      <label className="font-label-md text-label-md text-on-surface-variant">Email Address</label>
-                      <input className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary" placeholder="name@example.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                    </div>
-                  </div>
-                  <div className="mt-md space-y-xs">
-                    <label className="font-label-md text-label-md text-on-surface-variant">Password</label>
-                    <input className="w-full transition-all border rounded-lg outline-none bg-surface-container-lowest border-outline-variant p-sm focus:ring-2 focus:ring-secondary-fixed-dim focus:border-primary" placeholder="Create a password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                  </div>
-                </div>
-              )}
-
-              {step === 2 && (
-                <div className="transition-all duration-400">
-                  <p className="font-label-md text-label-md text-on-surface-variant mb-sm">Choose your primary path:</p>
-                  <div className="grid grid-cols-1 gap-md">
-                    {['Member', 'Volunteer'].map((opt) => (
-                      <label key={opt} className="flex items-start transition-colors border cursor-pointer p-md border-outline-variant rounded-xl hover:bg-surface-container-low group">
-                        <input className="w-4 h-4 mt-1 text-primary focus:ring-primary" name="path" type="radio" checked={role === opt} onChange={() => setRole(opt)} />
-                        <div className="ml-md">
-                          <span className="block font-headline-sm text-headline-sm text-primary mb-xs">{opt}</span>
-                          <span className="block font-body-sm text-body-sm text-on-surface-variant">
-                            {opt === 'Member' ? 'Access all resources, events, and formal mentorship programs.' : 'Contribute your skills to manage events and outreach initiatives.'}
-                          </span>
-                        </div>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {step === 3 && (
-                <div className="text-center transition-all duration-400 py-lg">
-                  <div className="flex items-center justify-center w-20 h-20 mx-auto rounded-full bg-primary-fixed mb-md">
-                    <span className="text-4xl material-symbols-outlined text-primary" style={{ fontVariationSettings: '"FILL" 1' }}>check_circle</span>
-                  </div>
-                  <h3 className="font-headline-md text-headline-md text-primary mb-sm">Ready to Join?</h3>
-                  <p className="font-body-md text-body-md text-on-surface-variant">By clicking submit, you agree to our community guidelines and mission statement.</p>
-                </div>
-              )}
-
-              <div className="flex items-center justify-between pt-lg">
-                <button type="button" onClick={prev} disabled={step === 1} className={`font-button text-button text-primary flex items-center transition-all ${step === 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}`}>
-                  <span className="material-symbols-outlined mr-xs">chevron_left</span> Back
-                </button>
-                {step < 3 ? (
-                  <button type="button" onClick={next} className="flex items-center py-2 transition-all rounded-full font-button text-button bg-primary text-on-primary px-md md:px-xl hover:shadow-lg">
-                    Continue <span className="material-symbols-outlined ml-xs">chevron_right</span>
-                  </button>
-                ) : (
-                  <button type="button" onClick={handleSubmit} className="flex items-center py-2 transition-all rounded-full font-button text-button bg-primary text-on-primary px-md md:px-xl hover:shadow-lg">
-                    Submit <span className="material-symbols-outlined ml-xs">send</span>
-                  </button>
-                )}
-              </div>
-            </form>
+            <h2 className="text-center font-headline-md text-headline-md text-primary mb-sm">Ready to Join?</h2>
+            <p className="text-center font-body-md text-body-md text-on-surface-variant mb-lg">
+              Create an account or sign in on our login page to become part of the LCA, Abuja community.
+            </p>
+            <Link
+              to="/login"
+              className="flex w-full items-center justify-center gap-sm rounded-lg bg-primary px-lg py-md font-button text-button text-on-primary shadow-md transition-all hover:bg-primary-container active:scale-[0.98]"
+            >
+              Continue to Sign Up
+              <span className="material-symbols-outlined">arrow_forward</span>
+            </Link>
+            <p className="mt-md text-center font-body-sm text-body-sm text-on-surface-variant">
+              Already have an account?{' '}
+              <Link to="/login" className="font-bold text-primary hover:underline">
+                Log in
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>

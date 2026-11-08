@@ -16,8 +16,9 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
 - **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
 - **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
-- **Content management** — resources, events, testimonials, leadership profiles, FAQ entries and legal pages live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
+- **Content management** — resources, events, testimonials, leadership profiles, FAQ entries, legal pages and the Donate page live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
 - **Profile dashboard** — edit name, phone and interests; view and cancel RSVPs; see a donation-history placeholder; log out.
+- **Newsletter signup** — `SubscribeForm` posts to Netlify Forms; submissions are available in the Netlify dashboard after deployment.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
 - **Shared login modal** — `LoginModal` gates event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
 - **Legal and utility pages** — CMS-driven privacy policy, terms of service, and FAQ accordion.
@@ -26,14 +27,10 @@ This is a **client-side demo, not a production application**. There is no backen
 ### UI-only or non-functional
 
 - **Donation confirmation** — the `/donate` page uses manual bank transfer. Donors copy the bank details, view donation destinations and FAQ content, then open WhatsApp with a prefilled message and attach their bank receipt. Nothing is persisted by the site, so donation history and receipts contain no user-created data. Bank details, quote, destinations and FAQ are edited from `src/content/donate.json` through Pages CMS.
-- **Newsletter subscription** — `SubscribeForm` renders an email input and button but does not submit, validate or persist anything.
-- **Resource search** — the search field and "Find" button on `/resources` are decorative; only category filters work.
+- **Resource search** — not implemented; only category filters work.
 - **Event search** — not implemented; only category filtering exists.
 - **Forgot password** — checks whether an email exists in local storage and simulates a short delay, but does not send a link or reset a password. It also reveals whether an account exists for an email.
-- **Membership flow** — `/join` is a three-step form, but the selected role ("Member" or "Volunteer") is not saved, no phone/terms data is collected, and the result is simply a local account.
-- **Home/About CTAs** — several buttons (e.g. "Join the Movement", "About LCA", "Register Now", "Become a Volunteer", "Make a Donation") are placeholders with no navigation or action.
-- **Terms links on signup** — point to `#` instead of `/terms` and `/privacy`.
-- **FAQ page** — placeholder only; it currently says no FAQs are available.
+- **Membership flow** — `/join` is a membership landing page with a CTA to `/login`; account creation and sign-in happen on the shared login/signup page.
 - **404 background image** — uses the relative path `../404bg.png`; this resolves correctly for top-level unmatched URLs but can break for deeper unmatched paths where `/404bg.png` would be safer.
 
 ### Known limitations
@@ -176,7 +173,7 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 | `/login` | Login / Signup | Standalone layout, no navbar/footer |
 | `/forgot-password` | Forgot Password | Standalone layout; mock only |
 | `/events` | Events | CMS events split into upcoming/past; RSVP requires login |
-| `/join` | Membership | Three-step form; role is not persisted |
+| `/join` | Membership | Landing page; CTA links to `/login` |
 | `/resources` | Resources | Category filters work; search does not |
 | `/resources/:slug` | Blog Post | Article detail with generated title hero |
 | `/donate` | Donate | Manual bank transfer; opens WhatsApp |
