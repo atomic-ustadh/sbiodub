@@ -1,0 +1,49 @@
+{
+  "bankName": "REPLACE_WITH_BANK_NAME",
+  "accountName": "REPLACE_WITH_ACCOUNT_NAME",
+  "accountNumber": "REPLACE_WITH_ACCOUNT_NUMBER",
+  "whatsappNumber": "REPLACE_WITH_WHATSAPP_NUMBER",
+  "quote": "I never imagined my small monthly donation could fund an entire leadership workshop. LCA, Abuja showed me exactly where my money went.",
+  "quoteAuthor": "Fatima B.",
+  "quoteRole": "Monthly Donor",
+  "destinations": [
+    {
+      "label": "General Fund",
+      "description": "Where most needed"
+    },
+    {
+      "label": "Youth Programs",
+      "description": "Workshops & mentorship"
+    },
+    {
+      "label": "Community Events",
+      "description": "Gatherings & outreach"
+    },
+    {
+      "label": "Outreach",
+      "description": "Dawah & charity drives"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How do I make a donation?",
+      "answer": "Transfer the amount to the bank account shown on this page, then send your bank transfer receipt to us on WhatsApp so we can verify it."
+    },
+    {
+      "question": "Do you collect card details?",
+      "answer": "No. We are currently using bank transfers only. Do not send card numbers, expiry dates, CVV codes, PINs, or banking passwords to anyone."
+    },
+    {
+      "question": "How do I get a donation receipt?",
+      "answer": "Send the transfer receipt from your bank app on WhatsApp. After we confirm the credit, we will acknowledge your donation. Contact us if you need a formal acknowledgement."
+    },
+    {
+      "question": "Can I donate monthly?",
+      "answer": "Yes. You can set up a standing order with your bank, or contact us on WhatsApp and we can advise on recurring giving. Recurring payments are not automated on this website."
+    },
+    {
+      "question": "Where does my donation go?",
+      "answer": "Donations support our General Fund, Youth Programs, Community Events, and Outreach work. Contact us on WhatsApp if you want to direct your gift to a specific area."
+    }
+  ]
+}

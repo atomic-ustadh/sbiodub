@@ -1,35 +1,5 @@
 import { useState } from "react";
-import { donationConfig } from "../config/donation";
-
-const allocations = [
-  { key: "general", label: "General Fund", desc: "Where most needed" },
-  { key: "youth", label: "Youth Programs", desc: "Workshops & mentorship" },
-  { key: "events", label: "Community Events", desc: "Gatherings & outreach" },
-  { key: "outreach", label: "Outreach", desc: "Dawah & charity drives" },
-];
-
-const faqs = [
-  {
-    q: "How do I make a donation?",
-    a: "Transfer the amount to the bank account shown on this page, then send your bank transfer receipt to us on WhatsApp so we can verify it.",
-  },
-  {
-    q: "Do you collect card details?",
-    a: "No. We are currently using bank transfers only. Do not send card numbers, expiry dates, CVV codes, PINs, or banking passwords to anyone.",
-  },
-  {
-    q: "How do I get a donation receipt?",
-    a: "Send the transfer receipt from your bank app on WhatsApp. After we confirm the credit, we will acknowledge your donation. Contact us if you need a formal acknowledgement.",
-  },
-  {
-    q: "Can I donate monthly?",
-    a: "Yes. You can set up a standing order with your bank, or contact us on WhatsApp and we can advise on recurring giving. Recurring payments are not automated on this website.",
-  },
-  {
-    q: "Where does my donation go?",
-    a: "Donations support our General Fund, Youth Programs, Community Events, and Outreach work. Contact us on WhatsApp if you want to direct your gift to a specific area.",
-  },
-];
+import { donationPage } from "../lib/content";
 
 export default function Donate() {
   const [donorName, setDonorName] = useState("");
@@ -48,9 +18,9 @@ export default function Donate() {
     }
   };
 
-  const whatsappNumber = donationConfig.whatsappNumber.replace(/\D/g, "");
+  const whatsappNumber = donationPage.whatsappNumber.replace(/\D/g, "");
   const whatsappReady =
-    !donationConfig.whatsappNumber.startsWith("REPLACE_WITH_") &&
+    !donationPage.whatsappNumber.startsWith("REPLACE_WITH_") &&
     whatsappNumber.length > 0;
   const whatsappMessage = [
     "Hello LCA Abuja, I have made a donation.",
@@ -62,9 +32,9 @@ export default function Donate() {
   ].join("\n");
   const whatsappHref = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
   const accountDetails = [
-    { label: "Bank", value: donationConfig.bankName },
-    { label: "Account name", value: donationConfig.accountName },
-    { label: "Account number", value: donationConfig.accountNumber },
+    { label: "Bank", value: donationPage.bankName },
+    { label: "Account name", value: donationPage.accountName },
+    { label: "Account number", value: donationPage.accountNumber },
   ];
 
   return (
@@ -140,16 +110,16 @@ export default function Donate() {
               Where does your donation go?
             </h2>
             <div className="grid sm:grid-cols-2 gap-sm">
-              {allocations.map((a) => (
+              {donationPage.destinations.map((destination) => (
                 <div
-                  key={a.key}
+                  key={destination.label}
                   className="rounded-lg border border-outline-variant bg-surface-container-lowest p-md"
                 >
                   <div className="font-button text-button text-primary">
-                    {a.label}
+                    {destination.label}
                   </div>
                   <div className="font-body-sm text-body-sm text-on-surface-variant">
-                    {a.desc}
+                    {destination.description}
                   </div>
                 </div>
               ))}
@@ -274,13 +244,13 @@ export default function Donate() {
               format_quote
             </span>
             <p className="italic leading-relaxed font-body-md text-body-md text-on-surface-variant mb-sm">
-              &ldquo;I never imagined my small monthly donation could fund an
-              entire leadership workshop. LCA, Abuja showed me exactly where my
-              money went.&rdquo;
+              &ldquo;{donationPage.quote}&rdquo;
             </p>
-            <p className="font-button text-button text-primary">— Fatima B.</p>
+            <p className="font-button text-button text-primary">
+              — {donationPage.quoteAuthor}
+            </p>
             <p className="font-body-sm text-body-sm text-on-surface-variant">
-              Monthly Donor
+              {donationPage.quoteRole}
             </p>
           </div>
         </aside>
@@ -292,19 +262,19 @@ export default function Donate() {
             Frequently Asked Questions
           </h2>
           <div className="max-w-3xl mx-auto space-y-md">
-            {faqs.map(({ q, a }) => (
+            {donationPage.faqs.map((faq) => (
               <details
-                key={q}
+                key={faq.question}
                 className="transition-all border rounded-lg group border-outline-variant p-md open:bg-surface-container-low"
               >
                 <summary className="flex items-center justify-between list-none cursor-pointer font-button text-button text-primary">
-                  {q}
+                  {faq.question}
                   <span className="transition-transform material-symbols-outlined group-open:rotate-180 text-primary">
                     expand_more
                   </span>
                 </summary>
                 <p className="leading-relaxed mt-md font-body-md text-body-md text-on-surface-variant">
-                  {a}
+                  {faq.answer}
                 </p>
               </details>
             ))}

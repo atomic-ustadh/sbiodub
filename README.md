@@ -25,7 +25,7 @@ This is a **client-side demo, not a production application**. There is no backen
 
 ### UI-only or non-functional
 
-- **Donation confirmation** — the `/donate` page uses manual bank transfer. Donors choose an amount and allocation, copy the configured bank details, then open WhatsApp with a prefilled message and attach their bank receipt. Nothing is persisted by the site, so donation history and receipts still contain no user-created data. Bank and WhatsApp details are configured in `src/config/donation.ts`.
+- **Donation confirmation** — the `/donate` page uses manual bank transfer. Donors copy the bank details, view donation destinations and FAQ content, then open WhatsApp with a prefilled message and attach their bank receipt. Nothing is persisted by the site, so donation history and receipts contain no user-created data. Bank details, quote, destinations and FAQ are edited from `src/content/donate.json` through Pages CMS.
 - **Newsletter subscription** — `SubscribeForm` renders an email input and button but does not submit, validate or persist anything.
 - **Resource search** — the search field and "Find" button on `/resources` are decorative; only category filters work.
 - **Event search** — not implemented; only category filtering exists.
@@ -156,7 +156,7 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
         ├── Events.tsx         # Events + RSVP
         ├── Resources.tsx      # Resource/article listing
         ├── BlogPost.tsx       # Individual article
-        ├── Donate.tsx         # Presentational donation page
+        ├── Donate.tsx         # Manual bank transfer and WhatsApp confirmation
         ├── Profile.tsx        # Member dashboard
         ├── Receipts.tsx       # Donation receipts
         ├── PrivacyPolicy.tsx

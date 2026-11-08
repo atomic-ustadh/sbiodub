@@ -273,3 +273,67 @@ content:
           format: html
           switcher: true
           media: false
+
+  - name: donate
+    label: Donate Page
+    type: file
+    path: src/content/donate.json
+    format: json
+    fields:
+      - name: bankName
+        label: Bank name
+        type: string
+        required: true
+      - name: accountName
+        label: Account name
+        type: string
+        required: true
+      - name: accountNumber
+        label: Account number
+        type: string
+        required: true
+      - name: whatsappNumber
+        label: WhatsApp number
+        type: string
+        required: true
+        description: Include the country code, digits only, e.g. 2348012345678.
+      - name: quote
+        label: Donor quote
+        type: text
+        required: true
+      - name: quoteAuthor
+        label: Quote author
+        type: string
+        required: true
+      - name: quoteRole
+        label: Quote author role
+        type: string
+        required: true
+      - name: destinations
+        label: Donation destinations
+        type: object
+        list: true
+        required: true
+        fields:
+          - name: label
+            label: Destination
+            type: string
+            required: true
+          - name: description
+            label: Description
+            type: text
+            required: true
+      - name: faqs
+        label: FAQ
+        type: object
+        list: true
+        required: true
+        fields:
+          - name: question
+            label: Question
+            type: string
+            required: true
+          - name: answer
+            label: Answer
+            type: text
+            required: true

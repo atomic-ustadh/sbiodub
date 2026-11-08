@@ -1,3 +1,5 @@
+import donateData from "../content/donate.json"
+
 export type PostType = "Guide" | "Article" | "Video"
 
 export type PostCategory =
@@ -48,6 +50,28 @@ export interface LegalPage {
   title: string
   lastUpdated: string
   content: string
+}
+
+export interface DonationDestination {
+  label: string
+  description: string
+}
+
+export interface DonationFaq {
+  question: string
+  answer: string
+}
+
+export interface DonationPageContent {
+  bankName: string
+  accountName: string
+  accountNumber: string
+  whatsappNumber: string
+  quote: string
+  quoteAuthor: string
+  quoteRole: string
+  destinations: DonationDestination[]
+  faqs: DonationFaq[]
 }
 
 export type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
@@ -234,6 +258,64 @@ function toLegalPage(filePath: string, value: unknown): LegalPage {
   }
 }
 
+function requireArray(
+  record: RawRecord,
+  key: string,
+  context: string,
+): unknown[] {
+  const value = record[key]
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new Error(`${context}: "${key}" must be a non-empty array`)
+  }
+  return value
+}
+
+function toDonationDestination(
+  value: unknown,
+  context: string,
+): DonationDestination {
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  return {
+    label: requireString(value, "label", context),
+    description: requireString(value, "description", context),
+  }
+}
+
+function toDonationFaq(value: unknown, context: string): DonationFaq {
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  return {
+    question: requireString(value, "question", context),
+    answer: requireString(value, "answer", context),
+  }
+}
+
+function toDonationPage(value: unknown): DonationPageContent {
+  const context = "src/content/donate.json"
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  return {
+    bankName: requireString(value, "bankName", context),
+    accountName: requireString(value, "accountName", context),
+    accountNumber: requireString(value, "accountNumber", context),
+    whatsappNumber: requireString(value, "whatsappNumber", context),
+    quote: requireString(value, "quote", context),
+    quoteAuthor: requireString(value, "quoteAuthor", context),
+    quoteRole: requireString(value, "quoteRole", context),
+    destinations: requireArray(value, "destinations", context).map(
+      (item, index) =>
+        toDonationDestination(item, `${context}: destinations[${index}]`),
+    ),
+    faqs: requireArray(value, "faqs", context).map((item, index) =>
+      toDonationFaq(item, `${context}: faqs[${index}]`),
+    ),
+  }
+}
+
 function toEvent(filePath: string, value: unknown): CommunityEvent {
   const context = `src/content/events/${slugFromPath(filePath)}.json`
   if (!isRecord(value)) {
@@ -311,6 +393,8 @@ export const faqItems: FaqItem[] = Object.entries(faqModules)
 export const legalPages: LegalPage[] = Object.entries(legalModules)
   .map(([filePath, value]) => toLegalPage(filePath, value))
   .sort((a, b) => a.title.localeCompare(b.title))
+
+export const donationPage = toDonationPage(donateData)
 
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((post) => post.slug === slug)
