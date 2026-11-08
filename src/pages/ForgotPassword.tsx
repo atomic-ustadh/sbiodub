@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
@@ -9,7 +9,7 @@ export default function ForgotPassword() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     setError('')
     if (!email) return setError('Please enter your email address')

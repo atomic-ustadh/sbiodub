@@ -1,4 +1,4 @@
-import { useState, useEffect, type FormEvent } from "react"
+import { useState, useEffect, type SubmitEvent } from "react"
 import { useLocation } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
@@ -64,7 +64,7 @@ export default function Events() {
     document.body.style.overflow = ''
   }
 
-  const handleRsvpSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleRsvpSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!rsvpEvent) return
     addRsvp({

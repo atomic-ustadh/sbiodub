@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type SubmitEvent } from 'react'
 
 interface SubscribeFormProps {
   variant?: 'default' | 'footer'
@@ -10,7 +10,7 @@ export default function SubscribeForm({ variant = 'default' }: SubscribeFormProp
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<Status>('idle')
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!email) return
     setStatus('sending')
