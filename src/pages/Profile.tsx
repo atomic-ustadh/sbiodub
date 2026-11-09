@@ -65,7 +65,7 @@ export default function Profile() {
         </div>
 
         {/* Tab Content */}
-        <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-lg min-h-96">
+        <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg min-h-96">
           {tab === "Edit Profile" && (
             <div className="max-w-2xl space-y-lg">
               <div>
@@ -164,7 +164,7 @@ export default function Profile() {
               </p>
               <Link
                 to="/donate"
-                className="inline-flex items-center gap-sm rounded-lg bg-primary px-lg py-md font-button text-button text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]"
+                className="inline-flex items-center gap-sm rounded-lg bg-primary px-md py-md font-button text-button text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]"
               >
                 Go to Donate
                 <span className="material-symbols-outlined">arrow_forward</span>

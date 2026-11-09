@@ -60,7 +60,7 @@ export default function Donate() {
 
       <div className="grid mx-auto max-w-container-max px-gutter lg:grid-cols-3 gap-xl">
         <div className="lg:col-span-2 space-y-lg">
-          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-lg">
+          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg">
             <h2 className="font-headline-sm text-headline-sm text-primary mb-md">
               Bank Transfer Details
             </h2>
@@ -103,7 +103,7 @@ export default function Donate() {
             </p>
           </div>
 
-          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-lg">
+          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg">
             <h2 className="font-headline-sm text-headline-sm text-primary mb-md">
               Where does your donation go?
             </h2>
@@ -124,7 +124,7 @@ export default function Donate() {
             </div>
           </div>
 
-          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-lg">
+          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg">
             <h2 className="font-headline-sm text-headline-sm text-primary mb-md">
               Confirm Your Donation on WhatsApp
             </h2>
@@ -244,7 +244,7 @@ export default function Donate() {
       </div>
 
       <section className="mx-auto max-w-container-max px-gutter mt-xl">
-        <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-lg md:p-xl">
+        <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg">
           <h2 className="text-center font-headline-md text-headline-md text-primary mb-lg">
             Frequently Asked Questions
           </h2>
