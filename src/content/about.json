@@ -1,0 +1,35 @@
+{
+  "journeyEyebrow": "Since 2012",
+  "journeyTitle": "Our Journey & Vision",
+  "journeyImage": "/media/about/journey.png",
+  "journeyContent": "<p>Founded by a group of passionate educators and community leaders, LCA began as a small weekend workshop in a local community center. Our goal was simple: to create a space where young Muslims could explore their identity without compromise.</p><p>Today, we have grown into a nationwide organization, providing mentorship, educational resources, and community service opportunities to thousands. Our vision is to cultivate a generation that is spiritually grounded, intellectually curious, and socially responsible.</p><p>We believe that when youth are equipped with the right tools—rooted in Islamic values and modern expertise—they become the architects of a better tomorrow.</p>",
+  "pillarsTitle": "The Pillars of LCA",
+  "pillarsIntro": "Our actions are guided by a core set of principles that define our culture and commitment to our members.",
+  "pillars": [
+    {
+      "icon": "mosque",
+      "title": "Faith",
+      "description": "Centering the Quran and Sunnah in everything we do, providing a spiritual compass for the modern world.",
+      "style": "wide"
+    },
+    {
+      "icon": "groups",
+      "title": "Community",
+      "description": "Building a supportive ecosystem where every individual feels a profound sense of belonging.",
+      "style": "default"
+    },
+    {
+      "icon": "stars",
+      "title": "Excellence",
+      "description": "Striving for Ihsan in our work, our studies, and our service to humanity.",
+      "style": "primary"
+    },
+    {
+      "icon": "verified_user",
+      "title": "Integrity",
+      "description": "Upholding the highest moral and ethical standards in all interactions, fostering trust and transparency within our organization.",
+      "style": "full",
+      "image": "/media/about/integrity.png"
+    }
+  ]
+}

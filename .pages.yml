@@ -337,3 +337,75 @@ content:
             label: Answer
             type: text
             required: true
+
+  - name: about
+    label: About Page
+    type: file
+    path: src/content/about.json
+    format: json
+    fields:
+      - name: journeyEyebrow
+        label: Journey eyebrow
+        type: string
+        required: true
+      - name: journeyTitle
+        label: Journey title
+        type: string
+        required: true
+      - name: journeyImage
+        label: Journey image
+        type: image
+        required: true
+        options:
+          categories: [image]
+      - name: journeyContent
+        label: Journey content
+        type: rich-text
+        required: true
+        options:
+          format: html
+          switcher: true
+          media: false
+      - name: pillarsTitle
+        label: Pillars title
+        type: string
+        required: true
+      - name: pillarsIntro
+        label: Pillars introduction
+        type: text
+        required: true
+      - name: pillars
+        label: Pillars
+        type: object
+        list: true
+        required: true
+        fields:
+          - name: icon
+            label: Icon
+            type: string
+            required: true
+            description: Material Symbols icon name, e.g. mosque, groups, stars.
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: description
+            label: Description
+            type: text
+            required: true
+          - name: style
+            label: Card style
+            type: select
+            required: true
+            options:
+              values:
+                - default
+                - primary
+                - wide
+                - full
+            description: Controls the card width and border treatment.
+          - name: image
+            label: Image
+            type: image
+            options:
+              categories: [image]

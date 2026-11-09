@@ -1,3 +1,4 @@
+import aboutData from "../content/about.json"
 import donateData from "../content/donate.json"
 
 export type PostType = "Guide" | "Article" | "Video"
@@ -72,6 +73,26 @@ export interface DonationPageContent {
   quoteRole: string
   destinations: DonationDestination[]
   faqs: DonationFaq[]
+}
+
+export type AboutPillarStyle = "default" | "primary" | "wide" | "full"
+
+export interface AboutPillar {
+  icon: string
+  title: string
+  description: string
+  style: AboutPillarStyle
+  image?: string
+}
+
+export interface AboutPageContent {
+  journeyEyebrow: string
+  journeyTitle: string
+  journeyImage: string
+  journeyContent: string
+  pillarsTitle: string
+  pillarsIntro: string
+  pillars: AboutPillar[]
 }
 
 export type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
@@ -316,6 +337,49 @@ function toDonationPage(value: unknown): DonationPageContent {
   }
 }
 
+const ABOUT_PILLAR_STYLES: AboutPillarStyle[] = [
+  "default",
+  "primary",
+  "wide",
+  "full",
+]
+
+function toAboutPillar(value: unknown, context: string): AboutPillar {
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  const image = value.image
+  if (image !== undefined && image !== null && typeof image !== "string") {
+    throw new Error(`${context}: "image" must be a string`)
+  }
+  return {
+    icon: requireString(value, "icon", context),
+    title: requireString(value, "title", context),
+    description: requireString(value, "description", context),
+    style: requireEnum(value, "style", ABOUT_PILLAR_STYLES, context),
+    image:
+      typeof image === "string" && image.trim() !== "" ? image : undefined,
+  }
+}
+
+function toAboutPage(value: unknown): AboutPageContent {
+  const context = "src/content/about.json"
+  if (!isRecord(value)) {
+    throw new Error(`${context}: expected a JSON object`)
+  }
+  return {
+    journeyEyebrow: requireString(value, "journeyEyebrow", context),
+    journeyTitle: requireString(value, "journeyTitle", context),
+    journeyImage: requireString(value, "journeyImage", context),
+    journeyContent: requireString(value, "journeyContent", context),
+    pillarsTitle: requireString(value, "pillarsTitle", context),
+    pillarsIntro: requireString(value, "pillarsIntro", context),
+    pillars: requireArray(value, "pillars", context).map((item, index) =>
+      toAboutPillar(item, `${context}: pillars[${index}]`),
+    ),
+  }
+}
+
 function toEvent(filePath: string, value: unknown): CommunityEvent {
   const context = `src/content/events/${slugFromPath(filePath)}.json`
   if (!isRecord(value)) {
@@ -395,6 +459,8 @@ export const legalPages: LegalPage[] = Object.entries(legalModules)
   .sort((a, b) => a.title.localeCompare(b.title))
 
 export const donationPage = toDonationPage(donateData)
+
+export const aboutPage = toAboutPage(aboutData)
 
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((post) => post.slug === slug)

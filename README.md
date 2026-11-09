@@ -11,12 +11,12 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Routing** — React Router with a shared site layout, standalone auth pages, protected routes, and a custom 404 page.
 - **Responsive shell** — sticky desktop/mobile navigation, active link states, footer, and a floating FAQ button that links to `/faq`.
 - **Home page** — hero, core pillars, up to three CMS-driven upcoming events, a CMS-driven testimonial carousel, and static CTA sections.
-- **About page** — static hero, story and values, plus CMS-driven leadership profiles.
+- **About page** — static hero, plus CMS-driven journey, pillars, and leadership profiles.
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
 - **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
 - **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
 - **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
-- **Content management** — resources, events, testimonials, leadership profiles, FAQ entries, legal pages and the Donate page live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
+- **Content management** — resources, events, testimonials, leadership profiles, FAQ entries, legal pages, the Donate page and About page content live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
 - **Profile dashboard** — edit name and phone; view and cancel RSVPs; see a donation-history placeholder; log out.
 - **Newsletter signup** — `SubscribeForm` posts to Netlify Forms; submissions are available in the Netlify dashboard after deployment.
 - **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.

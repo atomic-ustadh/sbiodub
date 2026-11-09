@@ -1,33 +1,12 @@
-import { about_hero, about_integrity, about_journey } from '../assets'
-import { leadershipProfiles } from '../lib/content'
+import { about_hero } from '../assets'
+import { aboutPage, leadershipProfiles, type AboutPillarStyle } from '../lib/content'
 
-const values = [
-  {
-    icon: 'mosque',
-    title: 'Faith',
-    desc: 'Centering the Quran and Sunnah in everything we do, providing a spiritual compass for the modern world.',
-    className: 'md:col-span-2 border-l-4 border-primary',
-  },
-  {
-    icon: 'groups',
-    title: 'Community',
-    desc: 'Building a supportive ecosystem where every individual feels a profound sense of belonging.',
-    className: 'border-t-4 border-secondary',
-  },
-  {
-    icon: 'stars',
-    title: 'Excellence',
-    desc: 'Striving for Ihsan in our work, our studies, and our service to humanity.',
-    className: 'border-t-4 border-primary',
-  },
-  {
-    icon: 'verified_user',
-    title: 'Integrity',
-    desc: 'Upholding the highest moral and ethical standards in all interactions, fostering trust and transparency within our organization.',
-    className: 'md:col-span-4 border-b-4 border-secondary-fixed',
-    img: about_integrity,
-  },
-]
+const pillarStyles: Record<AboutPillarStyle, string> = {
+  default: 'border-t-4 border-secondary',
+  primary: 'border-t-4 border-primary',
+  wide: 'md:col-span-2 border-l-4 border-primary',
+  full: 'md:col-span-4 border-b-4 border-secondary-fixed',
+}
 
 export default function About() {
   return (
@@ -79,31 +58,19 @@ export default function About() {
             <img
               className="relative z-10 shadow-lg rounded-xl"
               alt="Our founding story"
-              src={about_journey}
+              src={aboutPage.journeyImage}
             />
             <div className="absolute w-32 h-32 rounded-full -bottom-4 -right-4 bg-secondary-fixed/20 -z-10 blur-2xl" />
           </div>
           <div>
             <span className="block tracking-widest uppercase font-label-md text-label-md text-secondary mb-xs">
-              Since 2012
+              {aboutPage.journeyEyebrow}
             </span>
-            <h2 className="font-headline-md text-headline-md text-primary mb-md">Our Journey &amp; Vision</h2>
-            <div className="leading-relaxed space-y-md text-on-surface-variant font-body-md text-body-md">
-              <p>
-                Founded by a group of passionate educators and community leaders, LCA began as a small weekend
-                workshop in a local community center. Our goal was simple: to create a space where young Muslims could
-                explore their identity without compromise.
-              </p>
-              <p>
-                Today, we have grown into a nationwide organization, providing mentorship, educational resources, and
-                community service opportunities to thousands. Our vision is to cultivate a generation that is spiritually
-                grounded, intellectually curious, and socially responsible.
-              </p>
-              <p>
-                We believe that when youth are equipped with the right tools&mdash;rooted in Islamic values and modern
-                expertise&mdash;they become the architects of a better tomorrow.
-              </p>
-            </div>
+            <h2 className="font-headline-md text-headline-md text-primary mb-md">{aboutPage.journeyTitle}</h2>
+            <div
+              className="leading-relaxed text-on-surface-variant font-body-md text-body-md [&_a]:text-secondary [&_a]:underline [&_p]:leading-relaxed [&_p+p]:mt-md [&_strong]:text-primary [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-sm"
+              dangerouslySetInnerHTML={{ __html: aboutPage.journeyContent }}
+            />
           </div>
         </div>
       </section>
@@ -113,26 +80,26 @@ export default function About() {
         <div className="absolute inset-0 geometric-pattern" />
         <div className="relative z-10 mx-auto max-w-container-max px-gutter">
           <div className="text-center mb-xl">
-            <h2 className="font-headline-md text-headline-md text-primary mb-sm">The Pillars of LCA</h2>
+            <h2 className="font-headline-md text-headline-md text-primary mb-sm">{aboutPage.pillarsTitle}</h2>
             <p className="mx-auto font-body-md text-body-md text-on-surface-variant max-w-144">
-              Our actions are guided by a core set of principles that define our culture and commitment to our members.
+              {aboutPage.pillarsIntro}
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-md">
-            {values.map((v) => (
+            {aboutPage.pillars.map((pillar) => (
               <div
-                key={v.title}
-                className={`backdrop-blur-xl bg-white/80 border border-slate-100/50 p-lg rounded-xl hover:shadow-xl transition-all duration-300 ${v.className}`}
+                key={pillar.title}
+                className={`backdrop-blur-xl bg-white/80 border border-slate-100/50 p-lg rounded-xl hover:shadow-xl transition-all duration-300 ${pillarStyles[pillar.style]}`}
               >
-                <div className={v.img ? 'flex flex-col md:flex-row items-center gap-lg h-full' : ''}>
-                  <div className={v.img ? 'flex-1' : ''}>
-                    <span className="block text-4xl material-symbols-outlined text-primary mb-md">{v.icon}</span>
-                    <h3 className="font-headline-sm text-headline-sm text-primary mb-sm">{v.title}</h3>
-                    <p className="text-on-surface-variant font-body-sm md:font-body-md">{v.desc}</p>
+                <div className={pillar.image ? 'flex flex-col md:flex-row items-center gap-lg h-full' : ''}>
+                  <div className={pillar.image ? 'flex-1' : ''}>
+                    <span className="block text-4xl material-symbols-outlined text-primary mb-md">{pillar.icon}</span>
+                    <h3 className="font-headline-sm text-headline-sm text-primary mb-sm">{pillar.title}</h3>
+                    <p className="text-on-surface-variant font-body-sm md:font-body-md">{pillar.description}</p>
                   </div>
-                  {v.img && (
+                  {pillar.image && (
                     <div className="w-full md:w-1/3">
-                      <img className="object-cover w-full h-48 rounded-lg" alt={v.title} src={v.img} />
+                      <img className="object-cover w-full h-48 rounded-lg" alt={pillar.title} src={pillar.image} />
                     </div>
                   )}
                 </div>
