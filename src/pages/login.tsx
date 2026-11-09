@@ -62,28 +62,6 @@ export default function Login() {
             <p className="max-w-3xl font-body-lg text-body-lg text-on-primary/90">
               Join a movement dedicated to spiritual growth, community service, and youth empowerment. Your journey begins here.
             </p>
-            <div className="flex items-center mt-md md:mt-lg gap-sm">
-              <div className="flex space-x-[-12px] overflow-hidden">
-                <img
-                  alt="Member 1"
-                  className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2njxIygCe1ZpDVHv3I1yHuMq9jVqVASjiKTE5R6VbT_CLksgCQ3MmTboNOSUWv7hVY127qRSrgrCfgZ8fV4lQr73x5m2yqo54gwJvHIFHwfHFPze_Se2EmEqW-lcfuBCkz_1ly5V5VacjIZ7PHgaN_BUr6d2Q19UK34CYrZkwcS8MAc9x0S6N8RuHNY3X-ZwMuGCM_l2QUkVHLDbmSQ4Rka9lWYfmthjXyRxt8hR1rUSvid1N57OD2aAlkQCPiJjKEe8wSxUA-B6e"
-                />
-                <img
-                  alt="Member 2"
-                  className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBiK95LsX9ZL2ZZ11TycutHBWQ6H5mTEMLphb63GASjINVk_mOgnf7HmeYfQIPQN4k8NHQ3xzQHGI1bn4rerd-ULuragt00ZXf1lXCb4po-NAIw-YTjZS1_yr93SauhU-y_-C-rWH0sPRTj3buj_9HRmmibuZNRcv7J9VUvuLxXwco4CBAse7lw4o-0ZRjkW9Ev0ls6hEeCBOP5iH1qb1J1M2jOu2dLl97_AeY7K5nu3gNUMX4xUH__rzJ_4CIb-j0ea-58C1ed_i2y"
-                />
-                <img
-                  alt="Member 3"
-                  className="inline-block w-10 h-10 rounded-full ring-2 ring-primary"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBriPffv_6w60ycnplrf4tDb3T2qAEIM0RHfKPx2haJfxr2xudN9wnJMf-rF2G53F3QfJMT5Ua2wsJIcrEpgO1hWBP-xWv-Xor6FU6Tl_a0H9K66CcGY21iuCBoyFxSKisMK0L5sP22xoSeki6YVO36pmREVV6EFgE7EkABKJbANJ7AGAdD4P2exbqtjEQOUaw9qopSuXpdHR73GXBrwdbSKSuWuiyxyEv52FtjWHq7BSwxWtBi97_E4aNewj95FEJhFZTaZM6Ok1Ct"
-                />
-            </div>
-            <p className="font-body-sm text-body-sm text-on-primary/80">
-              Join 500+ youth members
-            </p>
-          </div>
         </div>
         ) : (
           <div className="relative z-10 flex flex-col justify-end px-xl py-sm text-on-primary max-w-120">
