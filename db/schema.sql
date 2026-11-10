@@ -1,5 +1,10 @@
 -- Neon Data API schema for LCA, Abuja member data.
--- Run this in the Neon SQL Editor on the branch where the Data API is enabled.
+--
+-- PREREQUISITE: Enable the Data API on the branch first (Postgres database ->
+-- Data API -> Enable Data API). That creates the `authenticated` role. If you
+-- run this script before enabling the Data API you will get:
+--   ERROR: role "authenticated" does not exist (SQLSTATE 42704)
+-- Then run this script in the Neon SQL Editor and click "Refresh schema cache".
 --
 -- Authorization is enforced by Postgres Row Level Security. The Data API
 -- extracts Clerk's JWT `sub` claim via auth.user_id(); the client must send a
