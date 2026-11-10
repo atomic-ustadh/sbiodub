@@ -6,26 +6,51 @@ interface SubscribeFormProps {
 
 type Status = 'idle' | 'sending' | 'success' | 'error'
 
+const FORM_ID = import.meta.env.VITE_GOOGLE_FORM_ID
+const EMAIL_ENTRY = import.meta.env.VITE_GOOGLE_FORM_EMAIL_ENTRY
+
+const FORM_RESPONSE_URL = FORM_ID
+  ? `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`
+  : ''
+
+function entryKey(value: string): string {
+  return value.startsWith('entry.') ? value : `entry.${value}`
+}
+
 export default function SubscribeForm({ variant = 'default' }: SubscribeFormProps) {
   const [email, setEmail] = useState('')
+  const [trap, setTrap] = useState('')
   const [status, setStatus] = useState<Status>('idle')
 
   const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!email) return
+    if (!email || trap) return
     setStatus('sending')
     try {
-      const body = new URLSearchParams({
-        'form-name': 'newsletter',
-        email,
-        'bot-field': '',
-      })
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: body.toString(),
-      })
-      if (!response.ok) throw new Error('Subscription failed')
+      if (FORM_RESPONSE_URL && EMAIL_ENTRY) {
+        // Google Forms only allows a CORS-opaque response, so we cannot read
+        // success/error from the network. The UI is optimistic on completion.
+        await fetch(FORM_RESPONSE_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({
+            [entryKey(EMAIL_ENTRY)]: email,
+          }).toString(),
+        })
+      } else {
+        const body = new URLSearchParams({
+          'form-name': 'newsletter',
+          email,
+          'bot-field': trap,
+        })
+        const response = await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: body.toString(),
+        })
+        if (!response.ok) throw new Error('Subscription failed')
+      }
       setStatus('success')
       setEmail('')
     } catch {
@@ -46,6 +71,16 @@ export default function SubscribeForm({ variant = 'default' }: SubscribeFormProp
         className={variant === 'footer' ? 'flex' : 'flex flex-col sm:flex-row gap-sm justify-center'}
         onSubmit={handleSubmit}
       >
+        <input
+          className="absolute -left-2499.75 h-0 w-0 opacity-0"
+          name="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          value={trap}
+          onChange={(e) => setTrap(e.target.value)}
+        />
         <input
           className={
             variant === 'footer'
