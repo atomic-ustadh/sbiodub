@@ -232,3 +232,171 @@ The UI follows the **Emerald & Gold** system documented in [`design.md`](./desig
 ## License
 
 No license has been specified for this project yet. Development is still ongoing.
+
+## Using Clerk on a Custom (Standard) Domain
+
+This section explains how to move Clerk from its development instance
+(`pk_test_...`, served from the default `*.clerk.accounts.dev` environment and the
+Netlify `*.netlify.app` URL) to a **production custom domain** such as
+`example.com`. It assumes the app is already deployed on Netlify and that you
+control the domain's DNS.
+
+> **"Standard domain" vs. satellite domain in Clerk:** a *standard/primary*
+> domain is the main domain where your app and Clerk live. *Satellite* domains
+> let you use Clerk on additional domains while sharing the same user base.
+> This guide covers the single standard (primary) domain setup. Only add a
+> satellite domain if you intentionally run the app on more than one domain.
+
+### 0. Before you start
+
+Make sure you have:
+
+- The domain (`example.com`) and access to its DNS provider (or Netlify DNS).
+- Admin access to the Clerk application.
+- Access to the Netlify site settings.
+- The Neon production connection details, if you use a separate production
+  branch/database.
+
+Clerk keeps **Development** and **Production** instances separate. Users, keys,
+JWT templates, and domain settings do **not** carry over. Plan to recreate any
+test users or admin accounts.
+
+### 1. Put the site on your domain in Netlify first
+
+Do this before touching Clerk so Clerk can verify the domain.
+
+1. In Netlify, open the site → **Domain management** → **Add a domain** and add
+   `example.com`.
+2. Either delegate DNS to Netlify DNS or add the records Netlify shows at your
+   DNS provider:
+   - Apex (`example.com`): Netlify's load-balancer record (ALIAS/A/ANAME).
+   - `www`: CNAME to your Netlify site.
+3. Choose one canonical host and make the other redirect to it (for example,
+   redirect `www.example.com` → `example.com`).
+4. Wait for Netlify to issue the HTTPS certificate, then confirm
+   `https://example.com` serves the app.
+
+### 2. Switch Clerk to the Production instance
+
+1. Open the [Clerk Dashboard](https://dashboard.clerk.com) and select the app.
+2. In the top-left instance switcher, switch from **Development** to
+   **Production**.
+3. Everything below is configured in the **Production** instance.
+
+### 3. Add the domain in Clerk
+
+1. In the Production instance, go to **Configure → Domains** (older dashboards:
+   **Domains**).
+2. Click **Add domain** and enter your domain (for example `example.com`). Add
+   the `www` variant too if you use it, but set only one as the primary.
+3. Mark the domain as **Primary** (standard). Do **not** mark it as a satellite
+   unless you are deliberately sharing users across multiple domains.
+4. Clerk generates the exact DNS records you must create. Leave this page open.
+
+### 4. Add the DNS records Clerk shows
+
+Clerk typically asks for CNAME records on subdomains of your domain, for
+example:
+
+| Host | Points to (example) | Purpose |
+| --- | --- | --- |
+| `clerk.example.com` | `frontend-api.clerk.services` | Clerk Frontend API |
+| `accounts.example.com` | `accounts.clerk.services` | Clerk Account Portal |
+| `clkmail.example.com` | value shown in dashboard | Clerk email deliverability |
+
+**Use the exact host/target values shown in your Clerk dashboard — the targets
+above are illustrative and can change.** Add the records at your DNS provider
+(or Netlify DNS) with the TTL Clerk recommends. Then return to Clerk and click
+**Verify** (or **Retry**) until all records show as verified. Propagation can
+take minutes to a few hours.
+
+If you also send verification/reset emails from your own domain, add the SPF
+and DKIM records Clerk provides so mail is not marked as spam.
+
+### 5. Set the application URLs and allowed origins
+
+Still in the Production instance:
+
+1. Set the **Home URL** to `https://example.com`.
+2. Set **Sign-in URL** to `https://example.com/login` and **Sign-up URL** to
+   `https://example.com/login?mode=signup` (these match `src/pages/login.tsx`).
+3. Set the **After sign-in** and **After sign-up** fallback URLs to
+   `https://example.com/profile` (the app also passes relative
+   `fallbackRedirectUrl` values at runtime).
+4. Confirm `https://example.com` is listed under the instance's allowed
+   origins/redirect URLs so Clerk does not reject requests with an
+   "invalid origin" error.
+
+### 6. Recreate the JWT template in the Production instance
+
+JWT templates are **per instance**; the `neon` template you created in
+Development will not exist in Production.
+
+1. In the Production instance, open **JWT Templates**.
+2. Create a template named exactly **`neon`** — this matches
+   `getToken({ template: 'neon' })` in `src/context/AuthContext.tsx`.
+3. Add the `role` claim with the value `"authenticated"` (required by the Neon
+   Data API and the RLS policies in `db/schema.sql`) and keep the default `sub`
+   claim (the Clerk user ID, used by `auth.user_id()`).
+4. Save the template.
+
+### 7. Update Neon for the production Clerk issuer
+
+The Neon Data API validates the Clerk JWT issuer/JWKS. Development and
+Production instances have **different issuer URLs**, so this must be updated.
+
+1. Copy the Production instance's issuer/JWKS URL from Clerk (shown in the JWT
+   template or API keys/domain settings).
+2. In the Neon Console, open the Data API settings for the branch used by the
+   site and set the Clerk issuer/JWKS to the **Production** value.
+3. If you use separate Neon branches for staging and production, point the
+   production site at the production branch and re-run `db/schema.sql` there so
+   the RLS policies exist. Refresh the schema cache.
+
+### 8. Update the Netlify environment variables
+
+1. In Netlify → **Site configuration → Environment variables**, change
+   `VITE_CLERK_PUBLISHABLE_KEY` to the Production key (`pk_live_...`) for the
+   **Production** deploy context.
+2. Keep `VITE_NEON_DATA_API_URL` pointed at the production Data API
+   (`https://<host>/<db>/rest/v1`).
+3. Optionally keep the `pk_test_...` key scoped to **Deploy previews** and
+   **Branch deploys** so previews use the Development instance.
+4. Leave "Contains secret values" unchecked for all `VITE_` variables — they are
+   inlined into the public bundle, so marking them secret hides nothing.
+5. **Redeploy** the site. Vite inlines environment variables at build time, so
+   a rebuild is required for changes to take effect.
+
+### 9. Verify the production setup
+
+1. Open `https://example.com`, sign up, sign out, and sign back in.
+2. Confirm session cookies (`__client`, `__session`) are set for
+   `example.com` (not `*.clerk.accounts.dev`).
+3. Open the browser console and check for Clerk origin or publishable-key
+   errors.
+4. Register for an event to confirm a Data API write succeeds (this proves the
+   `neon` JWT template, `role`/`sub` claims, and the Neon issuer setting are all
+   correct).
+5. Trigger a password reset and a verification email to confirm delivery and
+   that links point at your domain.
+6. Confirm existing Development users cannot sign in — they must be recreated in
+   Production.
+
+### Common issues and gotchas
+
+- **Wrong key:** using `pk_test_...` in production loads the Development
+  instance and will not match your Production domain/JWT template.
+- **Issuer mismatch:** the most common cause of Data API `401` responses after
+  going live is Neon still trusting the Development issuer. Update it to the
+  Production issuer.
+- **Missing template:** forgetting to recreate the `neon` JWT template in
+  Production makes `getToken({ template: 'neon' })` return `null`, so member
+  data fails to load.
+- **Domain not verified:** Clerk will not issue sessions on an unverified domain;
+  finish the DNS verification step first.
+- **Apex vs. `www`:** pick one canonical host and redirect the other; the Clerk
+  Frontend API subdomain must be on the same registrable domain.
+- **No session migration:** switching the primary domain does not move existing
+  sessions; users must sign in again on the new domain.
+- **Local development:** keep the Development (`pk_test_...`) key in
+  `.env.local` for `npm run dev`; never commit `.env.local`.
