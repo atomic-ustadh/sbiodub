@@ -1,41 +1,37 @@
-import { useState, type SubmitEvent } from 'react'
-import { useNavigate, useLocation, Link } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
+import { SignIn, SignUp } from '@clerk/react'
 import { useAuth } from '../context/AuthContext'
 
-export default function Login() {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { signup, login } = useAuth()
-  const from = location.state?.from
-  const redirectTo = typeof from === 'string' && from.startsWith('/') && !from.startsWith('//')
-    ? from
-    : '/profile'
-  const [mode, setMode] = useState('signin')
-  const [fullName, setFullName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [terms, setTerms] = useState(false)
-  const [remember, setRemember] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [error, setError] = useState('')
+const appearance = {
+  variables: {
+    colorPrimary: '#003527',
+    colorText: '#1a1c1a',
+    borderRadius: '0.5rem',
+  },
+}
 
-  const handleSignup = (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError('')
-    if (!fullName || !email || !password) return setError('Please fill in all fields')
-    if (!terms) return setError('Please agree to the Terms of Service')
-    const result = signup({ name: fullName, email, password })
-    if (result.ok) navigate(redirectTo, { replace: true })
-    else setError(result.error)
+export default function Login() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const { user, isLoading } = useAuth()
+
+  const from = location.state?.from
+  const redirectTo =
+    typeof from === 'string' && from.startsWith('/') && !from.startsWith('//')
+      ? from
+      : '/profile'
+  const mode = searchParams.get('mode') === 'signup' ? 'signup' : 'signin'
+
+  if (!isLoading && user) {
+    return <Navigate to={redirectTo} replace />
   }
 
-  const handleSignin = (e: SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setError('')
-    if (!email || !password) return setError('Please fill in all fields')
-    const result = login(email, password)
-    if (result.ok) navigate(redirectTo, { replace: true })
-    else setError(result.error)
+  const switchMode = () => {
+    navigate(mode === 'signup' ? '/login' : '/login?mode=signup', {
+      replace: true,
+      state: location.state,
+    })
   }
 
   return (
@@ -49,139 +45,67 @@ export default function Login() {
       </button>
 
       <section className="relative flex items-center justify-center w-full overflow-hidden md:w-1/2 bg-primary min-h-102 md:min-h-screen">
-        {mode === 'signup' ? (
-          <div className="relative z-10 text-center px-gutter md:text-left max-w-120">
-            <div className="mb-md mt-md">
-              <span className="inline-block rounded-full px-sm py-xs bg-secondary text-on-secondary font-label-md text-label-md mb-sm">
-                LCA, Abuja Community
-              </span>
-              <h1 className="leading-tight font-display-lg text-display-lg-mobile md:text-display-lg text-secondary-fixed">
-                Illuminate Your Potential.
-              </h1>
-            </div>
-            <p className="max-w-3xl font-body-lg text-body-lg text-on-primary/90">
-              Join a movement dedicated to spiritual growth, community service, and youth empowerment. Your journey begins here.
+        <div className="relative z-10 flex flex-col justify-end px-xl py-sm text-on-primary max-w-120">
+          <div className="py-sm mt-md">
+            <span className="inline-block rounded-full px-sm py-xs bg-secondary-fixed text-on-secondary-fixed text-label-md font-label-md mb-lg">
+              WISDOM &amp; GROWTH
+            </span>
+            <h1 className="font-display-lg text-display-lg mb-lg text-secondary-fixed">
+              &ldquo;Read, in the name of your Lord who created.&rdquo;
+            </h1>
+            <p className="italic leading-normal font-body-lg text-body-lg text-on-primary/90 md:leading-loose">
+              Knowledge is the light that guides the path of the youth towards a
+              brighter, more purposeful future.
             </p>
-        </div>
-        ) : (
-          <div className="relative z-10 flex flex-col justify-end px-xl py-sm text-on-primary max-w-120">
-            <div className="py-sm mt-md">
-              <span className="inline-block rounded-full px-sm py-xs bg-secondary-fixed text-on-secondary-fixed text-label-md font-label-md mb-lg">
-                WISDOM & GROWTH
-              </span>
-              <h1 className="font-display-lg text-display-lg mb-lg text-secondary-fixed">
-                &ldquo;Read, in the name of your Lord who created.&rdquo;
-              </h1>
-              <p className="italic leading-normal font-body-lg text-body-lg text-on-primary/90 md:leading-loose">
-                Knowledge is the light that guides the path of the youth towards a brighter, more purposeful future.
-              </p>
-            </div>
           </div>
-        )}
+        </div>
       </section>
 
-      <section className="flex items-center justify-center w-full md:w-1/2 bg-surface px-gutter">
-        <div className="w-full max-w-144">
-          {mode === 'signup' ? (
-            <>
-              <div className="mb-lg mt-md">
-                <h2 className="font-bold font-headline-md text-headline-md text-primary mb-xs">LCA, Abuja</h2>
-                <p className="font-body-md text-body-md text-on-surface-variant">Create your account to join the community.</p>
-              </div>
-              {error && <p className="rounded-lg bg-error-container text-on-error-container p-sm font-body-sm mb-md">{error}</p>}
-              <form className="space-y-5" onSubmit={handleSignup}>
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="full_name">Full Name</label>
-                  <div className="relative rounded-lg group form-glow">
-                    <span className="absolute -translate-y-1/2 material-symbols-outlined left-sm top-1/2 text-outline">person</span>
-                    <input className="w-full transition-all duration-200 border rounded-lg pl-lg pr-md py-sm bg-surface-container-lowest border-outline-variant font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" id="full_name" placeholder="Enter your full name" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} />
-                  </div>
-                </div>
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="email">Email Address</label>
-                  <div className="relative rounded-lg group form-glow">
-                    <span className="absolute -translate-y-1/2 material-symbols-outlined left-sm top-1/2 text-outline">mail</span>
-                    <input className="w-full transition-all duration-200 border rounded-lg pl-lg pr-md py-sm bg-surface-container-lowest border-outline-variant font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" id="email" placeholder="you@example.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  </div>
-                </div>
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="password">Password</label>
-                  <div className="relative rounded-lg group form-glow">
-                    <span className="absolute -translate-y-1/2 material-symbols-outlined left-sm top-1/2 text-outline">lock</span>
-                    <input className="w-full transition-all duration-200 border rounded-lg pl-lg pr-lg py-sm bg-surface-container-lowest border-outline-variant font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" id="password" placeholder="••••••••" type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <button className="absolute transition-colors -translate-y-1/2 right-sm top-1/2 text-outline hover:text-primary" type="button" onClick={() => setShowPassword(!showPassword)}>
-                      <span className="material-symbols-outlined">{showPassword ? 'visibility_off' : 'visibility'}</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-start gap-sm pt-sm">
-                  <div className="flex items-center h-5">
-                    <input className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary-container" id="terms" name="terms" type="checkbox" checked={terms} onChange={(e) => setTerms(e.target.checked)} />
-                  </div>
-                  <div className="text-sm mb-lg">
-                    <label className="font-body-sm text-body-sm text-on-surface-variant" htmlFor="terms">
-                      I agree to the <Link className="font-bold text-primary hover:underline" to="/terms">Terms of Service</Link> and <Link className="font-bold text-primary hover:underline" to="/privacy">Privacy Policy</Link>.
-                    </label>
-                  </div>
-                </div>
-                <button className="w-full bg-primary text-on-primary font-button text-button py-sm rounded-lg shadow-sm hover:shadow-md hover:scale-[1.01] active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-sm" type="submit">
-                  Create Account <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
-              </form>
-              <div className="text-center border-t mt-sm pt-md border-outline-variant">
-                <p className="font-body-md text-body-md text-on-surface-variant">
-                  Already a member?
-                  <button className="font-bold transition-colors text-secondary hover:text-primary ml-xs" onClick={() => { setMode('signin'); setError('') }}>Log In</button>
-                </p>
-              </div>
-              <div className="text-center mt-md mb-md">
-                <p className="font-body-sm text-body-sm text-outline">&copy; 2026 LCA, Abuja. All rights reserved.</p>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="mb-lg mt-md">
-                <h2 className="font-headline-md text-headline-md text-primary mb-xs">Welcome Back</h2>
-                <p className="font-body-md text-body-md text-on-surface-variant">Access your profile and continue your journey.</p>
-              </div>
-              {error && <p className="rounded-lg bg-error-container text-on-error-container p-sm font-body-sm mb-md">{error}</p>}
-              <form className="space-y-md" onSubmit={handleSignin}>
-                <div className="space-y-xs">
-                  <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="email">Email Address</label>
-                  <div className="relative rounded-lg form-glow">
-                    <span className="absolute -translate-y-1/2 material-symbols-outlined left-sm top-1/2 text-outline">mail</span>
-                    <input className="w-full transition-all duration-200 border rounded-lg pl-lg pr-md py-sm bg-surface-container-lowest border-outline-variant font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" id="email" placeholder="name@example.com" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  </div>
-                </div>
-                <div className="space-y-xs">
-                  <div className="flex items-center justify-between">
-                    <label className="font-label-md text-label-md text-on-surface-variant" htmlFor="password">Password</label>
-                    <Link className="transition-colors font-body-sm text-body-sm text-primary hover:text-secondary-fixed-dim" to="/forgot-password">Forgot password?</Link>
-                  </div>
-                  <div className="relative rounded-lg form-glow">
-                    <span className="absolute -translate-y-1/2 material-symbols-outlined left-sm top-1/2 text-outline">lock</span>
-                    <input className="w-full transition-all duration-200 border rounded-lg pl-lg pr-lg py-sm bg-surface-container-lowest border-outline-variant font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary" id="password" placeholder="••••••••" type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} />
-                    <button className="absolute -translate-y-1/2 right-sm top-1/2 text-outline hover:text-on-surface-variant" type="button" onClick={() => setShowPassword(!showPassword)}>
-                      <span className="material-symbols-outlined">{showPassword ? 'visibility_off' : 'visibility'}</span>
-                    </button>
-                  </div>
-                </div>
-                <div className="flex items-center gap-sm">
-                  <input className="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="remember" type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
-                  <label className="font-body-sm text-body-sm text-on-surface-variant" htmlFor="remember">Keep me signed in</label>
-                </div>
-                <button className="w-full bg-primary text-on-primary font-button text-button py-sm rounded-lg shadow-sm hover:bg-primary-container transition-all active:scale-[0.98]" type="submit">Sign In</button>
-              </form>
-              <div className="relative mt-lg">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-outline-variant" /></div>
-                <div className="relative flex justify-center"><span className="px-md bg-surface text-outline font-label-md text-label-md">OR CONTINUE WITH</span></div>
-              </div>
-              <p className="text-center mt-md mb-md font-body-md text-body-md text-on-surface-variant">
-                Don&rsquo;t have an account?
-                <button className="font-bold text-primary hover:underline decoration-secondary-fixed decoration-2 underline-offset-4 ml-xs" onClick={() => { setMode('signup'); setError('') }}>Join Us Today</button>
-              </p>
-            </>
-          )}
+      <section className="flex items-center justify-center w-full md:w-1/2 bg-surface px-gutter py-xl">
+        <div className="w-full max-w-lg">
+          <div className="mb-lg mt-md">
+            <h2 className="font-bold font-headline-md text-headline-md text-primary mb-xs">
+              {mode === 'signup' ? 'Join LCA, Abuja' : 'Welcome Back'}
+            </h2>
+            <p className="font-body-md text-body-md text-on-surface-variant">
+              {mode === 'signup'
+                ? 'Create your account to join the community.'
+                : 'Access your profile and continue your journey.'}
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            {mode === 'signup' ? (
+              <SignUp
+                routing="hash"
+                fallbackRedirectUrl={redirectTo}
+                signInUrl="/login"
+                appearance={appearance}
+              />
+            ) : (
+              <SignIn
+                routing="hash"
+                fallbackRedirectUrl={redirectTo}
+                signUpUrl="/login?mode=signup"
+                appearance={appearance}
+              />
+            )}
+          </div>
+
+          <p className="text-center mt-lg font-body-md text-body-md text-on-surface-variant">
+            {mode === 'signup' ? 'Already a member?' : "Don't have an account?"}
+            <button
+              type="button"
+              onClick={switchMode}
+              className="font-bold text-primary hover:underline decoration-secondary-fixed decoration-2 underline-offset-4 ml-xs"
+            >
+              {mode === 'signup' ? 'Log In' : 'Join Us Today'}
+            </button>
+          </p>
+
+          <p className="text-center mt-md mb-md font-body-sm text-body-sm text-outline">
+            &copy; 2026 LCA, Abuja. All rights reserved.
+          </p>
         </div>
       </section>
     </main>

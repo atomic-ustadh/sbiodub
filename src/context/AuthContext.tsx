@@ -1,21 +1,20 @@
-import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react'
+import { useAuth as useClerkAuth, useUser } from '@clerk/react'
+import { neonRequest } from '../lib/neon'
 
 export interface User {
   id: string
   name: string
   email: string
   phone: string
-}
-
-export interface StoredUser extends User {
-  password: string
-}
-
-export interface SignupInput {
-  name: string
-  email: string
-  password: string
-  phone?: string
 }
 
 export type ProfileUpdates = Partial<Pick<User, 'name' | 'email' | 'phone'>>
@@ -46,143 +45,238 @@ export interface Donation extends DonationInput {
   date: string
 }
 
-export type AuthResult = { ok: true } | { ok: false; error: string }
-
 interface AuthContextValue {
   user: User | null
-  users: StoredUser[]
-  signup: (input: SignupInput) => AuthResult
-  login: (email: string, password: string) => AuthResult
+  isLoading: boolean
   logout: () => void
   updateProfile: (updates: ProfileUpdates) => void
   rsvps: Rsvp[]
-  addRsvp: (event: RsvpInput) => void
+  addRsvp: (input: RsvpInput) => void
   cancelRsvp: (eventId: string) => void
   donations: Donation[]
   addDonation: (donation: DonationInput) => void
 }
 
+interface RsvpRow {
+  event_id: string
+  title: string
+  event_date: string
+  time: string
+  location: string
+  name: string
+  email: string
+  phone: string
+  rsvped_at: string
+}
+
+interface DonationRow {
+  id: string
+  amount: number | string
+  type: string
+  allocation: string
+  created_at: string
+}
+
 const AuthContext = createContext<AuthContextValue | null>(null)
 
-const STORAGE_PREFIX = 'lca_'
-const LEGACY_STORAGE_PREFIX = 'sbio_'
-
-function load<T>(key: string, fallback: T): T {
-  try {
-    const currentKey = `${STORAGE_PREFIX}${key}`
-    const legacyKey = `${LEGACY_STORAGE_PREFIX}${key}`
-    let raw = localStorage.getItem(currentKey)
-    if (raw === null) {
-      raw = localStorage.getItem(legacyKey)
-      if (raw !== null) {
-        localStorage.setItem(currentKey, raw)
-        localStorage.removeItem(legacyKey)
-      }
-    }
-    return raw ? (JSON.parse(raw) as T) : fallback
-  } catch {
-    return fallback
+function toRsvp(row: RsvpRow): Rsvp {
+  return {
+    id: row.event_id,
+    title: row.title,
+    date: row.event_date,
+    time: row.time,
+    location: row.location,
+    name: row.name,
+    email: row.email,
+    phone: row.phone,
+    rsvpedAt: row.rsvped_at,
   }
 }
 
-function save<T>(key: string, data: T) {
-  localStorage.setItem(`${STORAGE_PREFIX}${key}`, JSON.stringify(data))
+function toDonation(row: DonationRow): Donation {
+  return {
+    id: row.id,
+    amount: Number(row.amount),
+    type: row.type,
+    allocation: row.allocation,
+    date: row.created_at,
+  }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => load('session', null))
-  const [users, setUsers] = useState<StoredUser[]>(() => load('users', []))
-  const [rsvps, setRsvps] = useState<Record<string, Rsvp[]>>(() => load('rsvps', {}))
-  const [donations, setDonations] = useState<Record<string, Donation[]>>(() => load('donations', {}))
+  const { isLoaded, getToken, signOut } = useClerkAuth()
+  const { user: clerkUser } = useUser()
+  const [rsvps, setRsvps] = useState<Rsvp[]>([])
+  const [donations, setDonations] = useState<Donation[]>([])
 
-  useEffect(() => { save('session', user) }, [user])
-  useEffect(() => { save('users', users) }, [users])
-  useEffect(() => { save('rsvps', rsvps) }, [rsvps])
-  useEffect(() => { save('donations', donations) }, [donations])
-  useEffect(() => {
-    localStorage.removeItem('lca_cards')
-    localStorage.removeItem('sbio_cards')
-  }, [])
-
-  const signup = useCallback(({ name, email, password, phone }: SignupInput): AuthResult => {
-    if (users.find((u) => u.email === email)) {
-      return { ok: false, error: 'Email already registered' }
-    }
-    const newUser: StoredUser = {
-      id: crypto.randomUUID(),
-      name,
+  const user = useMemo<User | null>(() => {
+    if (!clerkUser) return null
+    const email = clerkUser.primaryEmailAddress?.emailAddress ?? ''
+    const metadataPhone = clerkUser.unsafeMetadata?.phone
+    return {
+      id: clerkUser.id,
+      name: clerkUser.fullName || clerkUser.username || email.split('@')[0] || '',
       email,
-      password,
-      phone: phone || '',
+      phone:
+        clerkUser.primaryPhoneNumber?.phoneNumber ??
+        (typeof metadataPhone === 'string' ? metadataPhone : ''),
     }
-    setUsers((prev) => [...prev, newUser])
-    setUser({
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      phone: newUser.phone,
-    })
-    return { ok: true }
-  }, [users])
+  }, [clerkUser])
 
-  const login = useCallback((email: string, password: string): AuthResult => {
-    const found = users.find((u) => u.email === email && u.password === password)
-    if (!found) return { ok: false, error: 'Invalid email or password' }
-    setUser({
-      id: found.id,
-      name: found.name,
-      email: found.email,
-      phone: found.phone,
-    })
-    return { ok: true }
-  }, [users])
+  const authFetch = useCallback(
+    async <T,>(path: string, init?: RequestInit): Promise<T> => {
+      const token = await getToken({ template: 'neon' })
+      if (!token) throw new Error('Not authenticated')
+      return neonRequest<T>(path, token, init)
+    },
+    [getToken],
+  )
+
+  const refresh = useCallback(async () => {
+    if (!user) {
+      setRsvps([])
+      setDonations([])
+      return
+    }
+    try {
+      const [rsvpRows, donationRows] = await Promise.all([
+        authFetch<RsvpRow[]>('/rsvps?select=*&order=rsvped_at.desc'),
+        authFetch<DonationRow[]>('/donations?select=*&order=created_at.desc'),
+      ])
+      setRsvps(rsvpRows.map(toRsvp))
+      setDonations(donationRows.map(toDonation))
+    } catch (error) {
+      console.error('Failed to load member data from Neon', error)
+    }
+  }, [user, authFetch])
+
+  useEffect(() => {
+    void refresh()
+  }, [refresh])
 
   const logout = useCallback(() => {
-    setUser(null)
-  }, [])
+    void signOut()
+  }, [signOut])
 
-  const updateProfile = useCallback((updates: ProfileUpdates) => {
-    if (!user) return
-    setUsers((prev) => prev.map((u) => u.id === user.id ? { ...u, ...updates } : u))
-    setUser((prev) => prev ? { ...prev, ...updates } : prev)
-  }, [user])
-
-  const addRsvp = useCallback((eventData: RsvpInput) => {
-    if (!user) return
-    setRsvps((prev) => {
-      const list = prev[user.id] || []
-      if (list.find((e) => e.id === eventData.id)) return prev
-      return { ...prev, [user.id]: [...list, { ...eventData, rsvpedAt: new Date().toISOString() }] }
-    })
-  }, [user])
-
-  const cancelRsvp = useCallback((eventId: string) => {
-    if (!user) return
-    setRsvps((prev) => {
-      const list = (prev[user.id] || []).filter((e) => e.id !== eventId)
-      return { ...prev, [user.id]: list }
-    })
-  }, [user])
-
-  const addDonation = useCallback((donation: DonationInput) => {
-    if (!user) return
-    setDonations((prev) => {
-      const list = prev[user.id] || []
-      return { ...prev, [user.id]: [...list, { id: crypto.randomUUID(), ...donation, date: new Date().toISOString() }] }
-    })
-  }, [user])
-
-  return (
-    <AuthContext.Provider value={{
-      user, users, signup, login, logout, updateProfile,
-      rsvps: user ? (rsvps[user.id] || []) : [],
-      addRsvp, cancelRsvp,
-      donations: user ? (donations[user.id] || []) : [],
-      addDonation,
-    }}>
-      {children}
-    </AuthContext.Provider>
+  const updateProfile = useCallback(
+    (updates: ProfileUpdates) => {
+      if (!clerkUser) return
+      void (async () => {
+        try {
+          if (updates.name !== undefined) {
+            const parts = updates.name.trim().split(/\s+/)
+            await clerkUser.update({
+              firstName: parts[0] ?? '',
+              lastName: parts.slice(1).join(' '),
+            })
+          }
+          if (updates.phone !== undefined) {
+            await clerkUser.updateMetadata({ unsafeMetadata: { phone: updates.phone } })
+          }
+        } catch (error) {
+          console.error('Failed to update profile', error)
+        }
+      })()
+    },
+    [clerkUser],
   )
+
+  const addRsvp = useCallback(
+    (input: RsvpInput) => {
+      if (!user) return
+      void (async () => {
+        try {
+          await authFetch('/rsvps?on_conflict=user_id,event_id', {
+            method: 'POST',
+            headers: { Prefer: 'resolution=merge-duplicates,return=representation' },
+            body: JSON.stringify({
+              user_id: user.id,
+              event_id: input.id,
+              title: input.title,
+              event_date: input.date,
+              time: input.time,
+              location: input.location,
+              name: input.name,
+              email: input.email,
+              phone: input.phone,
+            }),
+          })
+          await refresh()
+        } catch (error) {
+          console.error('Failed to save RSVP', error)
+        }
+      })()
+    },
+    [user, authFetch, refresh],
+  )
+
+  const cancelRsvp = useCallback(
+    (eventId: string) => {
+      if (!user) return
+      void (async () => {
+        try {
+          await authFetch(
+            `/rsvps?user_id=eq.${encodeURIComponent(user.id)}&event_id=eq.${encodeURIComponent(eventId)}`,
+            { method: 'DELETE', headers: { Prefer: 'return=minimal' } },
+          )
+          await refresh()
+        } catch (error) {
+          console.error('Failed to cancel RSVP', error)
+        }
+      })()
+    },
+    [user, authFetch, refresh],
+  )
+
+  const addDonation = useCallback(
+    (donation: DonationInput) => {
+      if (!user) return
+      void (async () => {
+        try {
+          await authFetch('/donations', {
+            method: 'POST',
+            body: JSON.stringify({
+              user_id: user.id,
+              amount: donation.amount,
+              type: donation.type,
+              allocation: donation.allocation,
+            }),
+          })
+          await refresh()
+        } catch (error) {
+          console.error('Failed to save donation', error)
+        }
+      })()
+    },
+    [user, authFetch, refresh],
+  )
+
+  const value = useMemo<AuthContextValue>(
+    () => ({
+      user,
+      isLoading: !isLoaded,
+      logout,
+      updateProfile,
+      rsvps,
+      addRsvp,
+      cancelRsvp,
+      donations,
+      addDonation,
+    }),
+    [
+      user,
+      isLoaded,
+      logout,
+      updateProfile,
+      rsvps,
+      addRsvp,
+      cancelRsvp,
+      donations,
+      addDonation,
+    ],
+  )
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
 export function useAuth() {
