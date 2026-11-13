@@ -375,6 +375,42 @@ content:
           format: html
           switcher: true
           media: false
+      - name: purposeEyebrow
+        label: Purpose eyebrow
+        type: string
+        required: true
+      - name: purposeTitle
+        label: Purpose title
+        type: string
+        required: true
+      - name: purposeIntro
+        label: Purpose introduction
+        type: text
+        required: true
+      - name: missionTitle
+        label: Mission title
+        type: string
+        required: true
+      - name: missionContent
+        label: Mission content
+        type: rich-text
+        required: true
+        options:
+          format: html
+          switcher: true
+          media: false
+      - name: visionTitle
+        label: Vision title
+        type: string
+        required: true
+      - name: visionContent
+        label: Vision content
+        type: rich-text
+        required: true
+        options:
+          format: html
+          switcher: true
+          media: false
       - name: pillarsTitle
         label: Pillars title
         type: string

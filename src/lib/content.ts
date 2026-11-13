@@ -93,6 +93,13 @@ export interface AboutPageContent {
   journeyTitle: string
   journeyImage: string
   journeyContent: string
+  purposeEyebrow: string
+  purposeTitle: string
+  purposeIntro: string
+  missionTitle: string
+  missionContent: string
+  visionTitle: string
+  visionContent: string
   pillarsTitle: string
   pillarsIntro: string
   pillars: AboutPillar[]
@@ -383,6 +390,13 @@ function toAboutPage(value: unknown): AboutPageContent {
     journeyTitle: requireString(value, "journeyTitle", context),
     journeyImage: requireString(value, "journeyImage", context),
     journeyContent: requireString(value, "journeyContent", context),
+    purposeEyebrow: requireString(value, "purposeEyebrow", context),
+    purposeTitle: requireString(value, "purposeTitle", context),
+    purposeIntro: requireString(value, "purposeIntro", context),
+    missionTitle: requireString(value, "missionTitle", context),
+    missionContent: requireString(value, "missionContent", context),
+    visionTitle: requireString(value, "visionTitle", context),
+    visionContent: requireString(value, "visionContent", context),
     pillarsTitle: requireString(value, "pillarsTitle", context),
     pillarsIntro: requireString(value, "pillarsIntro", context),
     pillars: requireArray(value, "pillars", context).map((item, index) =>

@@ -8,6 +8,11 @@ const pillarStyles: Record<AboutPillarStyle, string> = {
   full: 'md:col-span-4 border-b-4 border-secondary-fixed',
 }
 
+const purposeCards = [
+  { icon: 'flag', title: aboutPage.missionTitle, content: aboutPage.missionContent },
+  { icon: 'visibility', title: aboutPage.visionTitle, content: aboutPage.visionContent },
+]
+
 export default function About() {
   return (
     <main className="pt-18">
@@ -71,6 +76,45 @@ export default function About() {
               className="leading-relaxed text-on-surface-variant font-body-md text-body-md [&_a]:text-secondary [&_a]:underline [&_p]:leading-relaxed [&_p+p]:mt-md [&_strong]:text-primary [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:space-y-sm"
               dangerouslySetInnerHTML={{ __html: aboutPage.journeyContent }}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Mission & Vision */}
+      <section className="relative py-xl overflow-hidden bg-primary">
+        <div className="absolute inset-0 geometric-pattern opacity-[0.06]" />
+        <div className="absolute w-2/3 h-64 -translate-x-1/2 rounded-full top-0 left-1/2 bg-secondary-fixed/10 blur-3xl" />
+        <div className="relative z-10 mx-auto max-w-container-max px-gutter">
+          <div className="text-center mb-xl">
+            <span className="block tracking-widest uppercase font-label-md text-label-md text-secondary-fixed mb-xs">
+              {aboutPage.purposeEyebrow}
+            </span>
+            <h2 className="font-headline-md text-headline-md text-on-primary mb-sm">{aboutPage.purposeTitle}</h2>
+            <p className="mx-auto font-body-md text-body-md text-on-primary/70 max-w-144">
+              {aboutPage.purposeIntro}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 gap-md md:grid-cols-2 md:gap-lg">
+            {purposeCards.map((card) => (
+              <article
+                key={card.title}
+                className="relative p-lg overflow-hidden transition-all duration-300 border group rounded-xl border-white/10 bg-white/5 backdrop-blur-xl md:p-xl hover:border-secondary-fixed/40 hover:bg-white/10"
+              >
+                <span className="absolute -top-6 -right-3 text-[7rem] leading-none material-symbols-outlined text-white/5 transition-colors duration-300 group-hover:text-secondary-fixed/10">
+                  {card.icon}
+                </span>
+                <div className="relative">
+                  <div className="flex items-center justify-center w-12 h-12 mb-md rounded-full bg-secondary-fixed/15 text-secondary-fixed ring-1 ring-secondary-fixed/30">
+                    <span className="text-2xl material-symbols-outlined">{card.icon}</span>
+                  </div>
+                  <h3 className="font-headline-sm text-headline-sm text-secondary-fixed mb-sm">{card.title}</h3>
+                  <div
+                    className="leading-relaxed text-on-primary/75 font-body-md text-body-md [&_a]:text-secondary-fixed [&_a]:underline [&_p+p]:mt-sm [&_strong]:text-on-primary"
+                    dangerouslySetInnerHTML={{ __html: card.content }}
+                  />
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
