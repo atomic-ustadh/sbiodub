@@ -13,7 +13,7 @@ import TermsOfService from './pages/TermsOfService'
 import Faq from './pages/Faq'
 import Donate from './pages/Donate'
 import Profile from './pages/Profile'
-import Receipts from './pages/Receipts'
+import PaymentHistory from './pages/PaymentHistory'
 import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 
@@ -33,7 +33,8 @@ export default function App() {
         <Route path="donate" element={<Donate />} />
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<Profile />} />
-          <Route path="receipts" element={<Receipts />} />
+          <Route path="history" element={<PaymentHistory />} />
+          <Route path="receipts" element={<PaymentHistory />} />
         </Route>
       </Route>
       <Route path="login" element={<Login />} />

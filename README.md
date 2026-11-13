@@ -1,6 +1,6 @@
 # LCA, Abuja
 
-A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a browser-only member area for managing a profile, RSVPs and receipts.
+A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a member area for managing a profile, RSVPs and donation/payment history.
 
 This is a **client-side demo, not a production application**. There is no backend, no server-side authentication, and no real payment processing. Account data, passwords, RSVPs and donation records are stored in the browser via `localStorage`. The donation page uses manual bank transfer and WhatsApp confirmation, not a payment gateway. Several UI elements (notably the newsletter form, resource search and some calls to action) are presentational only.
 
@@ -13,20 +13,20 @@ This is a **client-side demo, not a production application**. There is no backen
 - **Home page** — hero, core pillars, up to three CMS-driven upcoming events, a CMS-driven testimonial carousel, and static CTA sections.
 - **About page** — static hero, plus CMS-driven journey, pillars, and leadership profiles.
 - **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
-- **Protected member area** — `/profile` and `/receipts` redirect logged-out users to `/login` and return them to the requested page after sign-in.
+- **Protected member area** — `/profile`, `/history` (and the legacy `/receipts` alias) redirect logged-out users to `/login` and return them to the requested page after sign-in.
 - **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
 - **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
 - **Content management** — resources, events, testimonials, leadership profiles, FAQ entries, legal pages, the Donate page and About page content live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
-- **Profile dashboard** — edit name and phone; view and cancel RSVPs; see a donation-history placeholder; log out.
+- **Profile dashboard** — edit name and phone; view and cancel RSVPs; open donation & payment history; log out.
 - **Newsletter signup** — `SubscribeForm` posts to Netlify Forms; submissions are available in the Netlify dashboard after deployment.
-- **Receipts** — renders donations from local state with printable receipt rows and optional filtering by `?donation=<id>`. Because no UI flow currently creates a donation, this list is normally empty.
+- **Donation & payment history** — `/history` lists verified donations in a table with totals, reference, allocation, channel and amount. `?donation=<id>` highlights the payment that just completed.
+- **Online donations** — `/donate` supports Paystack Inline (card, bank transfer, USSD) for signed-in and anonymous donors. Payments are verified server-side by Netlify Functions and written to Neon; signed-in donors see them under `/history`. Manual bank transfer with WhatsApp confirmation remains as an alternative.
 - **Shared login modal** — `LoginModal` gates event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
 - **Legal and utility pages** — CMS-driven privacy policy, terms of service, and FAQ accordion.
 - **Design system** — "Emerald & Gold" tokens and utilities in `src/index.css`.
 
 ### UI-only or non-functional
 
-- **Donation confirmation** — the `/donate` page uses manual bank transfer. Donors copy the bank details, view donation destinations and FAQ content, then open WhatsApp with a prefilled message and attach their bank receipt. Nothing is persisted by the site, so donation history and receipts contain no user-created data. Bank details, quote, destinations and FAQ are edited from `src/content/donate.json` through Pages CMS.
 - **Resource search** — not implemented; only category filters work.
 - **Event search** — not implemented; only category filtering exists.
 - **Forgot password** — checks whether an email exists in local storage and simulates a short delay, but does not send a link or reset a password. It also reveals whether an account exists for an email.
@@ -60,7 +60,7 @@ This is a client-side single-page application. There is no server, API layer or 
 
 - **Bootstrap:** `src/main.tsx` mounts React inside `BrowserRouter` and `AuthProvider`, then renders the route table in `src/App.tsx`.
 - **Layouts:** Most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer` + floating FAQ link). Auth pages and the 404 page render standalone.
-- **Route guards:** `ProtectedRoute` wraps `/profile` and `/receipts`, redirecting guests to `/login` with a return path.
+- **Route guards:** `ProtectedRoute` wraps `/profile` and `/history` (plus the legacy `/receipts` alias), redirecting guests to `/login` with a return path.
 - **State:** `AuthContext` is the single source of client state for the session, users, RSVPs and donations, persisted per user in `localStorage`.
 - **Content:** Resources, events, testimonials, leadership, FAQ and legal content are JSON files under `src/content/`, loaded efficiently by `src/lib/content.ts` and validated when the app runs.
 - **Shared UI:** `LoginModal` is used for RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
@@ -155,7 +155,7 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
         ├── BlogPost.tsx       # Individual article
         ├── Donate.tsx         # Manual bank transfer and WhatsApp confirmation
         ├── Profile.tsx        # Member dashboard
-        ├── Receipts.tsx       # Donation receipts
+        ├── PaymentHistory.tsx # Donation & payment history table
         ├── PrivacyPolicy.tsx
         ├── TermsOfService.tsx
         ├── Faq.tsx            # Placeholder FAQ page
@@ -178,7 +178,8 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 | `/resources/:slug` | Blog Post | Article detail with generated title hero |
 | `/donate` | Donate | Manual bank transfer; opens WhatsApp |
 | `/profile` | Profile | Protected; requires login |
-| `/receipts` | Receipts | Protected; requires login |
+| `/history` | Donation & Payment History | Protected; requires login |
+| `/receipts` | Legacy alias | Renders `/history` |
 | `/privacy` | Privacy Policy | |
 | `/terms` | Terms of Service | |
 | `/faq` | FAQ | CMS-driven accordion |
@@ -206,6 +207,50 @@ On load, the app migrates legacy `sbio_*` keys to the equivalent `lca_*` keys. T
 > **Security note:** This is a front-end demo. Passwords are stored in plain text, and donation records are simulated or purely visual. Do not use this implementation for real accounts, donations or payment data. A real backend with secure authentication and a payment provider is required before production use.
 
 All CMS collections live under `src/content/` and are loaded and validated by `src/lib/content.ts`.
+
+## Online payments (Paystack)
+
+Donations are collected with **Paystack Inline** in the browser and recorded
+only after the transaction is verified by a Netlify Function. The browser never
+writes donation rows directly, so payments cannot be fabricated.
+
+```
+Donate page -> Paystack Inline popup
+            -> POST /api/paystack/verify   (verifies with PAYSTACK_SECRET_KEY)
+            -> Netlify Function writes the verified row with DATABASE_URL
+Paystack    -> POST /api/paystack/webhook  (charge.success, HMAC-verified)
+```
+
+### Required environment variables
+
+| Variable | Scope | Notes |
+| --- | --- | --- |
+| `VITE_PAYSTACK_PUBLIC_KEY` | Client | `pk_test_...` locally, `pk_live_...` in production |
+| `PAYSTACK_SECRET_KEY` | Function | `sk_test_...` / `sk_live_...`; also validates webhook signatures |
+| `CLERK_SECRET_KEY` | Function | Verifies the signed-in user's token before linking a donation |
+| `DATABASE_URL` | Function | Neon Postgres connection string used to write verified donations |
+
+The three server values must **not** be prefixed with `VITE_`. Set them in
+Netlify under Site configuration → Environment variables; for local function
+testing use `netlify dev` with a gitignored `.env` file.
+
+### Setup checklist
+
+1. Run the updated `db/schema.sql` on the Neon branch so `donations` has the
+   `reference`, `status`, `channel`, `amount_kobo`, `paid_at`, etc. columns and
+   authenticated users can only `select` their own rows.
+2. In the Paystack dashboard, set the webhook URL to
+   `https://<your-site>/api/paystack/webhook` and subscribe to `charge.success`.
+3. Add the four environment variables above and redeploy so the Inline public
+   key is inlined into the bundle.
+4. Test with Paystack test keys/cards. A successful payment should:
+   - appear in `/history` when the user is signed in,
+   - be written by the webhook even if the tab was closed,
+   - be idempotent on repeated webhook deliveries (unique `reference`).
+
+`POST /api/paystack/verify` accepts `{ "reference": "..." }` and an optional
+`Authorization: Bearer <clerk-session-token>` header. The webhook verifies
+`x-paystack-signature` with `PAYSTACK_SECRET_KEY` before writing.
 
 ## Design System
 

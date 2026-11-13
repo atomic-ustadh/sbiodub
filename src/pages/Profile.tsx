@@ -156,17 +156,17 @@ export default function Profile() {
                 </span>
               </div>
               <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">
-                Donation History Coming Soon
+                Donation &amp; Payment History
               </h2>
               <p className="mx-auto max-w-2xl font-body-md text-body-md text-on-surface-variant mb-lg">
-                We are working on donation tracking and receipts. For now, you
-                can support us directly by bank transfer on the Donate page.
+                See every verified donation and payment on your account in one
+                place.
               </p>
               <Link
-                to="/donate"
+                to="/history"
                 className="inline-flex items-center gap-sm rounded-lg bg-primary px-md py-md font-button text-button text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]"
               >
-                Go to Donate
+                View history
                 <span className="material-symbols-outlined">arrow_forward</span>
               </Link>
             </div>

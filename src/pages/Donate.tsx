@@ -1,11 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth as useClerkAuth } from "@clerk/react";
 import { donationPage } from "../lib/content";
+import { payWithPaystack } from "../lib/paystack";
+import { useAuth } from "../context/AuthContext";
+
+const PRESET_AMOUNTS = [5000, 20000, 42000, 126000];
 
 export default function Donate() {
-  const [donorName, setDonorName] = useState("");
-  const [donorEmail, setDonorEmail] = useState("");
-  const [donorPhone, setDonorPhone] = useState("");
+  const navigate = useNavigate();
+  const { user, refreshDonations } = useAuth();
+  const { getToken } = useClerkAuth();
+  const [donorName, setDonorName] = useState(user?.name ?? "");
+  const [donorEmail, setDonorEmail] = useState(user?.email ?? "");
+  const [donorPhone, setDonorPhone] = useState(user?.phone ?? "");
   const [copied, setCopied] = useState<string | null>(null);
+  const [selectedAmount, setSelectedAmount] = useState<number | "custom">(42000);
+  const [customAmount, setCustomAmount] = useState("");
+  const [allocation, setAllocation] = useState(
+    donationPage.destinations[0]?.label ?? "General Fund",
+  );
+  const [anonymous, setAnonymous] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+
+  const paystackPublicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
+  const amountValue =
+    selectedAmount === "custom" ? Number(customAmount) : selectedAmount;
+
+  useEffect(() => {
+    if (!user) return;
+    setDonorName((current) => current || user.name);
+    setDonorEmail((current) => current || user.email);
+    setDonorPhone((current) => current || user.phone);
+  }, [user]);
 
   const copyDetail = async (label: string, value: string) => {
     try {
@@ -14,6 +43,72 @@ export default function Donate() {
       setTimeout(() => setCopied(null), 2000);
     } catch {
       setCopied(null);
+    }
+  };
+
+  const handleOnlineDonation = async () => {
+    setPaymentError(null);
+    setPaymentSuccess(false);
+
+    if (!paystackPublicKey) {
+      setPaymentError("Online payments are not configured yet.");
+      return;
+    }
+    if (!donorEmail.trim()) {
+      setPaymentError("Enter the email address that should receive your receipt.");
+      return;
+    }
+    if (!Number.isFinite(amountValue) || amountValue < 100) {
+      setPaymentError("Enter a donation amount of at least ₦100.");
+      return;
+    }
+
+    setPaying(true);
+    try {
+      const reference = `lca_${crypto.randomUUID()}`;
+      const token = user ? await getToken() : null;
+      const paidReference = await payWithPaystack({
+        publicKey: paystackPublicKey,
+        email: donorEmail.trim(),
+        amount: Math.round(amountValue * 100),
+        reference,
+        metadata: {
+          full_name: donorName.trim(),
+          phone: donorPhone.trim(),
+          allocation,
+          anonymous,
+          ...(user?.id ? { user_id: user.id } : {}),
+        },
+      });
+
+      const response = await fetch("/api/paystack/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ reference: paidReference }),
+      });
+      const payload = (await response.json().catch(() => null)) as
+        | { donation?: { id: string }; error?: string }
+        | null;
+
+      if (!response.ok || !payload?.donation) {
+        throw new Error(payload?.error || "We could not confirm the payment.");
+      }
+
+      if (user) {
+        await refreshDonations();
+        navigate(`/history?donation=${encodeURIComponent(payload.donation.id)}`);
+      } else {
+        setPaymentSuccess(true);
+      }
+    } catch (error) {
+      setPaymentError(
+        error instanceof Error ? error.message : "Payment failed. Please try again.",
+      );
+    } finally {
+      setPaying(false);
     }
   };
 
@@ -60,6 +155,160 @@ export default function Donate() {
 
       <div className="grid mx-auto max-w-container-max px-gutter lg:grid-cols-3 gap-xl">
         <div className="lg:col-span-2 space-y-lg">
+          <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg">
+            <h2 className="font-headline-sm text-headline-sm text-primary mb-md">
+              Donate online
+            </h2>
+            <p className="mb-md font-body-md text-body-md text-on-surface-variant">
+              Pay securely by card, bank transfer or USSD. Payment is handled by
+              Paystack — we never see or store your card details, and your
+              receipt is available immediately.
+            </p>
+
+            <p className="mb-sm font-label-md text-label-md text-on-surface-variant">
+              Choose an amount
+            </p>
+            <div className="grid grid-cols-2 gap-sm sm:grid-cols-4">
+              {PRESET_AMOUNTS.map((amount) => {
+                const active = selectedAmount === amount;
+                return (
+                  <button
+                    key={amount}
+                    type="button"
+                    onClick={() => setSelectedAmount(amount)}
+                    className={`rounded-lg border px-md py-sm font-button text-button transition-all ${
+                      active
+                        ? "border-primary bg-primary text-on-primary"
+                        : "border-outline-variant text-primary hover:bg-surface-container-low"
+                    }`}
+                  >
+                    &#8358;{amount.toLocaleString()}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="mt-sm flex flex-col gap-sm sm:flex-row sm:items-center">
+              <button
+                type="button"
+                onClick={() => setSelectedAmount("custom")}
+                className={`rounded-lg border px-md py-sm font-button text-button transition-all ${
+                  selectedAmount === "custom"
+                    ? "border-primary bg-primary text-on-primary"
+                    : "border-outline-variant text-primary hover:bg-surface-container-low"
+                }`}
+              >
+                Another amount
+              </button>
+              {selectedAmount === "custom" && (
+                <input
+                  type="number"
+                  min={100}
+                  step={100}
+                  value={customAmount}
+                  onChange={(e) => setCustomAmount(e.target.value)}
+                  placeholder="Amount in naira"
+                  className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary sm:max-w-xs"
+                />
+              )}
+            </div>
+
+            <div className="mt-md grid gap-md sm:grid-cols-2">
+              <div>
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">
+                  Where should it go?
+                </label>
+                <select
+                  value={allocation}
+                  onChange={(e) => setAllocation(e.target.value)}
+                  className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                >
+                  {donationPage.destinations.map((destination) => (
+                    <option key={destination.label} value={destination.label}>
+                      {destination.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">
+                  Full name
+                </label>
+                <input
+                  type="text"
+                  value={donorName}
+                  onChange={(e) => setDonorName(e.target.value)}
+                  placeholder="e.g. Ahmed Musa"
+                  className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                />
+              </div>
+              <div>
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={donorEmail}
+                  onChange={(e) => setDonorEmail(e.target.value)}
+                  placeholder="you@email.com"
+                  className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                />
+              </div>
+              <div>
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  value={donorPhone}
+                  onChange={(e) => setDonorPhone(e.target.value)}
+                  placeholder="080 1234 5678"
+                  className="w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-4 py-3 font-body-md text-on-surface focus:outline-none focus:ring-2 focus:ring-secondary"
+                />
+              </div>
+            </div>
+
+            <label className="mt-md flex items-start gap-sm font-body-sm text-body-sm text-on-surface-variant">
+              <input
+                type="checkbox"
+                checked={anonymous}
+                onChange={(e) => setAnonymous(e.target.checked)}
+                className="mt-1 h-4 w-4 accent-primary"
+              />
+              Give anonymously. Your name will not be shown publicly.
+            </label>
+
+            {paymentSuccess && (
+              <p className="mt-md rounded-lg bg-primary-fixed px-md py-sm font-body-sm text-body-sm text-on-primary-fixed">
+                Thank you — your payment was received and Paystack has emailed
+                your receipt. To keep donation history in your dashboard, sign
+                in before giving.
+              </p>
+            )}
+
+            {paymentError && (
+              <p className="mt-md rounded-lg bg-error-container px-md py-sm font-body-sm text-body-sm text-on-error-container">
+                {paymentError}
+              </p>
+            )}
+
+            <button
+              type="button"
+              onClick={handleOnlineDonation}
+              disabled={paying}
+              className="mt-lg flex w-full items-center justify-center gap-sm rounded-xl bg-primary px-lg py-4 font-button text-button text-on-primary shadow-md transition-all hover:bg-primary-container active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <span className="material-symbols-outlined">lock</span>
+              {paying
+                ? "Processing..."
+                : `Give ₦${(Number.isFinite(amountValue) ? amountValue : 0).toLocaleString()}`}
+            </button>
+            <p className="mt-md font-body-sm text-body-sm text-on-surface-variant">
+              Secure payment by Paystack. If you are signed in, the payment is
+              saved to your history; otherwise Paystack emails your receipt.
+            </p>
+          </div>
+
           <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg">
             <h2 className="font-headline-sm text-headline-sm text-primary mb-md">
               Bank Transfer Details

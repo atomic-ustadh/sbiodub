@@ -34,15 +34,15 @@ export interface Rsvp extends RsvpInput {
   rsvpedAt: string
 }
 
-export interface DonationInput {
+export interface Donation {
   amount: number
   type: string
   allocation: string
-}
-
-export interface Donation extends DonationInput {
   id: string
   date: string
+  reference?: string | null
+  status?: string | null
+  channel?: string | null
 }
 
 interface AuthContextValue {
@@ -54,7 +54,7 @@ interface AuthContextValue {
   addRsvp: (input: RsvpInput) => void
   cancelRsvp: (eventId: string) => void
   donations: Donation[]
-  addDonation: (donation: DonationInput) => void
+  refreshDonations: () => Promise<void>
 }
 
 interface RsvpRow {
@@ -75,6 +75,9 @@ interface DonationRow {
   type: string
   allocation: string
   created_at: string
+  reference?: string | null
+  status?: string | null
+  channel?: string | null
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null)
@@ -100,6 +103,9 @@ function toDonation(row: DonationRow): Donation {
     type: row.type,
     allocation: row.allocation,
     date: row.created_at,
+    reference: row.reference ?? null,
+    status: row.status ?? null,
+    channel: row.channel ?? null,
   }
 }
 
@@ -228,29 +234,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user, authFetch, refresh],
   )
 
-  const addDonation = useCallback(
-    (donation: DonationInput) => {
-      if (!user) return
-      void (async () => {
-        try {
-          await authFetch('/donations', {
-            method: 'POST',
-            body: JSON.stringify({
-              user_id: user.id,
-              amount: donation.amount,
-              type: donation.type,
-              allocation: donation.allocation,
-            }),
-          })
-          await refresh()
-        } catch (error) {
-          console.error('Failed to save donation', error)
-        }
-      })()
-    },
-    [user, authFetch, refresh],
-  )
-
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -261,7 +244,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addRsvp,
       cancelRsvp,
       donations,
-      addDonation,
+      refreshDonations: refresh,
     }),
     [
       user,
@@ -272,7 +255,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addRsvp,
       cancelRsvp,
       donations,
-      addDonation,
+      refresh,
     ],
   )
 

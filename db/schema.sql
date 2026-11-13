@@ -56,21 +56,55 @@ create policy "rsvps_delete_own" on public.rsvps
 
 -- ---------------------------------------------------------------------------
 -- Donations
+--
+-- Rows are written only by the Netlify Functions in netlify/functions, which
+-- connect with DATABASE_URL (the database owner) after verifying the Paystack
+-- transaction. Authenticated app users may only read their own rows, so a
+-- client can never fabricate a donation or receipt through the Data API.
 -- ---------------------------------------------------------------------------
 create table if not exists public.donations (
-  id         uuid           primary key default gen_random_uuid(),
-  user_id    text           not null,
-  amount     numeric(12, 2) not null check (amount > 0),
-  type       text           not null,
-  allocation text           not null,
-  created_at timestamptz    not null default now()
+  id          uuid           primary key default gen_random_uuid(),
+  reference   text,
+  user_id     text,
+  full_name   text,
+  email       text,
+  phone       text,
+  amount      numeric(12, 2) not null check (amount > 0),
+  amount_kobo bigint,
+  currency    text           not null default 'NGN',
+  type        text           not null default 'donation',
+  allocation  text           not null default 'General Fund',
+  channel     text,
+  paystack_id text,
+  anonymous   boolean        not null default false,
+  status      text           not null default 'success',
+  paid_at     timestamptz,
+  created_at  timestamptz    not null default now()
 );
 
+-- Bring an existing donations table up to date without dropping data.
+alter table public.donations
+  add column if not exists reference text,
+  add column if not exists full_name text,
+  add column if not exists email text,
+  add column if not exists phone text,
+  add column if not exists amount_kobo bigint,
+  add column if not exists currency text not null default 'NGN',
+  add column if not exists channel text,
+  add column if not exists paystack_id text,
+  add column if not exists anonymous boolean not null default false,
+  add column if not exists status text not null default 'success',
+  add column if not exists paid_at timestamptz,
+  alter column user_id drop not null;
+
+create unique index if not exists donations_reference_key on public.donations (reference);
 create index if not exists donations_user_id_idx on public.donations (user_id);
 
 alter table public.donations enable row level security;
 
-grant select, insert, update, delete on public.donations to authenticated;
+-- Read-only for the app; inserts/updates/deletes happen server-side only.
+grant select on public.donations to authenticated;
+revoke insert, update, delete on public.donations from authenticated;
 
 drop policy if exists "donations_select_own" on public.donations;
 create policy "donations_select_own" on public.donations
@@ -78,14 +112,8 @@ create policy "donations_select_own" on public.donations
   using (user_id = auth.user_id());
 
 drop policy if exists "donations_insert_own" on public.donations;
-create policy "donations_insert_own" on public.donations
-  for insert to authenticated
-  with check (user_id = auth.user_id());
-
+drop policy if exists "donations_update_own" on public.donations;
 drop policy if exists "donations_delete_own" on public.donations;
-create policy "donations_delete_own" on public.donations
-  for delete to authenticated
-  using (user_id = auth.user_id());
 
 -- Future tables created in public inherit these grants. RLS must still be
 -- enabled and a policy added per table.
