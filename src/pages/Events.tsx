@@ -96,26 +96,27 @@ export default function Events() {
     .sort((a, b) => b.date.localeCompare(a.date));
 
   const renderGridEvents = (items: CommunityEvent[], isPast: boolean) => (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+    <div className="grid grid-cols-1 gap-lg md:grid-cols-2 lg:grid-cols-3">
       {items.map((event) => (
         <div
           key={event.id}
-          className="group bg-white rounded-xl overflow-hidden shadow-[0px_4px_20px_rgba(0,0,0,0.05)] border border-outline-variant hover:shadow-xl transition-all duration-300"
+          className="card card-hover group flex flex-col overflow-hidden"
         >
           <div className="relative h-56 overflow-hidden">
             <img
-              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               alt={event.title}
               src={event.img}
             />
+            <div className="absolute inset-0 bg-linear-to-t from-primary/50 via-transparent to-transparent" />
             <div
-              className={`absolute top-4 left-4 ${categoryColors[event.category]} px-3 py-1 rounded-full font-label-md text-label-md`}
+              className={`chip absolute left-4 top-4 shadow-sm ${categoryColors[event.category]}`}
             >
               {event.category}
             </div>
           </div>
-          <div className="p-md">
-            <div className="flex items-center gap-2 mb-2 text-primary font-label-md text-label-md">
+          <div className="flex grow flex-col p-lg">
+            <div className="mb-2 flex items-center gap-2 font-label-md text-label-md text-secondary">
               <span className="material-symbols-outlined text-[18px]">
                 calendar_today
               </span>
@@ -123,24 +124,24 @@ export default function Events() {
               <span className="mx-1 text-outline">&bull;</span>
               <span>{event.time}</span>
             </div>
-            <h3 className="mb-3 font-headline-sm text-headline-sm text-on-surface">
+            <h3 className="mb-3 font-headline-sm text-headline-sm text-primary">
               {event.title}
             </h3>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-md">
+            <p className="mb-md font-body-sm text-body-sm text-on-surface-variant">
               {event.desc}
             </p>
-            <div className="flex items-center gap-2 text-on-surface-variant font-body-sm mb-lg">
+            <div className="mb-lg flex items-center gap-2 font-body-sm text-on-surface-variant">
               <span className="material-symbols-outlined text-[18px]">
                 location_on
               </span>
               <span>{event.location}</span>
             </div>
             {isPast ? (
-              <button disabled className="w-full py-3 rounded-lg font-button text-button bg-surface-container-high text-on-surface-variant cursor-not-allowed">
+              <button disabled className="btn mt-auto w-full cursor-not-allowed bg-surface-container-high py-3 text-on-surface-variant">
                 Event ended
               </button>
             ) : (
-              <button onClick={() => openRsvp(event)} className="w-full py-3 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
+              <button onClick={() => openRsvp(event)} className="btn btn-primary mt-auto w-full py-3">
                 {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
               </button>
             )}
@@ -152,28 +153,28 @@ export default function Events() {
 
   const renderTimelineEvents = (items: CommunityEvent[], isPast: boolean) => (
     <div className="relative">
-      <div className="absolute left-4.75 top-0 bottom-0 w-0.5 bg-outline-variant" />
+      <div className="absolute bottom-0 left-4.75 top-0 w-0.5 bg-secondary/20" />
       <div className="space-y-lg">
         {items.map((event) => (
           <div key={event.id} className="relative pl-14">
             <div
-              className={`absolute left-3 top-6 w-3.5 h-3.5 rounded-full border-4 border-surface ${dotColors[event.category]} ring-2 ring-outline-variant`}
+              className={`absolute left-3 top-6 h-3.5 w-3.5 rounded-full border-4 border-surface ${dotColors[event.category]} ring-2 ring-secondary/30`}
             />
-            <div className="transition-all duration-300 bg-white border shadow-sm rounded-xl border-outline-variant p-md hover:shadow-lg">
-              <div className="flex flex-col md:flex-row gap-md">
+            <div className="card card-hover p-md">
+              <div className="flex flex-col gap-md md:flex-row">
                 <div className="md:w-1/4">
                   <div
-                    className={`inline-block px-3 py-1 rounded-full font-label-md text-label-md mb-2 ${categoryColors[event.category]}`}
+                    className={`chip mb-2 ${categoryColors[event.category]}`}
                   >
                     {event.category}
                   </div>
-                  <div className="flex items-center gap-2 text-primary font-label-md text-label-md">
+                  <div className="flex items-center gap-2 font-label-md text-label-md text-secondary">
                     <span className="material-symbols-outlined text-[18px]">
                       calendar_today
                     </span>
                     <span>{formatContentDate(event.date)}</span>
                   </div>
-                  <div className="flex items-center gap-2 mt-1 text-primary font-label-md text-label-md">
+                  <div className="mt-1 flex items-center gap-2 font-label-md text-label-md text-secondary">
                     <span className="material-symbols-outlined text-[18px]">
                       schedule
                     </span>
@@ -181,24 +182,24 @@ export default function Events() {
                   </div>
                 </div>
                 <div className="md:w-3/4">
-                  <h3 className="mb-2 font-headline-sm text-headline-sm text-on-surface">
+                  <h3 className="mb-2 font-headline-sm text-headline-sm text-primary">
                     {event.title}
                   </h3>
                   <p className="mb-3 font-body-sm text-body-sm text-on-surface-variant">
                     {event.desc}
                   </p>
-                  <div className="flex items-center gap-2 mb-4 text-on-surface-variant font-body-sm">
+                  <div className="mb-4 flex items-center gap-2 font-body-sm text-on-surface-variant">
                     <span className="material-symbols-outlined text-[18px]">
                       location_on
                     </span>
                     <span>{event.location}</span>
                   </div>
                   {isPast ? (
-                    <span className="inline-block px-6 py-2 rounded-lg font-button text-button bg-surface-container text-on-surface-variant">
+                    <span className="btn inline-block cursor-not-allowed bg-surface-container px-6 py-2 text-on-surface-variant">
                       Event ended
                     </span>
                   ) : (
-                    <button onClick={() => openRsvp(event)} className="px-6 py-2 transition-all rounded-lg font-button text-button bg-primary text-on-primary hover:bg-primary-container">
+                    <button onClick={() => openRsvp(event)} className="btn btn-primary px-6 py-2">
                       {isRsvped(event.id) ? 'Registered ✓' : 'Register Now'}
                     </button>
                   )}
@@ -212,28 +213,29 @@ export default function Events() {
   );
 
   return (
-    <main className="pt-16">
+    <main className="pt-18">
       {/* Hero */}
-      <header className="relative pt-32 pb-16 overflow-hidden px-gutter bg-primary-container">
-        <div className="absolute inset-0 geometric-pattern" />
-        <div className="relative z-10 mx-auto text-center max-w-container-max">
-          <h1 className="mb-4 font-display-lg text-display-lg text-on-primary">
+      <header className="relative overflow-hidden bg-primary px-gutter pb-14 pt-28">
+        <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />
+        <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />
+        <div className="relative z-10 mx-auto max-w-container-max text-center">
+          <h1 className="mb-4 font-display-lg text-display-lg-mobile text-secondary-fixed md:text-display-lg">
             Events & Workshops
           </h1>
-          <p className="max-w-2xl mx-auto font-body-lg text-body-lg text-on-primary-container/90 mb-lg">
+          <p className="mx-auto mb-lg max-w-2xl font-body-lg text-body-lg text-on-primary/70">
             Discover opportunities to learn, connect, and grow. Join our vibrant
             community in activities designed for the next generation.
           </p>
-          <div className="flex flex-col items-center justify-between border md:flex-row gap-md bg-surface/10 backdrop-blur-md p-md rounded-xl border-white/10">
-            <div className="flex-wrap items-center hidden md:flex gap-sm">
+          <div className="glass-dark mx-auto flex flex-col items-center justify-between gap-md rounded-2xl p-sm md:flex-row">
+            <div className="hidden flex-wrap items-center gap-xs md:flex">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setActiveCategory(cat)}
                   className={
                     activeCategory === cat
-                      ? "bg-secondary text-on-secondary font-button text-button px-5 py-2 rounded-full shadow-lg"
-                      : "bg-white/10 text-on-primary hover:bg-white/20 font-button text-button px-5 py-2 rounded-full transition-all"
+                      ? "rounded-full bg-secondary-container px-5 py-2 font-button text-button text-on-secondary-container shadow-gold"
+                      : "rounded-full px-5 py-2 font-button text-button text-on-primary/75 transition-all hover:bg-white/10 hover:text-on-primary"
                   }
                 >
                   {cat}
@@ -243,25 +245,25 @@ export default function Events() {
             <select
               value={activeCategory}
               onChange={(e) => setActiveCategory(e.target.value as EventFilter)}
-              className="w-full px-4 py-2 border rounded-lg outline-none md:hidden bg-surface/20 text-on-primary border-white/20 font-button text-button focus:ring-2 focus:ring-secondary"
+              className="w-full rounded-xl border border-white/15 bg-white/10 px-4 py-2 font-button text-button text-on-primary outline-none md:hidden focus:border-secondary-fixed/60"
             >
               {categories.map((cat) => (
                 <option
                   key={cat}
                   value={cat}
-                  className="text-on-surface bg-surface"
+                  className="bg-surface text-on-surface"
                 >
                   {cat}
                 </option>
               ))}
             </select>
-            <div className="flex items-center p-1 rounded-lg bg-white/20">
+            <div className="flex items-center rounded-full bg-white/10 p-1">
               <button
                 onClick={() => setView("grid")}
                 className={
                   view === "grid"
-                    ? "bg-white text-primary p-2 rounded shadow-sm flex items-center gap-2"
-                    : "text-on-primary p-2 rounded hover:bg-white/10 flex items-center gap-2"
+                    ? "flex items-center gap-2 rounded-full bg-surface-container-lowest px-3 py-2 text-primary shadow-sm"
+                    : "flex items-center gap-2 rounded-full px-3 py-2 text-on-primary/70 transition-colors hover:text-on-primary"
                 }
               >
                 <span
@@ -276,8 +278,8 @@ export default function Events() {
                 onClick={() => setView("calendar")}
                 className={
                   view === "calendar"
-                    ? "bg-white text-primary p-2 rounded shadow-sm flex items-center gap-2"
-                    : "text-on-primary p-2 rounded hover:bg-white/10 flex items-center gap-2"
+                    ? "flex items-center gap-2 rounded-full bg-surface-container-lowest px-3 py-2 text-primary shadow-sm"
+                    : "flex items-center gap-2 rounded-full px-3 py-2 text-on-primary/70 transition-colors hover:text-on-primary"
                 }
               >
                 <span
@@ -296,7 +298,7 @@ export default function Events() {
       {/* Grid View */}
       {view === "grid" && (
         <div
-          className="mx-auto py-xl px-gutter max-w-container-max"
+          className="mx-auto max-w-container-max px-gutter py-xl"
           id="event-grid"
         >
           {filtered.length === 0 ? (
@@ -307,9 +309,7 @@ export default function Events() {
             <>
               <section>
                 <div className="mb-lg">
-                  <h2 className="font-headline-md text-headline-md text-on-surface">
-                    Upcoming Events
-                  </h2>
+                  <h2 className="section-heading">Upcoming Events</h2>
                   <p className="mt-xs text-on-surface-variant">
                     Events that have not happened yet.
                   </p>
@@ -326,9 +326,7 @@ export default function Events() {
               {past.length > 0 && (
                 <section className="mt-xl border-t border-outline-variant pt-xl">
                   <div className="mb-lg">
-                    <h2 className="font-headline-md text-headline-md text-on-surface">
-                      Past Events
-                    </h2>
+                    <h2 className="section-heading">Past Events</h2>
                     <p className="mt-xs text-on-surface-variant">
                       Events that have already taken place.
                     </p>
@@ -343,22 +341,20 @@ export default function Events() {
 
       {/* Timeline View */}
       {view === "calendar" && (
-        <div className="mx-auto py-xl px-gutter max-w-container-max">
-          <h2 className="font-headline-md text-headline-md text-on-surface mb-xl">
-            Event Timeline
-          </h2>
+        <div className="mx-auto max-w-container-max px-gutter py-xl">
+          <h2 className="section-heading mb-xl">Event Timeline</h2>
           {filtered.length === 0 ? (
-            <p className="text-center text-on-surface-variant py-xl">
+            <p className="py-xl text-center text-on-surface-variant">
               No events match this category.
             </p>
           ) : (
             <div className="space-y-xl">
               <section>
-                <h3 className="font-headline-sm text-headline-sm text-on-surface mb-lg">
+                <h3 className="mb-lg font-headline-sm text-headline-sm text-primary">
                   Upcoming Events
                 </h3>
                 {upcoming.length === 0 ? (
-                  <p className="text-center text-on-surface-variant py-lg">
+                  <p className="py-lg text-center text-on-surface-variant">
                     No upcoming events match this filter.
                   </p>
                 ) : (
@@ -368,7 +364,7 @@ export default function Events() {
 
               {past.length > 0 && (
                 <section className="border-t border-outline-variant pt-xl">
-                  <h3 className="font-headline-sm text-headline-sm text-on-surface mb-lg">
+                  <h3 className="mb-lg font-headline-sm text-headline-sm text-primary">
                     Past Events
                   </h3>
                   {renderTimelineEvents(past, true)}
@@ -380,9 +376,9 @@ export default function Events() {
       )}
 
       {/* CTA */}
-      <section className="bg-surface-container py-xl">
-        <div className="mx-auto text-center max-w-container-max px-gutter">
-          <h2 className="font-headline-md text-headline-md text-on-surface mb-md">
+      <section className="bg-surface-container-low py-xl">
+        <div className="mx-auto max-w-container-max px-gutter text-center">
+          <h2 className="mb-md font-headline-md text-headline-md text-primary">
             Don't miss out on our community updates.
           </h2>
           <div className="mx-auto max-w-128">
@@ -393,35 +389,35 @@ export default function Events() {
 
       {/* RSVP Modal */}
       {rsvpEvent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-gutter" onClick={closeRsvp}>
-          <div className="bg-surface-container-lowest rounded-xl p-lg max-h-[90vh] overflow-y-auto shadow-xl" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-md">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-gutter backdrop-blur-sm" onClick={closeRsvp}>
+          <div className="max-h-[90vh] overflow-y-auto rounded-3xl border border-outline-variant/80 bg-surface-container-lowest p-lg shadow-float" onClick={(e) => e.stopPropagation()}>
+            <div className="mb-md flex items-center justify-between">
               <h2 className="font-headline-md text-headline-md text-primary">Register for Event</h2>
-              <button onClick={closeRsvp} className="text-on-surface-variant hover:text-primary"><span className="material-symbols-outlined">close</span></button>
+              <button onClick={closeRsvp} className="flex h-9 w-9 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"><span className="material-symbols-outlined">close</span></button>
             </div>
-            <p className="font-headline-sm text-headline-sm text-primary mb-sm">{rsvpEvent.title}</p>
-            <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg">{formatContentDate(rsvpEvent.date)} &middot; {rsvpEvent.time} &middot; {rsvpEvent.location}</p>
+            <p className="mb-sm font-headline-sm text-headline-sm text-primary">{rsvpEvent.title}</p>
+            <p className="mb-lg font-body-sm text-body-sm text-on-surface-variant">{formatContentDate(rsvpEvent.date)} &middot; {rsvpEvent.time} &middot; {rsvpEvent.location}</p>
             <form onSubmit={handleRsvpSubmit} className="space-y-md">
               <div>
-                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Full Name</label>
-                <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">Full Name</label>
+                <input type="text" value={rsvpName} onChange={(e) => setRsvpName(e.target.value)} className="field" required />
               </div>
               <div>
-                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Email</label>
-                <input type="email" value={rsvpEmail} onChange={(e) => setRsvpEmail(e.target.value)} className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" required />
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">Email</label>
+                <input type="email" value={rsvpEmail} onChange={(e) => setRsvpEmail(e.target.value)} className="field" required />
               </div>
               <div>
-                <label className="block font-label-md text-label-md text-on-surface-variant mb-sm">Phone</label>
-                <input type="tel" value={rsvpPhone} onChange={(e) => setRsvpPhone(e.target.value)} className="w-full px-4 py-3 border rounded-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none" />
+                <label className="mb-sm block font-label-md text-label-md text-on-surface-variant">Phone</label>
+                <input type="tel" value={rsvpPhone} onChange={(e) => setRsvpPhone(e.target.value)} className="field" />
               </div>
-              <button type="submit" className="w-full py-3 transition-all rounded-lg bg-primary text-on-primary font-button text-button hover:opacity-90">Confirm Registration</button>
+              <button type="submit" className="btn btn-primary w-full py-3">Confirm Registration</button>
             </form>
           </div>
         </div>
       )}
 
       {rsvpMessage && (
-        <div className="fixed bottom-6 right-6 z-50 bg-primary-container text-on-primary-container px-lg py-md rounded-lg shadow-lg font-body-md animate-[fadeIn_0.3s_ease-in-out]">
+        <div className="fixed bottom-6 right-6 z-50 rounded-2xl bg-primary px-lg py-md font-body-md text-on-primary shadow-float animate-[fadeIn_0.3s_ease-in-out]">
           {rsvpMessage}
         </div>
       )}

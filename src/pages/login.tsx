@@ -4,9 +4,10 @@ import { useAuth } from '../context/AuthContext'
 
 const appearance = {
   variables: {
-    colorPrimary: '#003527',
-    colorText: '#1a1c1a',
-    borderRadius: '0.5rem',
+    colorPrimary: '#0c3a2c',
+    colorText: '#14241e',
+    borderRadius: '0.75rem',
+    fontFamily: '"Plus Jakarta Sans", sans-serif',
   },
 }
 
@@ -28,24 +29,31 @@ export default function Login() {
   }
 
   return (
-    <main className="relative flex flex-col w-full min-h-screen overflow-x-hidden md:flex-row">
+    <main className="relative flex min-h-screen w-full flex-col overflow-x-hidden md:flex-row">
       <button
         onClick={() => navigate(-1)}
         aria-label="Go back"
-        className="absolute z-50 flex items-center transition-all rounded-lg top-gutter md:top-25 left-3 md:left-gutter gap-sm text-on-primary px-sm py-xs hover:bg-white/30"
+        className="absolute left-3 top-gutter z-50 flex items-center gap-sm rounded-full border border-white/15 bg-white/5 px-sm py-xs text-on-primary backdrop-blur-sm transition-all hover:bg-white/15 md:left-gutter md:top-8"
       >
         <span className="material-symbols-outlined text-[20px]">arrow_back</span>
       </button>
 
-      <section className="relative flex items-center justify-center w-full overflow-hidden md:w-1/2 bg-primary min-h-102 md:min-h-screen">
-        <div className="relative z-10 px-xl max-w-2xl text-center md:text-left">
-          <h1 className="font-display-lg text-display-lg text-secondary-fixed">
+      <section className="hero-gradient relative flex min-h-102 w-full items-center justify-center overflow-hidden px-xl md:min-h-screen md:w-1/2">
+        <div className="absolute inset-0 geometric-pattern opacity-[0.08]" />
+        <div className="absolute -left-24 bottom-0 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />
+        <div className="absolute -right-16 top-10 h-56 w-56 rounded-full border border-secondary-fixed/15" />
+        <div className="relative z-10 max-w-2xl text-center md:text-left">
+          <span className="material-symbols-outlined mb-md block text-5xl text-secondary-fixed/70">
+            format_quote
+          </span>
+          <h1 className="font-display-lg text-display-lg-mobile leading-tight text-secondary-fixed md:text-display-lg">
             &ldquo;Read, in the name of your Lord who created.&rdquo;
           </h1>
+          <div className="mx-auto mt-lg h-px w-24 bg-linear-to-r from-secondary-fixed/70 to-transparent md:mx-0" />
         </div>
       </section>
 
-      <section className="flex items-center justify-center w-full md:w-1/2 bg-surface px-gutter py-xl">
+      <section className="flex w-full items-center justify-center bg-surface px-gutter py-xl md:w-1/2">
         {mode === 'signup' ? (
           <SignUp
             routing="hash"

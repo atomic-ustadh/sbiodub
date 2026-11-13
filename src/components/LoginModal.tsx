@@ -82,9 +82,9 @@ export default function LoginPrompt({
         aria-modal="true"
         aria-labelledby="login-prompt-title"
         onClick={(event) => event.stopPropagation()}
-        className="relative w-full max-w-2xl overflow-hidden rounded-2xl border border-outline-variant bg-surface-container-lowest p-lg shadow-2xl animate-[fadeIn_0.2s_ease-out]"
+        className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-outline-variant/80 bg-surface-container-lowest p-lg shadow-float animate-[fadeIn_0.2s_ease-out]"
       >
-        <div className="absolute top-0 left-0 h-1 w-full bg-secondary-container" />
+        <div className="absolute left-0 top-0 h-1 w-full bg-linear-to-r from-secondary via-secondary-fixed to-transparent" />
         <button
           type="button"
           onClick={onClose}
@@ -95,8 +95,8 @@ export default function LoginPrompt({
         </button>
 
         <div className="flex items-start gap-md pt-sm pr-lg">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary-fixed">
-            <span className="material-symbols-outlined text-primary">{icon}</span>
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-fixed text-primary">
+            <span className="material-symbols-outlined">{icon}</span>
           </div>
           <div>
             <h2
@@ -116,14 +116,14 @@ export default function LoginPrompt({
             ref={cancelRef}
             type="button"
             onClick={onClose}
-            className="rounded-lg px-md py-sm font-button text-button text-on-surface-variant transition-colors hover:bg-surface-container hover:text-primary"
+            className="rounded-full px-md py-sm font-button text-button text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary"
           >
             Not now
           </button>
           <button
             type="button"
             onClick={handleLogin}
-            className="flex items-center justify-center gap-xs rounded-lg bg-primary px-md py-sm font-button text-button text-on-primary shadow-sm transition-all hover:bg-primary-container active:scale-[0.98]"
+            className="btn btn-primary"
           >
             Log In
             <span className="material-symbols-outlined text-[18px]">

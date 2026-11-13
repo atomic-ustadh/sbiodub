@@ -27,25 +27,26 @@ export default function BlogPost() {
       <article>
         {/* Hero */}
         <div className="relative overflow-hidden bg-primary">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,214,91,0.18),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(149,211,186,0.2),transparent_45%)]" />
-          <span className="absolute -right-8 -top-10 material-symbols-outlined text-[220px] text-on-primary/10">
+          <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,209,138,0.18),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(159,210,189,0.16),transparent_45%)]" />
+          <span className="material-symbols-outlined absolute -right-8 -top-10 text-[220px] text-on-primary/10">
             {typeIcons[post.type]}
           </span>
           <div className="relative z-10 mx-auto max-w-container-max px-gutter py-16 md:py-24">
-            <div className="flex flex-wrap items-center gap-xs mb-md">
-              <span className="px-3 py-1 rounded bg-secondary text-on-secondary font-label-md text-label-md">
+            <div className="mb-md flex flex-wrap items-center gap-xs">
+              <span className="chip bg-secondary-container text-on-secondary-container">
                 {post.type}
               </span>
-              <span className="px-3 py-1 rounded bg-on-primary/10 text-on-primary font-label-md text-label-md backdrop-blur-sm">
+              <span className="chip bg-on-primary/10 text-on-primary backdrop-blur-sm">
                 {post.category}
               </span>
             </div>
-            <h1 className="max-w-4xl font-display-lg text-display-lg text-on-primary mb-sm">
+            <h1 className="mb-sm max-w-4xl font-display-lg text-display-lg-mobile text-on-primary md:text-display-lg">
               {post.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-md text-on-primary/80 font-body-sm">
+            <div className="flex flex-wrap items-center gap-md font-body-sm text-on-primary/70">
               <span>By {post.author}</span>
-              <span className="w-1 h-1 rounded-full bg-on-primary/40" />
+              <span className="h-1 w-1 rounded-full bg-on-primary/40" />
               <span>{formatContentDate(post.date)}</span>
             </div>
           </div>
@@ -53,12 +54,12 @@ export default function BlogPost() {
 
         {/* Content */}
         <div className="mx-auto max-w-container-max px-gutter py-xl">
-          <div className="max-w-3xl mx-auto">
-            <p className="leading-relaxed font-body-lg text-body-lg text-on-surface-variant mb-lg">
+          <div className="mx-auto max-w-3xl">
+            <p className="mb-lg font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
               {post.excerpt}
             </p>
             <div
-              className="prose prose-lg max-w-none prose-headings:font-headline-md prose-headings:text-headline-md prose-headings:text-primary prose-headings:mt-xl prose-headings:mb-md prose-p:text-body-md prose-p:text-on-surface-variant prose-p:leading-relaxed prose-p:mb-md prose-li:text-body-md prose-li:text-on-surface-variant prose-ul:space-y-sm prose-ul:mb-lg prose-ol:space-y-sm prose-ol:mb-lg prose-strong:text-primary prose-a:text-secondary prose-a:no-underline hover:prose-a:underline prose-hr:border-outline-variant"
+              className="article-prose"
               dangerouslySetInnerHTML={{ __html: post.content }}
             />
           </div>

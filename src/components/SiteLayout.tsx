@@ -15,7 +15,7 @@ export default function SiteLayout() {
         <Link
           to="/faq"
           aria-label="Frequently asked questions"
-          className="fixed z-40 flex items-center justify-center transition-all rounded-full shadow-lg bottom-gutter right-gutter bg-secondary text-on-secondary w-14 h-14 hover:scale-110 active:scale-95"
+          className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-secondary text-on-secondary shadow-gold ring-4 ring-secondary/15 transition-all duration-300 hover:-translate-y-1 hover:bg-secondary-fixed-dim active:scale-95"
         >
           <span className="material-symbols-outlined">help</span>
         </Link>

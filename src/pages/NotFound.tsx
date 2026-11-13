@@ -1,23 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
-const styles = `
-  .geometric-pattern {
-    background-image: url("https://www.transparenttextures.com/patterns/islamic-art.png");
-    opacity: 0.04;
-  }
-  .hero-gradient {
-    background: radial-gradient(circle at center, rgba(149, 211, 186, 0.15) 0%, rgba(248, 249, 255, 0) 70%);
-  }
-  @keyframes fade-in {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  .animate-fade-in {
-    animation: fade-in 0.8s ease-out forwards;
-  }
-`
-
 export default function NotFound() {
   const floatingRef = useRef<HTMLSpanElement>(null)
 
@@ -37,56 +20,52 @@ export default function NotFound() {
   }, [])
 
   return (
-    <>
-      <style>{styles}</style>
-      <main className="relative flex flex-col items-center justify-center min-h-screen px-4 overflow-hidden md:px-gutter bg-background text-on-background font-body-md selection:bg-secondary-container">
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-primary px-4 font-body-md text-on-background md:px-gutter">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <img
           alt="Serene spiritual path illustration"
-          className="object-cover object-center w-full h-full opacity-30 md:opacity-90"
+          className="h-full w-full object-cover object-center opacity-20"
           src="../404bg.png"
         />
       </div>
-      <div className="absolute inset-0 pointer-events-none geometric-pattern opacity-20" />
-      <div className="absolute inset-0 pointer-events-none hero-gradient opacity-20" />
-      <div className="relative z-10 w-full max-w-2xl p-6 text-center animate-fade-in backdrop-blur-sm md:backdrop-blur-none bg-white/10 md:bg-transparent md:p-0 rounded-2xl">
+      <div className="absolute inset-0 bg-linear-to-b from-primary/70 via-primary/85 to-primary" />
+      <div className="absolute inset-0 pointer-events-none geometric-pattern opacity-[0.08]" />
+      <div className="absolute -right-24 top-10 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />
+
+      <div className="relative z-10 w-full max-w-2xl animate-[fadeIn_0.8s_ease-out] rounded-3xl p-6 text-center backdrop-blur-sm md:bg-transparent md:p-0">
         <div className="mb-sm md:mb-md">
           <span
             ref={floatingRef}
-            className="inline-block text-8xl md:text-[180px] leading-none text-secondary-fixed-dim drop-shadow-sm select-none"
-            style={{
-              fontFamily: "'Playfair Display', serif",
-              transition: 'transform 0.1s ease-out',
-            }}
+            className="inline-block select-none text-8xl leading-none text-secondary-fixed drop-shadow-sm transition-transform duration-100 ease-out md:text-[180px]"
+            style={{ fontFamily: "'Fraunces', 'Playfair Display', serif" }}
           >
             404
           </span>
         </div>
-        <h1 className="px-2 mb-4 text-3xl leading-tight font-headline-md md:text-5xl lg:text-6xl text-primary md:mb-sm">
+        <h1 className="mb-4 px-2 text-3xl leading-tight font-headline-md text-on-primary md:mb-sm md:text-5xl lg:text-6xl">
           Even the best paths have a detour.
         </h1>
-        <p className="px-4 mx-auto mb-8 text-base font-body-lg md:text-body-lg text-on-surface-variant md:mb-lg">
+        <p className="mx-auto mb-8 max-w-144 px-4 font-body-lg text-body-lg text-on-primary/70 md:mb-lg">
           It looks like the page you are looking for has moved or no longer exists. Let us help you find your way back.
         </p>
-        <div className="flex flex-col items-center justify-center gap-4 px-4 sm:flex-row md:gap-md mb-xl">
+        <div className="mb-xl flex flex-col items-center justify-center gap-4 px-4 sm:flex-row md:gap-md">
           <Link
             to="/"
-            className="flex items-center justify-center w-full gap-2 px-10 py-4 transition-all rounded-lg shadow-md sm:w-auto bg-primary text-on-primary font-button text-button hover:bg-primary-container active:scale-95"
+            className="btn btn-gold w-full justify-center sm:w-auto"
           >
             <span className="material-symbols-outlined">home</span>
             Back to Home
           </Link>
           <Link
             to="/events"
-            className="flex items-center justify-center w-full gap-2 px-10 py-4 transition-all border-2 rounded-lg sm:w-auto border-primary text-primary font-button text-button hover:bg-primary/5 active:scale-95"
+            className="btn w-full justify-center border border-white/25 px-10 py-4 text-on-primary hover:border-secondary-fixed/60 hover:bg-white/10 sm:w-auto"
           >
             <span className="material-symbols-outlined">event</span>
             View Events
           </Link>
         </div>
-        <div className="w-16 h-px mx-auto bg-outline-variant/30" />
+        <div className="mx-auto h-px w-16 bg-secondary-fixed/30" />
       </div>
     </main>
-    </>
   )
 }

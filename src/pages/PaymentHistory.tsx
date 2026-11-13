@@ -21,7 +21,7 @@ export default function PaymentHistory() {
 
   if (!donations.length) {
     return (
-      <main className="flex min-h-screen items-center justify-center px-gutter">
+      <main className="flex min-h-screen items-center justify-center px-gutter pt-18">
         <div className="space-y-md text-center">
           <h1 className="font-headline-md text-headline-md text-primary">
             No donations yet
@@ -31,7 +31,7 @@ export default function PaymentHistory() {
           </p>
           <Link
             to="/donate"
-            className="inline-block rounded-lg bg-primary px-lg py-md font-button text-button text-on-primary"
+            className="btn btn-primary"
           >
             Make a donation
           </Link>
@@ -41,28 +41,28 @@ export default function PaymentHistory() {
   }
 
   return (
-    <main className="min-h-screen bg-surface-container-low pt-24 pb-xl">
-      <div className="mx-auto w-full max-w-540 px-sm">
+    <main className="min-h-screen bg-surface-container-low pb-xl pt-18">
+      <div className="mx-auto w-full max-w-container-max px-gutter py-xl">
         <div className="mb-lg flex flex-col gap-md sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="font-display-lg text-display-lg text-primary">
+            <h1 className="font-display-lg text-display-lg-mobile text-primary md:text-display-lg">
               Donation &amp; Payment History
             </h1>
             <p className="mt-sm font-body-md text-body-md text-on-surface-variant">
               Every verified donation and payment on your account.
             </p>
           </div>
-          <div className="flex gap-sm">
+          <div className="flex flex-wrap gap-sm">
             <button
               onClick={() => window.print()}
-              className="rounded-lg border border-outline-variant px-md py-sm font-button text-button text-primary transition-colors hover:bg-surface-container-low print:hidden"
+              className="btn btn-outline px-md py-sm print:hidden"
             >
               <span className="material-symbols-outlined align-middle">print</span>{' '}
               Print history
             </button>
             <Link
               to="/donate"
-              className="rounded-lg bg-primary px-md py-sm font-button text-button text-on-primary transition-all hover:bg-primary-container print:hidden"
+              className="btn btn-primary px-md py-sm print:hidden"
             >
               Donate again
             </Link>
@@ -70,21 +70,21 @@ export default function PaymentHistory() {
         </div>
 
         {highlightedId && highlighted && (
-          <div className="mb-lg rounded-xl border border-outline-variant bg-primary-fixed px-md py-sm font-body-sm text-body-sm text-on-primary-fixed">
+          <div className="mb-lg rounded-2xl border border-primary/15 bg-primary-fixed px-md py-sm font-body-sm text-body-sm text-on-primary-fixed">
             Payment confirmed — {highlighted.reference ?? `#${highlighted.id.slice(0, 8)}`}{' '}
             for &#8358;{formatAmount(highlighted.amount)}.
           </div>
         )}
 
         {highlightedId && !highlighted && (
-          <div className="mb-lg rounded-xl border border-outline-variant bg-surface-container-low px-md py-sm font-body-sm text-body-sm text-on-surface-variant">
+          <div className="mb-lg rounded-2xl border border-outline-variant bg-surface-container-low px-md py-sm font-body-sm text-body-sm text-on-surface-variant">
             We could not find that payment on this account yet. It may still be
             confirming — refresh in a moment.
           </div>
         )}
 
         <div className="mb-lg grid gap-md sm:grid-cols-3">
-          <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-md">
+          <div className="card p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
               Total
             </p>
@@ -92,7 +92,7 @@ export default function PaymentHistory() {
               &#8358;{formatAmount(total)}
             </p>
           </div>
-          <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-md">
+          <div className="card p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
               Payments
             </p>
@@ -100,7 +100,7 @@ export default function PaymentHistory() {
               {donations.length}
             </p>
           </div>
-          <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-md">
+          <div className="card p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
               Latest
             </p>
@@ -110,7 +110,7 @@ export default function PaymentHistory() {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded-xl border border-outline-variant bg-surface-container-lowest">
+        <div className="card overflow-x-auto">
           <table className="min-w-full text-left">
             <thead className="bg-surface-container-low">
               <tr className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">

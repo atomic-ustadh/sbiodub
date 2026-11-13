@@ -34,30 +34,32 @@ export default function Resources() {
   const featured = posts.find((p) => p.featured);
 
   return (
-    <main className="pt-24 pb-xl">
+    <main className="pt-18 pb-xl">
       {/* Hero */}
-      <section className="relative overflow-hidden bg-primary py-md mb-xl">
-        <div className="relative z-10 px-2 mx-auto text-center max-w-container-max">
-          <h1 className="font-display-lg text-display-lg md:text-display-lg text-secondary-fixed-dim mb-md">
+      <section className="relative overflow-hidden bg-primary px-gutter pb-16 pt-24">
+        <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />
+        <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-secondary/20 blur-3xl" />
+        <div className="relative z-10 mx-auto max-w-container-max text-center">
+          <h1 className="mb-md font-display-lg text-display-lg-mobile text-secondary-fixed md:text-display-lg">
             Empowerment Resources
           </h1>
-          <p className="max-w-2xl mx-auto font-body-lg text-body-lg text-on-primary-container mb-lg">
+          <p className="mx-auto mb-lg max-w-2xl font-body-lg text-body-lg text-on-primary/70">
             Discover a curated library of guides, articles, and videos designed
             to fuel your spiritual, professional, and personal growth.
           </p>
         </div>
 
         {/* Filters */}
-        <div className="mx-auto max-w-container-max px-gutter mb-lg">
-          <div className="flex flex-wrap items-center gap-sm">
+        <div className="relative z-10 mx-auto mb-lg max-w-container-max px-gutter">
+          <div className="flex flex-wrap items-center gap-xs">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCat(cat)}
                 className={
                   activeCat === cat
-                    ? "bg-primary text-on-primary px-6 py-2 rounded-full font-button text-button"
-                    : "bg-surface-container-high text-on-surface-variant px-6 py-2 rounded-full font-button text-button hover:bg-surface-variant transition-colors"
+                    ? "rounded-full bg-secondary-container px-6 py-2 font-button text-button text-on-secondary-container shadow-gold"
+                    : "rounded-full border border-white/15 bg-white/5 px-6 py-2 font-button text-button text-on-primary/75 transition-colors hover:bg-white/10 hover:text-on-primary"
                 }
               >
                 {cat}
@@ -69,22 +71,22 @@ export default function Resources() {
 
       {/* Featured Article */}
       {featured && (
-        <section className="mx-auto max-w-container-max px-gutter mb-xl">
+        <section className="mx-auto mb-xl max-w-container-max px-gutter">
           <Link
             to={`/resources/${featured.slug}`}
-            className="flex flex-col overflow-hidden transition-shadow duration-500 border shadow-md md:flex-row bg-surface-container-lowest rounded-xl border-outline-variant hover:shadow-xl"
+            className="card card-hover group flex flex-col overflow-hidden md:flex-row"
           >
-            <div className="relative flex items-end overflow-hidden md:w-1/2 min-h-75 bg-primary">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,214,91,0.2),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(149,211,186,0.22),transparent_45%)]" />
-              <span className="absolute -right-4 -top-6 material-symbols-outlined text-[160px] text-on-primary/10">
+            <div className="relative flex min-h-75 items-end overflow-hidden bg-primary md:w-1/2">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,209,138,0.22),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(159,210,189,0.2),transparent_50%)]" />
+              <span className="material-symbols-outlined absolute -right-4 -top-6 text-[160px] text-on-primary/10">
                 {typeIcons[featured.type]}
               </span>
               <div className="relative z-10 p-lg">
-                <div className="flex flex-wrap items-center gap-xs mb-md">
-                  <span className="px-4 py-1 rounded-full shadow-sm bg-secondary-container text-on-secondary-container font-label-md text-label-md">
+                <div className="mb-md flex flex-wrap items-center gap-xs">
+                  <span className="chip bg-secondary-container text-on-secondary-container shadow-sm">
                     Featured {featured.type}
                   </span>
-                  <span className="px-4 py-1 rounded-full bg-on-primary/10 text-on-primary font-label-md text-label-md backdrop-blur-sm">
+                  <span className="chip bg-on-primary/10 text-on-primary backdrop-blur-sm">
                     {featured.category}
                   </span>
                 </div>
@@ -93,21 +95,21 @@ export default function Resources() {
                 </h2>
               </div>
             </div>
-            <div className="flex flex-col justify-center md:w-1/2 p-lg">
-              <p className="font-body-md text-body-md text-on-surface-variant mb-md">
+            <div className="flex flex-col justify-center p-lg md:w-1/2 md:p-xl">
+              <p className="mb-md font-body-md text-body-md leading-relaxed text-on-surface-variant">
                 {featured.excerpt}
               </p>
-              <div className="flex flex-wrap items-center gap-sm mb-lg text-body-sm text-on-surface-variant">
+              <div className="mb-lg flex flex-wrap items-center gap-sm text-body-sm text-on-surface-variant">
                 <span>By {featured.author}</span>
-                <span className="w-1 h-1 rounded-full bg-outline" />
+                <span className="h-1 w-1 rounded-full bg-outline" />
                 <span>{formatContentDate(featured.date)}</span>
               </div>
               <div className="flex items-center gap-md">
-                <span className="flex items-center gap-2 px-8 py-3 rounded-lg bg-primary text-on-primary font-button text-button group">
+                <span className="btn btn-primary">
                   {featured.type === "Video"
                     ? "Watch Now"
                     : `Read ${featured.type}`}{" "}
-                  <span className="transition-transform material-symbols-outlined group-hover:translate-x-1">
+                  <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">
                     arrow_forward
                   </span>
                 </span>
@@ -119,48 +121,48 @@ export default function Resources() {
 
       {/* Resource Grid */}
       <section className="mx-auto max-w-container-max px-gutter">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-md">
+        <div className="grid grid-cols-1 gap-md md:grid-cols-2 lg:grid-cols-3">
           {filtered
             .filter((p) => !p.featured)
             .map((post) => (
               <Link
                 key={post.slug}
                 to={`/resources/${post.slug}`}
-                className="flex flex-col overflow-hidden transition-all border rounded-lg bg-surface-container-lowest border-outline-variant hover:shadow-lg group"
+                className="card card-hover group flex flex-col overflow-hidden"
               >
-                <div className="relative flex items-end overflow-hidden aspect-video bg-primary">
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(254,214,91,0.16),transparent_45%),radial-gradient(circle_at_bottom_left,rgba(149,211,186,0.18),transparent_45%)]" />
-                  <span className="absolute -right-3 -top-5 material-symbols-outlined text-[120px] text-on-primary/10">
+                <div className="relative flex aspect-video items-end overflow-hidden bg-primary">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,209,138,0.18),transparent_50%),radial-gradient(circle_at_bottom_left,rgba(159,210,189,0.18),transparent_50%)]" />
+                  <span className="material-symbols-outlined absolute -right-3 -top-5 text-[120px] text-on-primary/10">
                     {typeIcons[post.type]}
                   </span>
                   <div className="relative z-10 w-full p-md">
-                    <div className="flex flex-wrap items-center gap-xs mb-sm">
+                    <div className="mb-sm flex flex-wrap items-center gap-xs">
                       <span
-                        className={`px-3 py-1 rounded font-label-md text-label-md ${typeBadgeClasses[post.type]}`}
+                        className={`chip ${typeBadgeClasses[post.type]}`}
                       >
                         {post.type}
                       </span>
-                      <span className="px-3 py-1 rounded bg-on-primary/10 text-on-primary font-label-md text-label-md backdrop-blur-sm">
+                      <span className="chip bg-on-primary/10 text-on-primary backdrop-blur-sm">
                         {post.category}
                       </span>
                     </div>
-                    <h3 className="font-headline-sm text-headline-sm text-on-primary line-clamp-3">
+                    <h3 className="line-clamp-3 font-headline-sm text-headline-sm text-on-primary">
                       {post.title}
                     </h3>
                   </div>
                 </div>
-                <div className="flex flex-col p-md grow">
-                  <p className="font-body-sm text-body-sm text-on-surface-variant mb-lg line-clamp-3">
+                <div className="flex grow flex-col p-md">
+                  <p className="mb-lg line-clamp-3 font-body-sm text-body-sm text-on-surface-variant">
                     {post.excerpt}
                   </p>
-                  <div className="flex items-center justify-between mt-auto border-t pt-md border-outline-variant">
-                    <span className="flex items-center gap-1 text-primary font-button text-button">
+                  <div className="mt-auto flex items-center justify-between border-t border-outline-variant pt-md">
+                    <span className="flex items-center gap-1 font-button text-button text-primary">
                       {post.type === "Video"
                         ? "Watch Now"
                         : post.type === "Guide"
                           ? "Read Guide"
                           : "Learn More"}{" "}
-                      <span className="text-sm material-symbols-outlined">
+                      <span className="material-symbols-outlined text-sm">
                         {post.type === "Video"
                           ? "play_arrow"
                           : post.type === "Guide"
@@ -176,19 +178,22 @@ export default function Resources() {
       </section>
 
       {/* Newsletter */}
-      <section className="mx-auto max-w-container-max px-gutter mt-xl">
-        <div className="flex flex-col items-center justify-between bg-surface-container-highest rounded-2xl p-lg md:flex-row gap-lg">
-          <div className="md:w-1/2">
-            <h2 className="font-headline-md text-headline-md text-primary mb-sm">
-              Stay Updated
-            </h2>
-            <p className="font-body-md text-body-md text-on-surface-variant">
-              Get the latest resources and event invitations delivered straight
-              to your inbox weekly.
-            </p>
-          </div>
-          <div className="w-full md:w-1/2">
-            <SubscribeForm />
+      <section className="mx-auto mt-xl max-w-container-max px-gutter">
+        <div className="relative overflow-hidden rounded-3xl bg-primary-container p-lg md:p-xl">
+          <div className="absolute inset-0 geometric-pattern opacity-[0.06]" />
+          <div className="relative z-10 flex flex-col items-center justify-between gap-lg md:flex-row">
+            <div className="md:w-1/2">
+              <h2 className="mb-sm font-headline-md text-headline-md text-on-primary">
+                Stay Updated
+              </h2>
+              <p className="font-body-md text-body-md text-on-primary/70">
+                Get the latest resources and event invitations delivered straight
+                to your inbox weekly.
+              </p>
+            </div>
+            <div className="w-full md:w-1/2">
+              <SubscribeForm />
+            </div>
           </div>
         </div>
       </section>

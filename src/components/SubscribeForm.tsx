@@ -68,7 +68,7 @@ export default function SubscribeForm({ variant = 'default' }: SubscribeFormProp
   return (
     <div className={variant === 'footer' ? '' : 'w-full'}>
       <form
-        className={variant === 'footer' ? 'flex' : 'flex flex-col sm:flex-row gap-sm justify-center'}
+        className={variant === 'footer' ? 'flex items-stretch' : 'flex flex-col sm:flex-row gap-sm justify-center'}
         onSubmit={handleSubmit}
       >
         <input
@@ -84,8 +84,8 @@ export default function SubscribeForm({ variant = 'default' }: SubscribeFormProp
         <input
           className={
             variant === 'footer'
-              ? 'bg-primary-container border-none text-white rounded-l-lg px-md w-full focus:ring-1 focus:ring-secondary-fixed placeholder:text-white/50'
-              : 'flex-1 px-md py-3 rounded-lg border border-outline bg-white focus:ring-2 focus:ring-secondary focus:outline-none'
+              ? 'w-full rounded-l-full border border-white/15 bg-white/10 px-md py-3 font-body-sm text-white outline-none transition-colors placeholder:text-white/40 focus:border-secondary-fixed/60 focus:bg-white/15'
+              : 'field flex-1 rounded-full px-md py-3.5'
           }
           name="email"
           placeholder={variant === 'footer' ? 'Email address' : 'Enter your email'}
@@ -102,8 +102,8 @@ export default function SubscribeForm({ variant = 'default' }: SubscribeFormProp
           disabled={status === 'sending'}
           className={
             variant === 'footer'
-              ? 'bg-secondary-fixed text-primary px-md py-2 rounded-r-lg hover:bg-secondary-fixed-dim transition-colors disabled:opacity-60'
-              : 'bg-primary text-on-primary font-button text-button px-lg py-3 rounded-lg hover:bg-primary-container transition-all disabled:opacity-60'
+              ? 'flex items-center justify-center rounded-r-full bg-secondary-fixed px-md py-3 text-primary transition-colors hover:bg-secondary-fixed-dim disabled:opacity-60'
+              : 'btn btn-primary shrink-0 px-lg py-3.5'
           }
         >
           {status === 'sending' ? (

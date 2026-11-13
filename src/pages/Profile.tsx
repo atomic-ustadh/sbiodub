@@ -32,22 +32,22 @@ export default function Profile() {
   if (!user) return null;
 
   return (
-    <main className="min-h-screen pt-24 pb-xl bg-surface-container-low">
-      <div className="mx-auto max-w-container-max px-gutter">
-        <h1 className="font-display-lg text-display-lg text-primary mb-lg">
+    <main className="min-h-screen bg-surface-container-low pb-xl pt-18">
+      <div className="mx-auto max-w-container-max px-gutter py-xl">
+        <h1 className="mb-lg font-display-lg text-display-lg-mobile text-primary md:text-display-lg">
           My Profile
         </h1>
 
         {/* Tabs */}
-        <div className="flex flex-wrap border-b gap-sm mb-xl border-outline-variant pb-sm">
+        <div className="mb-xl flex flex-wrap items-center gap-sm rounded-full border border-outline-variant/70 bg-surface-container-lowest p-1.5 shadow-card">
           {tabs.map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`font-button text-button px-md py-sm rounded-t-lg transition-all ${
+              className={`rounded-full px-md py-sm font-button text-button transition-all ${
                 tab === t
-                  ? "bg-primary text-on-primary"
-                  : "text-on-surface-variant hover:text-primary"
+                  ? "bg-primary text-on-primary shadow-sm"
+                  : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
               }`}
             >
               {t}
@@ -58,40 +58,40 @@ export default function Profile() {
               logout();
               navigate("/", { replace: true });
             }}
-            className="ml-auto font-button text-button px-md py-sm rounded-t-lg text-error hover:opacity-80 transition-all"
+            className="ml-auto rounded-full px-md py-sm font-button text-button text-error transition-all hover:bg-error-container/60"
           >
             Log Out
           </button>
         </div>
 
         {/* Tab Content */}
-        <div className="border bg-surface-container-lowest border-outline-variant rounded-xl p-md md:p-lg min-h-96">
+        <div className="card min-h-96 p-md md:p-lg">
           {tab === "Edit Profile" && (
             <div className="max-w-2xl space-y-lg">
               <div>
-                <label className="block font-label-lg text-label-lg text-on-surface-variant mb-sm">
+                <label className="mb-sm block font-label-md text-label-md uppercase text-on-surface-variant">
                   Full Name
                 </label>
                 <input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-5 py-4 border rounded-xl text-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none"
+                  className="field py-4 text-lg"
                 />
               </div>
               <div>
-                <label className="block font-label-lg text-label-lg text-on-surface-variant mb-sm">
+                <label className="mb-sm block font-label-md text-label-md uppercase text-on-surface-variant">
                   Email Address
                 </label>
                 <input
                   type="email"
                   value={user.email}
                   disabled
-                  className="w-full px-5 py-4 border rounded-xl text-lg cursor-not-allowed border-outline-variant bg-surface-container-low text-on-surface-variant font-body-md"
+                  className="field cursor-not-allowed bg-surface-container-low py-4 text-lg text-on-surface-variant"
                 />
               </div>
               <div>
-                <label className="block font-label-lg text-label-lg text-on-surface-variant mb-sm">
+                <label className="mb-sm block font-label-md text-label-md uppercase text-on-surface-variant">
                   Phone Number
                 </label>
                 <input
@@ -99,12 +99,12 @@ export default function Profile() {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="080 1234 5678"
-                  className="w-full px-5 py-4 border rounded-xl text-lg border-outline-variant bg-surface-container-lowest text-on-surface font-body-md focus:ring-2 focus:ring-secondary focus:outline-none"
+                  className="field py-4 text-lg"
                 />
               </div>
               <button
                 onClick={handleSaveProfile}
-                className="w-40 transition-all rounded-lg bg-primary text-on-primary font-button text-button px-md py-sm hover:opacity-90"
+                className="btn btn-primary w-40"
               >
                 {saved ? "Saved!" : "Save Changes"}
               </button>
@@ -114,7 +114,7 @@ export default function Profile() {
           {tab === "My Events" && (
             <div>
               {rsvps.length === 0 ? (
-                <p className="text-on-surface-variant font-body-md">
+                <p className="font-body-md text-on-surface-variant">
                   You haven't RSVP'd to any events yet.
                 </p>
               ) : (
@@ -122,7 +122,7 @@ export default function Profile() {
                   {rsvps.map((event) => (
                     <div
                       key={event.id}
-                      className="flex items-center justify-between border rounded-lg border-outline-variant p-md bg-surface-container-lowest"
+                      className="flex flex-col gap-sm rounded-2xl border border-outline-variant bg-surface-container-low p-md sm:flex-row sm:items-center sm:justify-between"
                     >
                       <div>
                         <h3 className="font-headline-sm text-headline-sm text-primary">
@@ -137,7 +137,7 @@ export default function Profile() {
                       </div>
                       <button
                         onClick={() => cancelRsvp(event.id)}
-                        className="text-error font-button text-button hover:underline"
+                        className="rounded-full px-sm py-xs font-button text-button text-error transition-colors hover:bg-error-container/60"
                       >
                         Cancel
                       </button>
@@ -149,22 +149,22 @@ export default function Profile() {
           )}
 
           {tab === "Donations" && (
-            <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-lg text-center">
-              <div className="mx-auto mb-md flex h-16 w-16 items-center justify-center rounded-full bg-primary-fixed">
+            <div className="rounded-2xl border border-outline-variant bg-surface-container-low p-lg text-center">
+              <div className="mx-auto mb-md flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-fixed">
                 <span className="material-symbols-outlined text-3xl text-primary">
                   volunteer_activism
                 </span>
               </div>
-              <h2 className="font-headline-sm text-headline-sm text-primary mb-sm">
+              <h2 className="mb-sm font-headline-sm text-headline-sm text-primary">
                 Donation &amp; Payment History
               </h2>
-              <p className="mx-auto max-w-2xl font-body-md text-body-md text-on-surface-variant mb-lg">
+              <p className="mx-auto mb-lg max-w-2xl font-body-md text-body-md text-on-surface-variant">
                 See every verified donation and payment on your account in one
                 place.
               </p>
               <Link
                 to="/history"
-                className="inline-flex items-center gap-sm rounded-lg bg-primary px-md py-md font-button text-button text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]"
+                className="btn btn-primary"
               >
                 View history
                 <span className="material-symbols-outlined">arrow_forward</span>

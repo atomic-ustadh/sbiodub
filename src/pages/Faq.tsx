@@ -3,13 +3,13 @@ import { faqItems } from '../lib/content'
 
 export default function Faq() {
   return (
-    <main className="min-h-screen bg-surface pt-24 pb-xl">
-      <section className="mx-auto max-w-container-max px-gutter">
+    <main className="min-h-screen bg-surface pb-xl pt-18">
+      <section className="container-shell py-xl">
         <div className="mx-auto mb-xl max-w-3xl text-center">
-          <div className="mx-auto mb-md flex h-20 w-20 items-center justify-center rounded-full bg-primary-fixed">
-            <span className="material-symbols-outlined text-4xl text-primary">help</span>
+          <div className="mx-auto mb-md flex h-20 w-20 items-center justify-center rounded-3xl bg-secondary-fixed/40 ring-1 ring-secondary/15">
+            <span className="material-symbols-outlined text-4xl text-secondary">help</span>
           </div>
-          <h1 className="mb-sm font-display-lg text-display-lg text-primary">
+          <h1 className="mb-sm font-display-lg text-display-lg-mobile text-primary md:text-display-lg">
             Frequently Asked Questions
           </h1>
           <p className="font-body-lg text-body-lg text-on-surface-variant">
@@ -18,13 +18,13 @@ export default function Faq() {
         </div>
 
         {faqItems.length === 0 ? (
-          <div className="mx-auto max-w-3xl rounded-xl border border-outline-variant bg-white p-lg text-center">
+          <div className="card mx-auto max-w-3xl p-lg text-center">
             <p className="mb-md font-body-md text-body-md text-on-surface-variant">
               No Frequently Asked Questions for now.
             </p>
             <Link
               to="/"
-              className="inline-flex items-center gap-sm rounded-lg bg-primary px-lg py-md font-button text-button text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]"
+              className="btn btn-primary"
             >
               <span className="material-symbols-outlined">home</span>
               Back to Home
@@ -36,12 +36,12 @@ export default function Faq() {
               {faqItems.map((item) => (
                 <details
                   key={item.slug}
-                  className="group rounded-xl border border-outline-variant bg-white p-md"
+                  className="card group p-md transition-all open:border-secondary/30"
                 >
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-md font-headline-sm text-headline-sm text-primary [&::-webkit-details-marker]:hidden">
                     <span>{item.question}</span>
-                    <span className="material-symbols-outlined transition-transform group-open:rotate-180">
-                      expand_more
+                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container-low text-primary transition-transform group-open:rotate-180">
+                      <span className="material-symbols-outlined">expand_more</span>
                     </span>
                   </summary>
                   <div
@@ -55,7 +55,7 @@ export default function Faq() {
             <div className="mt-xl text-center">
               <Link
                 to="/"
-                className="inline-flex items-center gap-sm rounded-lg bg-primary px-lg py-md font-button text-button text-on-primary transition-all hover:bg-primary-container active:scale-[0.98]"
+                className="btn btn-outline"
               >
                 <span className="material-symbols-outlined">home</span>
                 Back to Home
