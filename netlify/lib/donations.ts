@@ -63,6 +63,7 @@ export async function recordVerifiedDonation(
   const metadata = parseMetadata(transaction.metadata)
   const amount = transaction.amount / 100
   const allocation = (asString(metadata.allocation, 'General Fund') || 'General Fund').slice(0, 80)
+  const type = asString(metadata.type) === 'payment' ? 'payment' : 'donation'
   const fullName =
     asString(metadata.full_name) ||
     [transaction.customer?.first_name, transaction.customer?.last_name]
@@ -85,7 +86,7 @@ export async function recordVerifiedDonation(
        currency, type, allocation, channel, paystack_id, anonymous, status, paid_at)
     values
       (${transaction.reference}, ${resolvedUserId}, ${fullName || null}, ${email},
-       ${phone}, ${amount}, ${transaction.amount}, ${currency}, ${'donation'},
+       ${phone}, ${amount}, ${transaction.amount}, ${currency}, ${type},
        ${allocation}, ${transaction.channel ?? null}, ${paystackId}, ${anonymous},
        ${'success'}, ${paidAt})
     on conflict (reference) do update set

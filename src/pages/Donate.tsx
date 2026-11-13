@@ -28,6 +28,10 @@ export default function Donate() {
   const paystackPublicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
   const amountValue =
     selectedAmount === "custom" ? Number(customAmount) : selectedAmount;
+  const selectedDestination = donationPage.destinations.find(
+    (destination) => destination.label === allocation,
+  );
+  const donationKind = selectedDestination?.kind ?? "donation";
 
   useEffect(() => {
     if (!user) return;
@@ -76,6 +80,7 @@ export default function Donate() {
           full_name: donorName.trim(),
           phone: donorPhone.trim(),
           allocation,
+          type: donationKind,
           anonymous,
           ...(user?.id ? { user_id: user.id } : {}),
         },

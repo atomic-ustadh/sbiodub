@@ -1,168 +1,340 @@
 # LCA, Abuja
 
-A front-end prototype for Leadership Course, Abuja. The site presents the organization's mission, events, resources, membership and donation pages, and includes a member area for managing a profile, RSVPs and donation/payment history.
+A web application for Leadership Course Abuja. It presents the organisation's
+mission, events, resources, membership and donation pages, and gives members a
+dashboard for their profile, event RSVPs and donation/payment history.
 
-This is a **client-side demo, not a production application**. There is no backend, no server-side authentication, and no real payment processing. Account data, passwords, RSVPs and donation records are stored in the browser via `localStorage`. The donation page uses manual bank transfer and WhatsApp confirmation, not a payment gateway. Several UI elements (notably the newsletter form, resource search and some calls to action) are presentational only.
+The application runs as a Vite + React single-page app on Netlify. Clerk handles
+authentication, Neon Postgres stores member data (accessed through the Neon Data
+API and protected by row-level security), and Netlify Functions verify and record
+Paystack payments.
 
 ## Implementation Status
 
 ### Working
 
-- **Routing** — React Router with a shared site layout, standalone auth pages, protected routes, and a custom 404 page.
-- **Responsive shell** — sticky desktop/mobile navigation, active link states, footer, and a floating FAQ button that links to `/faq`.
-- **Home page** — hero, core pillars, up to three CMS-driven upcoming events, a CMS-driven testimonial carousel, and static CTA sections.
-- **About page** — static hero, plus CMS-driven journey, pillars, and leadership profiles.
-- **Local authentication** — sign up, sign in and logout against users stored in `localStorage`. Passwords are stored in plain text. Sessions persist across reloads. A "Keep me signed in" checkbox is shown but has no effect.
-- **Protected member area** — `/profile`, `/history` (and the legacy `/receipts` alias) redirect logged-out users to `/login` and return them to the requested page after sign-in.
-- **Events** — six events loaded from JSON content files (all dated 2024), category filtering, grid/timeline view toggle, and RSVP through a modal. RSVP requires login (guests see a login modal), is stored per user, prevents duplicates, and can be cancelled from the profile.
-- **Resources** — four articles loaded from JSON content files, with category filters, a featured article, and article detail pages.
-- **Content management** — resources, events, testimonials, leadership profiles, FAQ entries, legal pages, the Donate page and About page content live in `src/content/` and are editable through [Pages CMS](https://pagescms.org) using the repository's `.pages.yml`. Saving in Pages CMS commits to GitHub, which triggers a Netlify rebuild.
-- **Profile dashboard** — edit name and phone; view and cancel RSVPs; open donation & payment history; log out.
-- **Newsletter signup** — `SubscribeForm` posts to Netlify Forms; submissions are available in the Netlify dashboard after deployment.
-- **Donation & payment history** — `/history` lists verified donations in a table with totals, reference, allocation, channel and amount. `?donation=<id>` highlights the payment that just completed.
-- **Online donations** — `/donate` supports Paystack Inline (card, bank transfer, USSD) for signed-in and anonymous donors. Payments are verified server-side by Netlify Functions and written to Neon; signed-in donors see them under `/history`. Manual bank transfer with WhatsApp confirmation remains as an alternative.
-- **Shared login modal** — `LoginModal` gates event registration for guests, supports custom title/description/icon, traps focus, closes on Escape or backdrop click, and returns the user to the current page after login.
-- **Legal and utility pages** — CMS-driven privacy policy, terms of service, and FAQ accordion.
+- **Routing and shell** — React Router with a shared site layout, standalone auth
+  pages, protected member routes, responsive navigation/footer, and a custom 404.
+- **Home and About** — hero, pillars, upcoming events, testimonials and leadership
+  profiles, with CMS-driven content.
+- **Authentication (Clerk)** — sign up, sign in, sign out, and password reset.
+  Sessions are managed by Clerk; the app never stores passwords.
+- **Protected member area** — `/profile`, `/history` and the legacy `/receipts`
+  alias redirect logged-out users to `/login` and return them afterwards.
+- **Profile dashboard** — edit name and phone, view and cancel RSVPs, open
+  donation/payment history, and log out. Email is read-only (managed by Clerk).
+- **Events** — five CMS events (2026–2027), category filters, grid/timeline view,
+  and RSVP through a modal. RSVP requires login, is stored per user in Neon,
+  prevents duplicates, and can be cancelled from the profile.
+- **Resources** — four articles with category filters, a featured article, and
+  article detail pages.
+- **Content management** — resources, events, testimonials, leadership, FAQ, legal
+  pages, Donate and About content live in `src/content/` and are edited through
+  [Pages CMS](https://pagescms.org) via `.pages.yml`. Saving commits to GitHub and
+  triggers a Netlify rebuild.
+- **Newsletter** — `SubscribeForm` posts to a Google Form when configured, and
+  falls back to Netlify Forms (the hidden form in `index.html`).
+- **Online donations (Paystack)** — `/donate` supports card, bank transfer and
+  USSD through Paystack Inline for signed-in and anonymous donors. Transactions
+  are verified server-side by Netlify Functions and written to Neon.
+- **Donation & payment history** — `/history` lists verified payments in a table
+  with totals, reference, type, allocation, channel and amount. The `?donation=<id>`
+  query highlights the payment that just completed.
+- **Manual bank transfer** — bank details plus WhatsApp receipt confirmation remain
+  available as an alternative to online payment.
+- **Legal and utility pages** — CMS-driven privacy policy, terms of service and FAQ.
 - **Design system** — "Emerald & Gold" tokens and utilities in `src/index.css`.
 
-### UI-only or non-functional
+### Not implemented / limitations
 
-- **Resource search** — not implemented; only category filters work.
-- **Event search** — not implemented; only category filtering exists.
-- **Forgot password** — checks whether an email exists in local storage and simulates a short delay, but does not send a link or reset a password. It also reveals whether an account exists for an email.
-- **Membership flow** — `/join` is a membership landing page with a CTA to `/login`; account creation and sign-in happen on the shared login/signup page.
-- **404 background image** — uses the relative path `../404bg.png`; this resolves correctly for top-level unmatched URLs but can break for deeper unmatched paths where `/404bg.png` would be safer.
-
-### Known limitations
-
-- No backend, database, email delivery or payment gateway.
-- Passwords are stored in plain text in `localStorage`; all member data is user-editable.
-- Pages CMS edits require a Git commit and a rebuild; content is not updated instantly.
-- Resources and events are editable, but Home, About, Donate and Join copy still lives in source files.
-- Uploaded media lives under `public/media` and is committed to the repository, increasing repo size over time.
-- The privacy and terms pages use the current date for "Last Updated".
-- No automated tests, linting configuration or CI.
+- **Resource and event search** — only category filters exist.
+- **Membership flow** — `/join` is a landing page; account creation and sign-in
+  happen through Clerk on `/login`.
+- **Transactional email** — the app itself does not send email. Paystack sends
+  payment receipts, Clerk sends auth emails, and the newsletter is handled by a
+  Google Form or Netlify Forms.
+- **Anonymous donations are not linked to accounts.** A donation made while signed
+  out is verified and stored with `user_id = null`; it will not appear in a member's
+  history, and signing in later does not claim it.
+- **Pages CMS edits** require a Git commit and a rebuild; content is not live
+  immediately.
+- **Home, Join and parts of Donate copy** still live in source files.
+- **Uploaded media** lives under `public/media/` and is committed to the repository.
+- **404 background** uses the relative path `../404bg.png`, which can break on
+  deeper unmatched paths.
+- **No automated tests, lint configuration or CI.**
 
 ## Tech Stack
 
 | Tool | Purpose |
 | --- | --- |
 | React 19 | UI library |
-| TypeScript | Static typing |
-| Vite 6 | Dev server and build tool |
+| TypeScript | Static typing (app and Netlify Functions) |
+| Vite 6 | Dev server and production build |
 | React Router DOM 7 | Client-side routing |
 | Tailwind CSS 4 (`@tailwindcss/vite`) | Styling and design tokens |
+| Clerk (`@clerk/react`, `@clerk/backend`) | Authentication and session verification |
+| Neon Postgres + Data API | Member data, with Postgres row-level security |
+| `@neondatabase/serverless` | Server-side writes from Netlify Functions |
+| Paystack Inline | Card, bank transfer and USSD payments |
+| Netlify Functions | Payment verification and webhook handling |
+| Pages CMS (`.pages.yml`) | Git-based content editing |
 | Google Fonts | Playfair Display, Plus Jakarta Sans, Material Symbols |
 
 ## Architecture
 
-This is a client-side single-page application. There is no server, API layer or database.
-
-- **Bootstrap:** `src/main.tsx` mounts React inside `BrowserRouter` and `AuthProvider`, then renders the route table in `src/App.tsx`.
-- **Layouts:** Most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer` + floating FAQ link). Auth pages and the 404 page render standalone.
-- **Route guards:** `ProtectedRoute` wraps `/profile` and `/history` (plus the legacy `/receipts` alias), redirecting guests to `/login` with a return path.
-- **State:** `AuthContext` is the single source of client state for the session, users, RSVPs and donations, persisted per user in `localStorage`.
-- **Content:** Resources, events, testimonials, leadership, FAQ and legal content are JSON files under `src/content/`, loaded efficiently by `src/lib/content.ts` and validated when the app runs.
-- **Shared UI:** `LoginModal` is used for RSVP login gating; `SubscribeForm` is reused in the footer and content pages.
-- **Styling:** Tailwind CSS theme tokens and utilities live in `src/index.css`, following the `design.md` "Emerald & Gold" system.
-- **Deployment:** Netlify builds with Vite and rewrites all routes to `index.html` for client-side routing.
+- **Bootstrap:** `src/main.tsx` mounts React inside `ClerkProvider`, `BrowserRouter`
+  and `AuthProvider`, then renders the route table in `src/App.tsx`.
+- **Layouts:** most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer`
+  + floating FAQ link). Auth pages and the 404 render standalone.
+- **Route guards:** `ProtectedRoute` wraps `/profile` and `/history` (plus the
+  legacy `/receipts` alias), redirecting guests to `/login` with a return path.
+- **Client state:** `AuthContext` (`src/context/AuthContext.tsx`) bridges the Clerk
+  user to app data: profile updates, RSVPs and donations. RSVP reads/writes go
+  through the Neon Data API; donation writes go through Netlify Functions.
+- **Database:** `src/lib/neon.ts` calls the Neon Data API with a Clerk JWT from the
+  `neon` template. Postgres row-level security restricts each user to their own rows.
+- **Server:** `netlify/functions/paystack-verify.ts` verifies a transaction and
+  records it; `paystack-webhook.ts` handles `charge.success` idempotently. Shared
+  helpers live in `netlify/lib/`.
+- **Content:** JSON files under `src/content/`, loaded and validated by
+  `src/lib/content.ts` at build time.
+- **Styling:** Tailwind theme tokens and utilities live in `src/index.css`,
+  following `design.md` ("Emerald & Gold").
+- **Deployment:** Netlify builds with Vite, publishes `dist/`, serves the API
+  rewrites, and falls back to `index.html` for client-side routes.
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 20+ and npm
+- A Clerk application
+- A Neon project with the Data API enabled
+- A Paystack account (test keys are enough for local development)
 
-### Install and run
+### Install
 
 ```bash
 npm install
+```
+
+### Environment variables
+
+Copy `.env.example` to `.env.local` (client values) and create a gitignored `.env`
+for local Netlify Functions. `VITE_`-prefixed values are compiled into the public
+bundle; everything else must stay server-only.
+
+| Variable | Scope | Required | Notes |
+| --- | --- | --- | --- |
+| `VITE_CLERK_PUBLISHABLE_KEY` | Client | Yes | Clerk publishable key (`pk_test_...` / `pk_live_...`) |
+| `VITE_NEON_DATA_API_URL` | Client | Yes | Neon Data API base ending in `/rest/v1` |
+| `VITE_PAYSTACK_PUBLIC_KEY` | Client | For online donations | Paystack public key (`pk_test_...` / `pk_live_...`) |
+| `VITE_GOOGLE_FORM_ID` | Client | Optional | Google Form id for the newsletter |
+| `VITE_GOOGLE_FORM_EMAIL_ENTRY` | Client | Optional | Google Form email entry id (required if the form id is set) |
+| `PAYSTACK_SECRET_KEY` | Function | For online donations | Paystack secret key; also validates webhook signatures |
+| `CLERK_SECRET_KEY` | Function | For signed-in donations | Verifies the caller's Clerk session token |
+| `DATABASE_URL` | Function | For online donations | Neon Postgres connection string (database owner) |
+
+Never put `PAYSTACK_SECRET_KEY`, `CLERK_SECRET_KEY` or `DATABASE_URL` behind a
+`VITE_` prefix. Redeploy after changing any `VITE_` value because Vite inlines
+them at build time.
+
+### Run locally
+
+Frontend only:
+
+```bash
 npm run dev
 ```
 
-Open the URL printed by Vite (typically `http://localhost:5173`).
+Full app including Netlify Functions (needed for online donations, which call
+`/api/paystack/*`):
 
-### Build for production
+```bash
+npx netlify-cli dev
+```
+
+Open the URL printed by Netlify Dev (typically `http://localhost:8888`), not the
+raw Vite port, so relative `/api` requests reach the functions.
+
+### Build
 
 ```bash
 npm run build
 npm run preview
 ```
 
-The production output is written to `dist/`.
+`npm run build` type-checks both the app and the Netlify Functions before building
+into `dist/`.
+
+## Database Setup
+
+1. In the Neon Console, enable the **Data API** for the branch (this creates the
+   `authenticated` role used by the RLS policies).
+2. Run `db/schema.sql` against that branch, either in the Neon SQL Editor or with:
+
+   ```bash
+   psql "$DATABASE_URL" -f db/schema.sql
+   ```
+
+3. Click **Refresh schema cache** on the Data API page.
+4. In Clerk, create a JWT template named exactly **`neon`** with a `role` claim of
+   `"authenticated"` and the default `sub` claim. `AuthContext` requests this
+   template via `getToken({ template: 'neon' })`.
+
+### Tables
+
+| Table | Purpose | Access |
+| --- | --- | --- |
+| `public.rsvps` | One row per user/event RSVP | Authenticated users can select/insert/update/delete only their own rows |
+| `public.donations` | Verified Paystack payments | Authenticated users can only `select` their own rows; inserts/updates happen through Netlify Functions |
+
+`donations` stores `reference` (unique), `user_id` (nullable), `email`, `full_name`,
+`phone`, `amount`, `amount_kobo`, `currency`, `type` (`donation`/`payment`),
+`allocation`, `channel`, `status`, `anonymous`, `paid_at` and `created_at`.
+
+## Authentication
+
+- Clerk owns credentials, sessions, password reset and auth emails.
+- `ProtectedRoute` is a client-side guard; the real data boundary is Postgres RLS
+  keyed on `auth.user_id()` (the Clerk `sub`).
+- Profile name is updated through Clerk; phone is stored in Clerk `unsafeMetadata`.
+  Email is read-only.
+- Development and Production are separate Clerk instances with separate users,
+  keys and JWT templates.
+
+## Online Payments (Paystack)
+
+```
+Donate page -> Paystack Inline popup
+            -> POST /api/paystack/verify   (secret key verification)
+            -> Netlify Function writes the verified row with DATABASE_URL
+Paystack    -> POST /api/paystack/webhook  (charge.success, HMAC-verified)
+```
+
+- The browser opens Paystack Inline (`src/lib/paystack.ts`) with the public key,
+  amount in kobo, a unique `reference`, and metadata (name, phone, allocation,
+  type, optional Clerk user id).
+- `paystack-verify` verifies the reference with Paystack, optionally validates the
+  caller's Clerk token, and performs an idempotent upsert keyed on `reference`.
+- `paystack-webhook` verifies `x-paystack-signature` and records successful
+  payments even if the user closed the tab.
+- Donations made while signed in are linked to the Clerk user and appear in
+  `/history`. Anonymous donations are stored with `user_id = null`.
+- Manual bank transfer plus WhatsApp confirmation remains available.
+
+### Setup checklist
+
+1. Run `db/schema.sql` and refresh the Data API schema cache.
+2. Add the environment variables above (Netlify env for production, `.env` locally).
+3. In Paystack, set the webhook URL to
+   `https://<your-site>/api/paystack/webhook` and subscribe to `charge.success`.
+4. Redeploy so the Inline public key is baked into the bundle.
+5. Test with Paystack test keys/cards and confirm:
+   - signed-in payments appear in `/history`,
+   - the webhook records payments even if the tab closes,
+   - duplicate webhook deliveries do not create duplicate rows.
 
 ## Editing Content with Pages CMS
 
-Resources and events are managed through [Pages CMS](https://pagescms.org). The repository config lives in `.pages.yml`.
+Content lives in `src/content/` and is managed through
+[Pages CMS](https://pagescms.org) using `.pages.yml`.
 
 1. Sign in at [app.pagescms.org](https://app.pagescms.org) with GitHub.
-2. Install the Pages CMS GitHub App on the account that owns this repository and grant it access to `sbiodub`.
-3. Open the repository and select the branch you want to edit (`Decap-CMS` while testing, `main` after merging).
-4. Edit entries under **Resources** or **Events** and save. Pages CMS commits the JSON change to GitHub.
+2. Install the Pages CMS GitHub App on the account that owns this repository.
+3. Open the repository and select the branch you want to edit.
+4. Edit resources, events, testimonials, leadership, FAQ, legal pages, Donate or
+   About content and save. Pages CMS commits the JSON change to GitHub.
 5. Netlify rebuilds and deploys the updated site.
 
 ### Content rules
 
-- New content is stored as JSON in `src/content/resources/` or `src/content/events/`. The filename becomes the resource slug or event fallback ID.
-- Keep an event's **Stable ID** unchanged once people have RSVP'd. New events can leave it empty; the filename is used.
-- Dates use `YYYY-MM-DD` and are formatted for display in the app.
-- Event image fields use uploaded `/media/...` paths. Existing images live in `public/media/events/`. Resources are text-only and render a generated title panel instead of a cover image.
-- Content is compiled at build time. Edits are not visible until the commit triggers a successful Netlify deploy.
-- To see CMS edits locally, pull the latest commit before running `npm run dev`.
+- New resources and events are JSON files in `src/content/resources/` and
+  `src/content/events/`. The filename becomes the resource slug or event fallback id.
+- Keep an event's **Stable ID** unchanged once people have RSVP'd.
+- Dates use `YYYY-MM-DD`.
+- Donation destinations include a **Type** (`donation` or `payment`). Use `payment`
+  when the money is for a programme or event; that value is written to the payment
+  history.
+- Event images use `/media/...` paths under `public/media/`.
+- Content is compiled at build time; edits are visible only after a successful
+  deploy. Pull the latest commit before running the app locally.
 
 ## Project Structure
 
 ```
 .
-├── index.html                 # HTML entry point, fonts, root div
+├── index.html                 # HTML entry, fonts, hidden Netlify newsletter form
+├── .env.example               # Documented client and server variables
 ├── .pages.yml                 # Pages CMS collections and media config
-├── vite.config.ts             # Vite + React + Tailwind plugins
-├── tsconfig.json              # TypeScript configuration
-├── design.md                  # "Emerald & Gold" design system spec
-├── netlify.toml               # Netlify build and SPA redirect config
-├── public/                    # Static assets served from the site root
-│   ├── media/                 # Pages CMS image uploads
+├── design.md                  # "Emerald & Gold" design system
+├── netlify.toml               # Build, functions directory, API rewrites, SPA fallback
+├── package.json
+├── tsconfig.json              # App TypeScript config
+├── tsconfig.functions.json    # Netlify Functions TypeScript config
+├── vite.config.ts
+├── db/
+│   └── schema.sql             # Tables, grants, RLS policies
+├── netlify/
+│   ├── functions/
+│   │   ├── paystack-verify.ts
+│   │   └── paystack-webhook.ts
+│   └── lib/
+│       ├── clerk.ts           # Clerk token verification
+│       ├── donations.ts       # Idempotent Neon upsert
+│       ├── http.ts            # JSON response helper
+│       └── paystack.ts        # Paystack verify API
+├── public/
+│   ├── media/                 # Pages CMS uploads
 │   ├── 404bg.png
 │   └── facebook.svg
 └── src/
-    ├── main.tsx               # App bootstrap: Router + AuthProvider
-    ├── App.tsx                # Route table using layout routes
-    ├── vite-env.d.ts          # Vite client types
-    ├── index.css              # Tailwind theme tokens, utilities, animations
+    ├── main.tsx               # ClerkProvider + Router + AuthProvider
+    ├── App.tsx                # Route table
+    ├── index.css              # Tailwind theme tokens and utilities
+    ├── vite-env.d.ts
+    ├── assets/
     ├── components/
-    │   ├── SiteLayout.tsx     # Navbar + page outlet + footer + FAQ link
-    │   ├── ProtectedRoute.tsx # Redirects logged-out users to login
-    │   ├── Navbar.tsx         # Responsive sticky navigation
-    │   ├── Footer.tsx         # Footer with newsletter UI
-    │   ├── LoginModal.tsx     # Shared login prompt for gated actions
-    │   └── SubscribeForm.tsx  # Presentational newsletter form
+    │   ├── SiteLayout.tsx
+    │   ├── ProtectedRoute.tsx
+    │   ├── Navbar.tsx
+    │   ├── Footer.tsx
+    │   ├── LoginModal.tsx
+    │   ├── SubscribeForm.tsx
+    │   └── LegalPageContent.tsx
     ├── context/
-    │   └── AuthContext.tsx    # Auth + member data via localStorage
+    │   └── AuthContext.tsx    # Clerk user + RSVPs + donations
     ├── content/
-    │   ├── resources/         # Editable resource posts (JSON)
-    │   └── events/            # Editable events (JSON)
+    │   ├── resources/
+    │   ├── events/
+    │   ├── testimonials/
+    │   ├── leadership/
+    │   ├── faq/
+    │   ├── legal/
+    │   ├── about.json
+    │   └── donate.json
     ├── lib/
-    │   └── content.ts         # Content loader, types and validation
-    ├── assets/                # Local images and social SVG icons
+    │   ├── content.ts         # Content loader, types and validation
+    │   ├── neon.ts            # Neon Data API client (Clerk JWT)
+    │   └── paystack.ts        # Paystack Inline loader
     └── pages/
         ├── index.tsx          # Home
-        ├── about.tsx          # About
-        ├── login.tsx          # Login / signup
-        ├── ForgotPassword.tsx # Mock forgot-password screen
-        ├── Join.tsx           # Mock multi-step membership flow
-        ├── Events.tsx         # Events + RSVP
-        ├── Resources.tsx      # Resource/article listing
-        ├── BlogPost.tsx       # Individual article
-        ├── Donate.tsx         # Manual bank transfer and WhatsApp confirmation
-        ├── Profile.tsx        # Member dashboard
+        ├── about.tsx
+        ├── login.tsx          # Clerk SignIn / SignUp
+        ├── ForgotPassword.tsx # Redirects to Clerk sign-in
+        ├── Join.tsx
+        ├── Events.tsx
+        ├── Resources.tsx
+        ├── BlogPost.tsx
+        ├── Donate.tsx         # Paystack + bank transfer
+        ├── Profile.tsx
         ├── PaymentHistory.tsx # Donation & payment history table
         ├── PrivacyPolicy.tsx
         ├── TermsOfService.tsx
-        ├── Faq.tsx            # Placeholder FAQ page
-        └── NotFound.tsx       # 404
+        ├── Faq.tsx
+        └── NotFound.tsx
 ```
-
-> Local note: `src/content/`, `src/content/resources/`, `src/lib/` and `src/schemas/` exist in some working copies as empty placeholder directories. They contain no code and are not tracked by git.
 
 ## Routes
 
@@ -170,87 +342,20 @@ Resources and events are managed through [Pages CMS](https://pagescms.org). The 
 | --- | --- | --- |
 | `/` | Home | |
 | `/about` | About | |
-| `/login` | Login / Signup | Standalone layout, no navbar/footer |
-| `/forgot-password` | Forgot Password | Standalone layout; mock only |
+| `/login` | Login / Signup | Clerk components; standalone layout |
+| `/forgot-password` | Forgot Password | Redirects to `/login`, where Clerk handles reset |
 | `/events` | Events | CMS events split into upcoming/past; RSVP requires login |
 | `/join` | Membership | Landing page; CTA links to `/login` |
-| `/resources` | Resources | Category filters work; search does not |
-| `/resources/:slug` | Blog Post | Article detail with generated title hero |
-| `/donate` | Donate | Manual bank transfer; opens WhatsApp |
-| `/profile` | Profile | Protected; requires login |
-| `/history` | Donation & Payment History | Protected; requires login |
+| `/resources` | Resources | Category filters; no search |
+| `/resources/:slug` | Blog Post | Article detail |
+| `/donate` | Donate | Paystack online payment + manual bank transfer |
+| `/profile` | Profile | Protected |
+| `/history` | Donation & Payment History | Protected |
 | `/receipts` | Legacy alias | Renders `/history` |
 | `/privacy` | Privacy Policy | |
 | `/terms` | Terms of Service | |
 | `/faq` | FAQ | CMS-driven accordion |
-| `*` | Not Found | Standalone layout; background image uses a relative path |
-
-## Data & Authentication
-
-`AuthContext` (`src/context/AuthContext.tsx`) provides:
-
-- `signup`, `login`, `logout`, `updateProfile`
-- RSVPs: `addRsvp`, `cancelRsvp`
-- donations: `addDonation` (defined but unused)
-
-All state is scoped per user and stored under these `localStorage` keys:
-
-| Key | Contents |
-| --- | --- |
-| `lca_session` | Currently logged-in user |
-| `lca_users` | Registered users, including plain-text passwords |
-| `lca_rsvps` | RSVP'd events per user |
-| `lca_donations` | Donation history per user (empty without direct manipulation) |
-
-On load, the app migrates legacy `sbio_*` keys to the equivalent `lca_*` keys. The site does not collect or store card details; the `/donate` page uses manual bank transfer.
-
-> **Security note:** This is a front-end demo. Passwords are stored in plain text, and donation records are simulated or purely visual. Do not use this implementation for real accounts, donations or payment data. A real backend with secure authentication and a payment provider is required before production use.
-
-All CMS collections live under `src/content/` and are loaded and validated by `src/lib/content.ts`.
-
-## Online payments (Paystack)
-
-Donations are collected with **Paystack Inline** in the browser and recorded
-only after the transaction is verified by a Netlify Function. The browser never
-writes donation rows directly, so payments cannot be fabricated.
-
-```
-Donate page -> Paystack Inline popup
-            -> POST /api/paystack/verify   (verifies with PAYSTACK_SECRET_KEY)
-            -> Netlify Function writes the verified row with DATABASE_URL
-Paystack    -> POST /api/paystack/webhook  (charge.success, HMAC-verified)
-```
-
-### Required environment variables
-
-| Variable | Scope | Notes |
-| --- | --- | --- |
-| `VITE_PAYSTACK_PUBLIC_KEY` | Client | `pk_test_...` locally, `pk_live_...` in production |
-| `PAYSTACK_SECRET_KEY` | Function | `sk_test_...` / `sk_live_...`; also validates webhook signatures |
-| `CLERK_SECRET_KEY` | Function | Verifies the signed-in user's token before linking a donation |
-| `DATABASE_URL` | Function | Neon Postgres connection string used to write verified donations |
-
-The three server values must **not** be prefixed with `VITE_`. Set them in
-Netlify under Site configuration → Environment variables; for local function
-testing use `netlify dev` with a gitignored `.env` file.
-
-### Setup checklist
-
-1. Run the updated `db/schema.sql` on the Neon branch so `donations` has the
-   `reference`, `status`, `channel`, `amount_kobo`, `paid_at`, etc. columns and
-   authenticated users can only `select` their own rows.
-2. In the Paystack dashboard, set the webhook URL to
-   `https://<your-site>/api/paystack/webhook` and subscribe to `charge.success`.
-3. Add the four environment variables above and redeploy so the Inline public
-   key is inlined into the bundle.
-4. Test with Paystack test keys/cards. A successful payment should:
-   - appear in `/history` when the user is signed in,
-   - be written by the webhook even if the tab was closed,
-   - be idempotent on repeated webhook deliveries (unique `reference`).
-
-`POST /api/paystack/verify` accepts `{ "reference": "..." }` and an optional
-`Authorization: Bearer <clerk-session-token>` header. The webhook verifies
-`x-paystack-signature` with `PAYSTACK_SECRET_KEY` before writing.
+| `*` | Not Found | Standalone |
 
 ## Design System
 
@@ -259,26 +364,32 @@ The UI follows the **Emerald & Gold** system documented in [`design.md`](./desig
 - Deep emerald primary (`#003527`), rich gold accent (`#fed65b`), soft light surfaces.
 - Playfair Display for headings, Plus Jakarta Sans for body/UI.
 - Rounded corners, tonal layers, soft shadows, and subtle geometric patterns.
-- Design tokens are defined as Tailwind theme variables in `src/index.css`.
+- Tokens are defined as Tailwind theme variables in `src/index.css`.
 
 ## Scripts
 
 | Command | Description |
 | --- | --- |
-| `npm run dev` | Start the Vite dev server |
-| `npm run build` | Type-check and build for production into `dist/` |
-| `npm run typecheck` | Run TypeScript without emitting files |
-| `npm run preview` | Preview the production build locally |
+| `npm run dev` | Start the Vite dev server (frontend only) |
+| `npx netlify-cli dev` | Run the app and Netlify Functions locally |
+| `npm run build` | Type-check app + functions and build into `dist/` |
+| `npm run typecheck` | Type-check the app and the Netlify Functions |
+| `npm run preview` | Preview the production build |
 
 ## Deployment
 
-`netlify.toml` configures Netlify to run `npm run build`, publish `dist/`, and rewrite all paths to `index.html` for client-side routing.
+`netlify.toml` configures Netlify to:
 
-## License
+- run `npm run build` and publish `dist/`,
+- load functions from `netlify/functions/`,
+- rewrite `/api/paystack/verify` and `/api/paystack/webhook` to the functions,
+- fall back to `index.html` for client-side routes.
 
-No license has been specified for this project yet. Development is still ongoing.
+Set the environment variables from the table above in
+**Site configuration → Environment variables** before deploying. After changing a
+`VITE_` value, redeploy. For payments, also configure the Paystack webhook URL.
 
-## Using Clerk on a Custom (Standard) Domain
+## Appendix: Using Clerk on a Custom (Standard) Domain
 
 This section explains how to move Clerk from its development instance
 (`pk_test_...`, served from the default `*.clerk.accounts.dev` environment and the
@@ -445,3 +556,8 @@ Production instances have **different issuer URLs**, so this must be updated.
   sessions; users must sign in again on the new domain.
 - **Local development:** keep the Development (`pk_test_...`) key in
   `.env.local` for `npm run dev`; never commit `.env.local`.
+
+
+## License
+
+No license has been specified for this project yet. Development is still ongoing.

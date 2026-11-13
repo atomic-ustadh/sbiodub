@@ -9,19 +9,23 @@
   "destinations": [
     {
       "label": "General Fund",
-      "description": "Where most needed"
+      "description": "Where most needed",
+      "kind": "donation"
     },
     {
       "label": "Youth Programs",
-      "description": "Workshops & mentorship"
+      "description": "Workshops & mentorship",
+      "kind": "payment"
     },
     {
       "label": "Community Events",
-      "description": "Gatherings & outreach"
+      "description": "Gatherings & outreach",
+      "kind": "payment"
     },
     {
       "label": "Outreach",
-      "description": "Dawah & charity drives"
+      "description": "Dawah & charity drives",
+      "kind": "donation"
     }
   ],
   "faqs": [

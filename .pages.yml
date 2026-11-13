@@ -323,6 +323,15 @@ content:
             label: Description
             type: text
             required: true
+          - name: kind
+            label: Type
+            type: select
+            required: true
+            options:
+              values:
+                - donation
+                - payment
+            description: Use "payment" when the money is for a programme or event.
       - name: faqs
         label: FAQ
         type: object

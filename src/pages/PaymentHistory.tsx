@@ -42,7 +42,7 @@ export default function PaymentHistory() {
 
   return (
     <main className="min-h-screen bg-surface-container-low pt-24 pb-xl">
-      <div className="mx-auto max-w-container-max px-gutter">
+      <div className="mx-auto w-full max-w-540 px-sm">
         <div className="mb-lg flex flex-col gap-md sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h1 className="font-display-lg text-display-lg text-primary">
@@ -86,7 +86,7 @@ export default function PaymentHistory() {
         <div className="mb-lg grid gap-md sm:grid-cols-3">
           <div className="rounded-xl border border-outline-variant bg-surface-container-lowest p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
-              Total given
+              Total
             </p>
             <p className="mt-sm font-headline-sm text-headline-sm text-primary">
               &#8358;{formatAmount(total)}

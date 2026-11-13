@@ -53,9 +53,12 @@ export interface LegalPage {
   content: string
 }
 
+export type DonationKind = "donation" | "payment"
+
 export interface DonationDestination {
   label: string
   description: string
+  kind: DonationKind
 }
 
 export interface DonationFaq {
@@ -291,6 +294,13 @@ function requireArray(
   return value
 }
 
+function toDonationKind(value: unknown, context: string): DonationKind {
+  if (value !== "donation" && value !== "payment") {
+    throw new Error(`${context}: "kind" must be "donation" or "payment"`)
+  }
+  return value
+}
+
 function toDonationDestination(
   value: unknown,
   context: string,
@@ -301,6 +311,7 @@ function toDonationDestination(
   return {
     label: requireString(value, "label", context),
     description: requireString(value, "description", context),
+    kind: toDonationKind(value.kind, context),
   }
 }
 
