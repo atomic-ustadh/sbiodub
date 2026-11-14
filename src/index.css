@@ -398,5 +398,18 @@
     body {
       background: #ffffff;
     }
+    main {
+      padding-top: 0 !important;
+      background: #ffffff !important;
+    }
+    thead {
+      display: table-header-group;
+    }
+    tr {
+      break-inside: avoid;
+    }
+    .card {
+      box-shadow: none !important;
+    }
   }
 }

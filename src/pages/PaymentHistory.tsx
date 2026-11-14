@@ -63,9 +63,9 @@ export default function PaymentHistory() {
   }
 
   return (
-    <main className="min-h-screen bg-surface-container-low pb-xl pt-18">
+    <main className="min-h-screen bg-surface-container-low pb-xl pt-18 print:bg-white">
       <div className="mx-auto w-full max-w-container-max px-gutter py-xl">
-        <div className="mb-lg flex flex-col gap-md sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-lg flex flex-col gap-md sm:flex-row sm:items-end sm:justify-between print:hidden">
           <div>
             <h1 className="font-display-lg text-display-lg-mobile text-primary md:text-display-lg">
               Donation &amp; Payment History
@@ -92,21 +92,21 @@ export default function PaymentHistory() {
         </div>
 
         {highlightedId && highlighted && (
-          <div className="mb-lg rounded-2xl border border-primary/15 bg-primary-fixed px-md py-sm font-body-sm text-body-sm text-on-primary-fixed">
+          <div className="mb-lg rounded-2xl border border-primary/15 bg-primary-fixed px-md py-sm font-body-sm text-body-sm text-on-primary-fixed print:hidden">
             Payment confirmed — {highlighted.reference ?? `#${highlighted.id.slice(0, 8)}`}{' '}
             for &#8358;{formatAmount(highlighted.amount)}.
           </div>
         )}
 
         {highlightedId && !highlighted && (
-          <div className="mb-lg rounded-2xl border border-outline-variant bg-surface-container-low px-md py-sm font-body-sm text-body-sm text-on-surface-variant">
+          <div className="mb-lg rounded-2xl border border-outline-variant bg-surface-container-low px-md py-sm font-body-sm text-body-sm text-on-surface-variant print:hidden">
             We could not find that payment on this account yet. It may still be
             confirming — refresh in a moment.
           </div>
         )}
 
         {dataError && (
-          <div className="mb-lg flex flex-col gap-sm rounded-2xl border border-secondary/25 bg-secondary-container/40 px-md py-sm font-body-sm text-body-sm text-on-secondary-container sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-lg flex flex-col gap-sm rounded-2xl border border-secondary/25 bg-secondary-container/40 px-md py-sm font-body-sm text-body-sm text-on-secondary-container sm:flex-row sm:items-center sm:justify-between print:hidden">
             <span>{dataError} Showing the last records we loaded.</span>
             <button
               onClick={() => void refreshDonations()}
@@ -144,7 +144,7 @@ export default function PaymentHistory() {
           </div>
         </div>
 
-        <div className="card overflow-x-auto">
+        <div className="card overflow-x-auto print:overflow-visible print:border-0 print:shadow-none">
           <table className="min-w-full text-left">
             <thead className="bg-surface-container-low">
               <tr className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">

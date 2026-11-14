@@ -11,7 +11,7 @@ const socials = [
 
 export default function Footer() {
   return (
-    <footer className="relative mt-auto overflow-hidden bg-primary text-on-primary">
+    <footer className="relative mt-auto overflow-hidden bg-primary text-on-primary print:hidden">
       <div className="absolute inset-0 geometric-pattern opacity-[0.08]" />
       <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-secondary-fixed/70 to-transparent" />
       <div className="relative z-10 mx-auto grid max-w-container-max grid-cols-1 gap-xl px-gutter py-xl md:grid-cols-2 lg:grid-cols-[1.35fr_0.8fr_0.8fr_1.35fr]">

@@ -18,7 +18,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 z-50 w-full border-b border-outline-variant/70 bg-surface/85 backdrop-blur-xl">
+    <nav className="fixed top-0 z-50 w-full border-b border-outline-variant/70 bg-surface/85 backdrop-blur-xl print:hidden">
       <div className="mx-auto flex min-h-18 max-w-container-max items-center justify-between gap-md px-gutter">
         <Link
           to="/"
