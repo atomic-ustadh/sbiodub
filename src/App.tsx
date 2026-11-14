@@ -12,11 +12,14 @@ import BlogPost from './pages/BlogPost'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsOfService from './pages/TermsOfService'
 import Faq from './pages/Faq'
+import Contact from './pages/Contact'
 import Donate from './pages/Donate'
 import Profile from './pages/Profile'
 import PaymentHistory from './pages/PaymentHistory'
 import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
+import { involvementItems } from './lib/involvement'
+import { posts } from './lib/content'
 
 export default function App() {
   return (
@@ -26,12 +29,27 @@ export default function App() {
         <Route path="about" element={<About />} />
         <Route path="events" element={<Events />} />
         <Route path="get-involved" element={<GetInvolved />} />
-        <Route path="get-involved/:slug" element={<InvolvementDetail />} />
+        {involvementItems
+          .filter((item) => item.detail)
+          .map((item) => (
+            <Route
+              key={item.slug}
+              path={`get-involved/${item.slug}`}
+              element={<InvolvementDetail slug={item.slug} />}
+            />
+          ))}
         <Route path="resources" element={<Resources />} />
-        <Route path="resources/:slug" element={<BlogPost />} />
+        {posts.map((post) => (
+          <Route
+            key={post.slug}
+            path={`resources/${post.slug}`}
+            element={<BlogPost slug={post.slug} />}
+          />
+        ))}
         <Route path="privacy" element={<PrivacyPolicy />} />
         <Route path="terms" element={<TermsOfService />} />
         <Route path="faq" element={<Faq />} />
+        <Route path="contact" element={<Contact />} />
         <Route path="donate" element={<Donate />} />
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<Profile />} />

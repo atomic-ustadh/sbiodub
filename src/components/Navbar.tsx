@@ -8,6 +8,7 @@ const links = [
   { label: "Events", to: "/events" },
   { label: "Resources", to: "/resources" },
   { label: "Get Involved", to: "/get-involved" },
+  { label: "Contact", to: "/contact" },
 ];
 
 const mobileLinks = [...links, { label: "Donate", to: "/donate" }];

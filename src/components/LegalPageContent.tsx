@@ -1,26 +1,12 @@
 import { Link } from 'react-router-dom'
 import { formatContentDate, getLegalPageBySlug } from '../lib/content'
+import NotFound from '../pages/NotFound'
 
 export default function LegalPageContent({ slug }: { slug: string }) {
   const page = getLegalPageBySlug(slug)
 
   if (!page) {
-    return (
-      <main className="pb-xl pt-18">
-        <section className="container-shell py-xl">
-          <h1 className="mb-md font-display-lg text-display-lg-mobile text-primary md:text-display-lg">
-            Page Not Found
-          </h1>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-sm font-button text-primary hover:underline"
-          >
-            <span className="material-symbols-outlined">arrow_back</span>
-            Back to Home
-          </Link>
-        </section>
-      </main>
-    )
+    return <NotFound />
   }
 
   return (

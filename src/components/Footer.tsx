@@ -49,6 +49,7 @@ export default function Footer() {
             <li><Link to="/events" className="transition-colors hover:text-secondary-fixed">Events</Link></li>
             <li><Link to="/get-involved/volunteer" className="transition-colors hover:text-secondary-fixed">Volunteer</Link></li>
             <li><Link to="/resources" className="transition-colors hover:text-secondary-fixed">Resources</Link></li>
+            <li><Link to="/contact" className="transition-colors hover:text-secondary-fixed">Contact</Link></li>
           </ul>
         </div>
 

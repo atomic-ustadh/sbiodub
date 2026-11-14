@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { posts, formatContentDate, type PostType } from '../lib/content'
+import NotFound from './NotFound'
 
 const typeIcons: Record<PostType, string> = {
   Guide: 'menu_book',
@@ -7,19 +8,13 @@ const typeIcons: Record<PostType, string> = {
   Video: 'play_circle',
 }
 
-export default function BlogPost() {
-  const { slug } = useParams()
+export default function BlogPost({ slug: slugProp }: { slug?: string }) {
+  const { slug: slugParam } = useParams()
+  const slug = slugProp ?? slugParam
   const post = posts.find((p) => p.slug === slug)
 
   if (!post) {
-    return (
-      <main className="flex flex-col items-center justify-center min-h-screen px-gutter">
-        <h1 className="font-headline-md text-headline-md text-primary mb-md">Post Not Found</h1>
-        <Link to="/resources" className="rounded-lg bg-primary text-on-primary px-lg py-md font-button">
-          Back to Resources
-        </Link>
-      </main>
-    )
+    return <NotFound />
   }
 
   return (

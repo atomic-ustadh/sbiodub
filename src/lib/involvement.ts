@@ -4,10 +4,16 @@ export interface InvolvementSection {
   list?: string[]
 }
 
+export interface InvolvementStep {
+  title: string
+  body: string
+}
+
 export interface InvolvementDetail {
   title: string
   description: string
   sections: InvolvementSection[]
+  steps?: InvolvementStep[]
 }
 
 export interface InvolvementItem {
@@ -49,24 +55,28 @@ export const involvementItems: InvolvementItem[] = [
       title: 'Volunteer With Us',
       description:
         'From mentoring and event support to media and logistics, there are many ways to serve.',
+      steps: [
+        {
+          title: 'Register',
+          body: 'Fill in the form below. It takes about two minutes.',
+        },
+        {
+          title: 'We confirm',
+          body: 'Our Welfare & Logistics unit reviews and confirms you on the register.',
+        },
+        {
+          title: 'You are deployed',
+          body: 'When a duty matches your availability we contact you with the date, place and who to report to.',
+        },
+        {
+          title: 'On the day',
+          body: 'Your team lead checks you in. Some volunteers also work the gate, scanning tickets.',
+        },
+      ],
       sections: [
         {
           title: 'Why volunteer with LCA?',
-          body: 'Volunteering with LCA is an opportunity to invest in the next generation while growing your own skills, network and sense of purpose. You will work alongside a committed team that values faith, excellence and service.',
-        },
-        {
-          title: 'Ways you can serve',
-          body: 'We match volunteers with roles that fit their skills and availability.',
-          list: [
-            'Mentor or facilitate a session',
-            'Support events and logistics',
-            'Photography, design and social media',
-            'Outreach, hospitality and administration',
-          ],
-        },
-        {
-          title: 'What to expect',
-          body: 'Whether you can give a few hours at an event or commit to a longer programme, your contribution matters. We will help you find a role where you can serve confidently and make a real difference.',
+          body: 'Volunteering with LCA is an opportunity to invest in the next generation while growing your own skills, network and sense of purpose. You will work alongside a committed team that values faith, excellence and service. Whether you can give a few hours at an event or commit to a longer programme, your contribution matters. We will help you find a role where you can serve confidently and make a real difference.',
         },
       ],
     },
@@ -74,70 +84,11 @@ export const involvementItems: InvolvementItem[] = [
   {
     slug: 'partner',
     icon: 'handshake',
-    title: 'Partner',
+    title: 'Partner & Sponsor',
     summary:
-      'Work with us on programmes, events and initiatives that create lasting impact for young Muslims.',
-    ctaLabel: 'Partner With Us',
-    ctaTo: '/get-involved/partner',
-    detail: {
-      title: 'Partner With Us',
-      description:
-        'Collaborate with LCA on programmes and events that serve young people and strengthen our community.',
-      sections: [
-        {
-          title: 'Who we partner with',
-          body: 'We work with organisations that share our commitment to faith, excellence and service.',
-          list: [
-            'Schools and educational institutions',
-            'Mosques and community organisations',
-            'Businesses and professional networks',
-            'Non-profits and development partners',
-          ],
-        },
-        {
-          title: 'What partnership looks like',
-          body: 'We build partnerships around shared goals: co-hosting programmes, sharing expertise, reaching new communities and creating opportunities for young Muslims.',
-        },
-        {
-          title: 'Start a conversation',
-          body: 'Tell us about your organisation and the impact you would like to create. Together we can shape a partnership that is practical, respectful and lasting.',
-        },
-      ],
-    },
-  },
-  {
-    slug: 'sponsor',
-    icon: 'diamond',
-    title: 'Sponsor',
-    summary:
-      'Fund a programme, event or resource and help us reach more young people across Nigeria.',
-    ctaLabel: 'Become a Sponsor',
-    ctaTo: '/get-involved/sponsor',
-    detail: {
-      title: 'Sponsor Our Work',
-      description:
-        'Directly support the programmes, events and resources that equip young Muslims to lead.',
-      sections: [
-        {
-          title: 'Where your sponsorship goes',
-          body: 'Sponsorship gives us the confidence to plan and deliver meaningful work.',
-          list: [
-            'Leadership programmes and workshops',
-            'Events and community gatherings',
-            'Learning resources and mentorship',
-            'Outreach and charity initiatives',
-          ],
-        },
-        {
-          title: 'Recognition and reporting',
-          body: 'We work with sponsors to agree recognition that fits their goals and provide clear reporting on how funds were used.',
-        },
-        {
-          title: 'Make it meaningful',
-          body: 'A sponsorship can be one-off or ongoing. Whatever the scale, your support helps us reach more young people and deliver programmes with excellence.',
-        },
-      ],
-    },
+      'Work with us on programmes and events that create lasting impact, or sponsor our work directly.',
+    ctaLabel: 'Partner or Sponsor',
+    ctaTo: '/contact',
   },
   {
     slug: 'take-a-stall',
