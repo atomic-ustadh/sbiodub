@@ -117,28 +117,28 @@ export default function PaymentHistory() {
           </div>
         )}
 
-        <div className="mb-lg grid gap-md sm:grid-cols-3">
-          <div className="card p-md">
+        <div className="mb-lg grid gap-sm sm:grid-cols-3 sm:gap-md">
+          <div className="card p-sm sm:p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
               Total
             </p>
-            <p className="mt-sm font-headline-sm text-headline-sm text-primary">
+            <p className="mt-xs font-headline-sm text-xl text-primary sm:mt-sm sm:text-headline-sm">
               &#8358;{formatAmount(total)}
             </p>
           </div>
-          <div className="card p-md">
+          <div className="card p-sm sm:p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
               Payments
             </p>
-            <p className="mt-sm font-headline-sm text-headline-sm text-primary">
+            <p className="mt-xs font-headline-sm text-xl text-primary sm:mt-sm sm:text-headline-sm">
               {donations.length}
             </p>
           </div>
-          <div className="card p-md">
+          <div className="card p-sm sm:p-md">
             <p className="font-label-md text-label-md uppercase tracking-wide text-on-surface-variant">
               Latest
             </p>
-            <p className="mt-sm font-headline-sm text-headline-sm text-primary">
+            <p className="mt-xs font-headline-sm text-xl text-primary sm:mt-sm sm:text-headline-sm">
               {formatContentDate(donations[0].date)}
             </p>
           </div>
