@@ -34,7 +34,7 @@ export default function Platform() {
               thrive and lead in a modern world.
             </p>
             <div className="flex flex-wrap gap-sm pt-base">
-              <Link to="/join" className="btn btn-gold">
+              <Link to="/get-involved" className="btn btn-gold">
                 Join the Movement
               </Link>
               <Link
@@ -303,8 +303,8 @@ export default function Platform() {
                   next generation of leaders.
                 </p>
                 <div className="flex flex-wrap gap-sm pt-base">
-                  <Link to="/join" className="btn btn-gold">
-                    Become a Member
+                  <Link to="/get-involved" className="btn btn-gold">
+                    Get Involved
                   </Link>
                   <Link
                     to="/donate"

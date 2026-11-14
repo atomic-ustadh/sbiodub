@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import SiteLayout from './components/SiteLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/index'
@@ -27,7 +27,6 @@ export default function App() {
         <Route path="events" element={<Events />} />
         <Route path="get-involved" element={<GetInvolved />} />
         <Route path="get-involved/:slug" element={<InvolvementDetail />} />
-        <Route path="join" element={<Navigate to="/get-involved" replace />} />
         <Route path="resources" element={<Resources />} />
         <Route path="resources/:slug" element={<BlogPost />} />
         <Route path="privacy" element={<PrivacyPolicy />} />
