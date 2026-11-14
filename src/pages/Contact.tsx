@@ -1,43 +1,36 @@
+import data from '../content/contact.json'
+
 interface ContactDetail {
   icon: string
   label: string
   lines: string[]
 }
 
-const contactDetails: ContactDetail[] = [
-  {
-    icon: 'location_on',
-    label: 'Visit us',
-    lines: ['Banex Plaza, 2nd Floor, Suite 5,', '123 Main Street, Abuja, Nigeria.'],
-  },
-  {
-    icon: 'call',
-    label: 'Call us',
-    lines: ['09065750161', '08105185369', '09041520412'],
-  },
-  {
-    icon: 'schedule',
-    label: 'Office hours',
-    lines: ['Monday – Friday', '9:00am – 5:00pm'],
-  },
-]
+interface EmailContact {
+  label: string
+  email: string
+}
 
-const emailContacts = [
-  {
-    label: 'Partnerships & sponsorship',
-    email: 'partnerships@leadershipcourseabuja.org',
-  },
-  {
-    label: 'General enquiries',
-    email: 'info@leadershipcourseabuja.org',
-  },
-  {
-    label: 'Legal',
-    email: 'legal@leadershipcourseabuja.org',
-  },
-]
+interface ContactContent {
+  hero: {
+    eyebrow: string
+    title: string
+    description: string
+  }
+  contactDetails: ContactDetail[]
+  emailHeading: string
+  emailContacts: EmailContact[]
+  form: {
+    title: string
+    description: string
+    enquiryOptions: string[]
+    messagePlaceholder: string
+    submitLabel: string
+  }
+}
 
-const enquiryOptions = ['Partnership', 'Sponsorship', 'General enquiry']
+const contact = data as ContactContent
+const { hero, contactDetails, emailHeading, emailContacts, form } = contact
 
 export default function Contact() {
   return (
@@ -46,13 +39,12 @@ export default function Contact() {
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />
         <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />
         <div className="relative z-10 mx-auto max-w-container-max text-center">
-          <span className="eyebrow mb-sm text-secondary-fixed">Get in touch</span>
+          <span className="eyebrow mb-sm text-secondary-fixed">{hero.eyebrow}</span>
           <h1 className="mb-md font-display-lg text-display-lg-mobile text-on-primary md:text-display-lg">
-            Contact Us
+            {hero.title}
           </h1>
           <p className="mx-auto max-w-2xl font-body-lg text-body-lg text-on-primary/70">
-            Interested in partnering with or sponsoring LCA, or simply want to
-            learn more? Send us a message and our team will get back to you.
+            {hero.description}
           </p>
         </div>
       </section>
@@ -87,7 +79,7 @@ export default function Contact() {
               </div>
               <div className="min-w-0">
                 <h2 className="mb-xs font-label-md text-label-md uppercase text-secondary">
-                  Email us
+                  {emailHeading}
                 </h2>
                 <ul className="space-y-sm">
                   {emailContacts.map(({ label, email }) => (
@@ -113,11 +105,10 @@ export default function Contact() {
             onSubmit={(event) => event.preventDefault()}
           >
             <h2 className="mb-sm font-headline-md text-headline-md text-primary">
-              Send us a message
+              {form.title}
             </h2>
             <p className="mb-lg font-body-md text-body-md text-on-surface-variant">
-              Tell us a little about yourself and how you would like to work with
-              us.
+              {form.description}
             </p>
 
             <div className="grid grid-cols-1 gap-md sm:grid-cols-2">
@@ -150,7 +141,7 @@ export default function Contact() {
                   <option value="" disabled>
                     Please choose
                   </option>
-                  {enquiryOptions.map((option) => (
+                  {form.enquiryOptions.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
@@ -165,14 +156,14 @@ export default function Contact() {
                 <textarea
                   name="message"
                   rows={5}
-                  placeholder="Tell us how you would like to partner with or sponsor LCA."
+                  placeholder={form.messagePlaceholder}
                   className="field resize-none"
                   required
                 />
               </div>
 
               <button type="submit" className="btn btn-primary w-full py-3 sm:col-span-2">
-                Send Message
+                {form.submitLabel}
               </button>
             </div>
           </form>
