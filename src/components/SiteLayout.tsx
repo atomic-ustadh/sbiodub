@@ -4,7 +4,7 @@ import Footer from './Footer'
 
 export default function SiteLayout() {
   const { pathname } = useLocation()
-  const showFaqButton = pathname !== '/join' && pathname !== '/faq'
+  const showFaqButton = !pathname.startsWith('/get-involved') && pathname !== '/faq'
 
   return (
     <div className="min-h-screen flex flex-col">

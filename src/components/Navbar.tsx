@@ -7,7 +7,7 @@ const links = [
   { label: "About", to: "/about" },
   { label: "Events", to: "/events" },
   { label: "Resources", to: "/resources" },
-  { label: "Membership", to: "/join" },
+  { label: "Get Involved", to: "/get-involved" },
 ];
 
 const mobileLinks = [...links, { label: "Donate", to: "/donate" }];
