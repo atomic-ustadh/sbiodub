@@ -10,6 +10,13 @@ export interface DonationRow {
   created_at: string
 }
 
+export class DatabaseUnavailableError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options)
+    this.name = 'DatabaseUnavailableError'
+  }
+}
+
 function parseMetadata(metadata: unknown): Record<string, unknown> {
   if (!metadata) return {}
   if (typeof metadata === 'string') {
@@ -79,36 +86,43 @@ export async function recordVerifiedDonation(
   const paidAt = transaction.paid_at ?? transaction.paidAt ?? new Date().toISOString()
   const paystackId = transaction.id != null ? String(transaction.id) : null
 
-  const sql = neon(databaseUrl)
-  const rows = (await sql`
-    insert into public.donations
-      (reference, user_id, full_name, email, phone, amount, amount_kobo,
-       currency, type, allocation, channel, paystack_id, anonymous, status, paid_at)
-    values
-      (${transaction.reference}, ${resolvedUserId}, ${fullName || null}, ${email},
-       ${phone}, ${amount}, ${transaction.amount}, ${currency}, ${type},
-       ${allocation}, ${transaction.channel ?? null}, ${paystackId}, ${anonymous},
-       ${'success'}, ${paidAt})
-    on conflict (reference) do update set
-      user_id = coalesce(excluded.user_id, public.donations.user_id),
-      full_name = coalesce(excluded.full_name, public.donations.full_name),
-      email = excluded.email,
-      phone = coalesce(nullif(excluded.phone, ''), public.donations.phone),
-      amount = excluded.amount,
-      amount_kobo = excluded.amount_kobo,
-      currency = excluded.currency,
-      allocation = excluded.allocation,
-      channel = excluded.channel,
-      paystack_id = excluded.paystack_id,
-      anonymous = public.donations.anonymous or excluded.anonymous,
-      status = excluded.status,
-      paid_at = coalesce(public.donations.paid_at, excluded.paid_at)
-    returning id, reference, amount, type, allocation, created_at
-  `) as DonationRow[]
+  try {
+    const sql = neon(databaseUrl)
+    const rows = (await sql`
+      insert into public.donations
+        (reference, user_id, full_name, email, phone, amount, amount_kobo,
+         currency, type, allocation, channel, paystack_id, anonymous, status, paid_at)
+      values
+        (${transaction.reference}, ${resolvedUserId}, ${fullName || null}, ${email},
+         ${phone}, ${amount}, ${transaction.amount}, ${currency}, ${type},
+         ${allocation}, ${transaction.channel ?? null}, ${paystackId}, ${anonymous},
+         ${'success'}, ${paidAt})
+      on conflict (reference) do update set
+        user_id = coalesce(excluded.user_id, public.donations.user_id),
+        full_name = coalesce(excluded.full_name, public.donations.full_name),
+        email = excluded.email,
+        phone = coalesce(nullif(excluded.phone, ''), public.donations.phone),
+        amount = excluded.amount,
+        amount_kobo = excluded.amount_kobo,
+        currency = excluded.currency,
+        allocation = excluded.allocation,
+        channel = excluded.channel,
+        paystack_id = excluded.paystack_id,
+        anonymous = public.donations.anonymous or excluded.anonymous,
+        status = excluded.status,
+        paid_at = coalesce(public.donations.paid_at, excluded.paid_at)
+      returning id, reference, amount, type, allocation, created_at
+    `) as DonationRow[]
 
-  const row = rows[0]
-  if (!row) {
-    throw new Error('Failed to record donation')
+    const row = rows[0]
+    if (!row) {
+      throw new DatabaseUnavailableError('Failed to record donation')
+    }
+    return row
+  } catch (error) {
+    if (error instanceof DatabaseUnavailableError) throw error
+    throw new DatabaseUnavailableError('Unable to record donation in the database', {
+      cause: error,
+    })
   }
-  return row
 }

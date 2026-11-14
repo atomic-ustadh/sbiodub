@@ -54,6 +54,7 @@ interface AuthContextValue {
   addRsvp: (input: RsvpInput) => void
   cancelRsvp: (eventId: string) => void
   donations: Donation[]
+  dataError: string | null
   refreshDonations: () => Promise<void>
 }
 
@@ -114,6 +115,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const { user: clerkUser } = useUser()
   const [rsvps, setRsvps] = useState<Rsvp[]>([])
   const [donations, setDonations] = useState<Donation[]>([])
+  const [dataError, setDataError] = useState<string | null>(null)
 
   const user = useMemo<User | null>(() => {
     if (!clerkUser) return null
@@ -142,6 +144,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (!user) {
       setRsvps([])
       setDonations([])
+      setDataError(null)
       return
     }
     try {
@@ -151,8 +154,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       ])
       setRsvps(rsvpRows.map(toRsvp))
       setDonations(donationRows.map(toDonation))
+      setDataError(null)
     } catch (error) {
       console.error('Failed to load member data from Neon', error)
+      setDataError('We could not load your donation history right now. Please try again in a moment.')
     }
   }, [user, authFetch])
 
@@ -244,6 +249,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addRsvp,
       cancelRsvp,
       donations,
+      dataError,
       refreshDonations: refresh,
     }),
     [
@@ -255,6 +261,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       addRsvp,
       cancelRsvp,
       donations,
+      dataError,
       refresh,
     ],
   )

@@ -10,7 +10,7 @@ function formatAmount(amount: number): string {
 }
 
 export default function PaymentHistory() {
-  const { donations } = useAuth()
+  const { donations, dataError, refreshDonations } = useAuth()
   const [searchParams] = useSearchParams()
   const highlightedId = searchParams.get('donation')
 
@@ -22,19 +22,41 @@ export default function PaymentHistory() {
   if (!donations.length) {
     return (
       <main className="flex min-h-screen items-center justify-center px-gutter pt-18">
-        <div className="space-y-md text-center">
-          <h1 className="font-headline-md text-headline-md text-primary">
-            No donations yet
-          </h1>
-          <p className="font-body-md text-body-md text-on-surface-variant">
-            Your donation and payment history will appear here once you give.
-          </p>
-          <Link
-            to="/donate"
-            className="btn btn-primary"
-          >
-            Make a donation
-          </Link>
+        <div className="card w-full max-w-2xl space-y-md p-lg text-center">
+          {dataError ? (
+            <>
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-secondary-container/40 text-secondary">
+                <span className="material-symbols-outlined text-3xl">cloud_off</span>
+              </div>
+              <h1 className="font-headline-md text-headline-md text-primary">
+                Donation history unavailable
+              </h1>
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                {dataError}
+              </p>
+              <button
+                onClick={() => void refreshDonations()}
+                className="btn btn-primary"
+              >
+                Try again
+              </button>
+            </>
+          ) : (
+            <>
+              <h1 className="font-headline-md text-headline-md text-primary">
+                No donations yet
+              </h1>
+              <p className="font-body-md text-body-md text-on-surface-variant">
+                Your donation and payment history will appear here once you give.
+              </p>
+              <Link
+                to="/donate"
+                className="btn btn-primary"
+              >
+                Make a donation
+              </Link>
+            </>
+          )}
         </div>
       </main>
     )
@@ -80,6 +102,18 @@ export default function PaymentHistory() {
           <div className="mb-lg rounded-2xl border border-outline-variant bg-surface-container-low px-md py-sm font-body-sm text-body-sm text-on-surface-variant">
             We could not find that payment on this account yet. It may still be
             confirming — refresh in a moment.
+          </div>
+        )}
+
+        {dataError && (
+          <div className="mb-lg flex flex-col gap-sm rounded-2xl border border-secondary/25 bg-secondary-container/40 px-md py-sm font-body-sm text-body-sm text-on-secondary-container sm:flex-row sm:items-center sm:justify-between">
+            <span>{dataError} Showing the last records we loaded.</span>
+            <button
+              onClick={() => void refreshDonations()}
+              className="shrink-0 rounded-full border border-secondary/30 px-sm py-xs font-button text-button text-secondary transition-colors hover:bg-secondary/10"
+            >
+              Try again
+            </button>
           </div>
         )}
 

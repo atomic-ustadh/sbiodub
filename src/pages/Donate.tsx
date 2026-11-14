@@ -24,6 +24,7 @@ export default function Donate() {
   const [paying, setPaying] = useState(false);
   const [paymentError, setPaymentError] = useState<string | null>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paymentFallback, setPaymentFallback] = useState(false);
 
   const paystackPublicKey = import.meta.env.VITE_PAYSTACK_PUBLIC_KEY;
   const amountValue =
@@ -53,6 +54,7 @@ export default function Donate() {
   const handleOnlineDonation = async () => {
     setPaymentError(null);
     setPaymentSuccess(false);
+    setPaymentFallback(false);
 
     if (!paystackPublicKey) {
       setPaymentError("Online payments are not configured yet.");
@@ -95,10 +97,14 @@ export default function Donate() {
         body: JSON.stringify({ reference: paidReference }),
       });
       const payload = (await response.json().catch(() => null)) as
-        | { donation?: { id: string }; error?: string }
+        | { donation?: { id: string }; error?: string; code?: string }
         | null;
 
       if (!response.ok || !payload?.donation) {
+        if (payload?.code === "database_unavailable" || response.status === 503) {
+          setPaymentFallback(true);
+          return;
+        }
         throw new Error(payload?.error || "We could not confirm the payment.");
       }
 
@@ -206,7 +212,7 @@ export default function Donate() {
                   value={customAmount}
                   onChange={(e) => setCustomAmount(e.target.value)}
                   placeholder="Amount in naira"
-                  className="field sm:max-w-80"
+                  className="field min-w-0 sm:flex-1"
                 />
               )}
             </div>
@@ -281,6 +287,15 @@ export default function Donate() {
                 Thank you — your payment was received and Paystack has emailed
                 your receipt. To keep donation history in your dashboard, sign
                 in before giving.
+              </p>
+            )}
+
+            {paymentFallback && (
+              <p className="mt-md rounded-xl border border-secondary/25 bg-secondary-container/40 px-md py-sm font-body-sm text-body-sm text-on-secondary-container">
+                Your payment went through, but we could not reach our donation
+                records right now. Paystack has emailed your receipt — please
+                keep it. If this donation does not appear in your history later,
+                contact us with your receipt.
               </p>
             )}
 

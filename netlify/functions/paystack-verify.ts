@@ -1,5 +1,5 @@
 import { getOptionalClerkUserId, UnauthorizedError } from '../lib/clerk'
-import { recordVerifiedDonation } from '../lib/donations'
+import { DatabaseUnavailableError, recordVerifiedDonation } from '../lib/donations'
 import { json } from '../lib/http'
 import { verifyPaystackTransaction } from '../lib/paystack'
 
@@ -33,6 +33,16 @@ export default async function handler(req: Request): Promise<Response> {
   } catch (error) {
     if (error instanceof UnauthorizedError) {
       return json({ error: 'Unauthorized' }, 401)
+    }
+    if (error instanceof DatabaseUnavailableError) {
+      console.error('Donation database unavailable', error)
+      return json(
+        {
+          error: 'Payment received, but our records database is unavailable.',
+          code: 'database_unavailable',
+        },
+        503,
+      )
     }
     console.error('Paystack verification failed', error)
     return json({ error: 'Unable to verify payment' }, 502)
