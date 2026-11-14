@@ -506,11 +506,6 @@ content:
             label: Button label
             type: string
             required: true
-          - name: ctaTo
-            label: Button link
-            type: string
-            required: true
-            description: Target URL, e.g. /donate, /contact, or /get-involved/volunteer.
           - name: detail
             label: Detail page
             type: object

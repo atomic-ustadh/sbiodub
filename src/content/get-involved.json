@@ -10,8 +10,7 @@
       "icon": "volunteer_activism",
       "title": "Give",
       "summary": "Support our programmes with a one-off or regular gift. Every donation funds mentorship, events and outreach.",
-      "ctaLabel": "Give Now",
-      "ctaTo": "/donate"
+      "ctaLabel": "Give Now"
     },
     {
       "slug": "volunteer",
@@ -19,7 +18,6 @@
       "title": "Volunteer",
       "summary": "Share your time, skills and experience with young people who are eager to learn and grow.",
       "ctaLabel": "Explore Volunteering",
-      "ctaTo": "/get-involved/volunteer",
       "detail": {
         "title": "Volunteer With Us",
         "description": "From mentoring and event support to media and logistics, there are many ways to serve.",
@@ -54,8 +52,7 @@
       "icon": "handshake",
       "title": "Partner & Sponsor",
       "summary": "Work with us on programmes and events that create lasting impact, or sponsor our work directly.",
-      "ctaLabel": "Partner or Sponsor",
-      "ctaTo": "/contact"
+      "ctaLabel": "Partner or Sponsor"
     },
     {
       "slug": "take-a-stall",
@@ -63,7 +60,6 @@
       "title": "Take a Stall",
       "summary": "Showcase your business or products at our events and connect with a vibrant community.",
       "ctaLabel": "Reserve a Stall",
-      "ctaTo": "/get-involved/take-a-stall",
       "detail": {
         "title": "Take a Stall at Our Events",
         "description": "Bring your business, brand or service to an engaged community of young people and families.",
