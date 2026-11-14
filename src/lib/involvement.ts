@@ -1,4 +1,4 @@
-import data from '../content/get-involved.json'
+import introData from '../content/get-involved-intro.json'
 
 export interface InvolvementSection {
   title: string
@@ -24,20 +24,12 @@ interface InvolvementItemData {
   title: string
   summary: string
   ctaLabel: string
+  order: number
   detail?: InvolvementDetail
 }
 
 export interface InvolvementItem extends InvolvementItemData {
   ctaTo: string
-}
-
-interface InvolvementContent {
-  intro: {
-    eyebrow: string
-    title: string
-    description: string
-  }
-  items: InvolvementItemData[]
 }
 
 const involvementRoutes: Record<string, string> = {
@@ -47,16 +39,27 @@ const involvementRoutes: Record<string, string> = {
   'take-a-stall': '/get-involved/take-a-stall',
 }
 
-const involvementContent = data as InvolvementContent
+export const involvementIntro = introData as {
+  eyebrow: string
+  title: string
+  description: string
+}
 
-export const involvementIntro = involvementContent.intro
-export const involvementItems: InvolvementItem[] = involvementContent.items.map(
-  (item) => ({
+const itemModules = import.meta.glob('../content/get-involved/*.json', {
+  eager: true,
+  import: 'default',
+}) as Record<string, unknown>
+
+export const involvementItems: InvolvementItem[] = Object.values(itemModules)
+  .map((value) => value as InvolvementItemData)
+  .sort((a, b) => a.order - b.order)
+  .map((item) => ({
     ...item,
     ctaTo: involvementRoutes[item.slug] ?? '/get-involved',
-  }),
-)
+  }))
 
-export function getInvolvementItem(slug: string | undefined): InvolvementItem | undefined {
+export function getInvolvementItem(
+  slug: string | undefined,
+): InvolvementItem | undefined {
   return involvementItems.find((item) => item.slug === slug)
 }

@@ -1,0 +1,30 @@
+{
+  "slug": "take-a-stall",
+  "icon": "storefront",
+  "title": "Take a Stall",
+  "summary": "Showcase your business or products at our events and connect with a vibrant community.",
+  "ctaLabel": "Reserve a Stall",
+  "order": 4,
+  "detail": {
+    "title": "Take a Stall at Our Events",
+    "description": "Bring your business, brand or service to an engaged community of young people and families.",
+    "steps": [
+      {
+        "title": "Apply",
+        "body": "Fill in the form below. You may apply for only one stall slot."
+      },
+      {
+        "title": "We review",
+        "body": "Our Stall Unit selects a mix of vendors that suit the event and its audience. Only selected vendors will be contacted. Please note that it may take up to three weeks after the EOI closes to receive an email."
+      },
+      {
+        "title": "Keep an eye on your mailbox",
+        "body": "All notifications are sent only to the email address given in your application, so please check your inbox, spam and junk folders regularly."
+      },
+      {
+        "title": "Pay within 48 hours",
+        "body": "The payment link is valid for 48 hours only. After that the stall is offered to another vendor, and any payment received after the deadline will not secure a stall — it will be treated as a charitable donation."
+      }
+    ]
+  }
+}

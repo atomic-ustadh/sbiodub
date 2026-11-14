@@ -1,0 +1,36 @@
+{
+  "slug": "volunteer",
+  "icon": "groups",
+  "title": "Volunteer",
+  "summary": "Share your time, skills and experience with young people who are eager to learn and grow.",
+  "ctaLabel": "Explore Volunteering",
+  "order": 2,
+  "detail": {
+    "title": "Volunteer With Us",
+    "description": "From mentoring and event support to media and logistics, there are many ways to serve.",
+    "steps": [
+      {
+        "title": "Register",
+        "body": "Fill in the form below. It takes about two minutes."
+      },
+      {
+        "title": "We confirm",
+        "body": "Our Welfare & Logistics unit reviews and confirms you on the register."
+      },
+      {
+        "title": "You are deployed",
+        "body": "When a duty matches your availability we contact you with the date, place and who to report to."
+      },
+      {
+        "title": "On the day",
+        "body": "Your team lead checks you in. Some volunteers also work the gate, scanning tickets."
+      }
+    ],
+    "sections": [
+      {
+        "title": "Why volunteer with LCA?",
+        "body": "Volunteering with LCA is an opportunity to invest in the next generation while growing your own skills, network and sense of purpose. You will work alongside a committed team that values faith, excellence and service. Whether you can give a few hours at an event or commit to a longer programme, your contribution matters. We will help you find a role where you can serve confidently and make a real difference."
+      }
+    ]
+  }
+}
