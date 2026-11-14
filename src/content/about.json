@@ -37,6 +37,12 @@
       "description": "Upholding the highest moral and ethical standards in all interactions, fostering trust and transparency within our organization.",
       "style": "full",
       "image": "/media/about/integrity.png"
+    },
+    {
+      "icon": "volunteer_activism",
+      "title": "Service",
+      "description": "Giving back to the wider community through dedicated activism and impactful charity work.",
+      "style": "wide"
     }
   ]
 }
