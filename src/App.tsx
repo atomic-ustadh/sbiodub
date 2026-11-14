@@ -1,4 +1,5 @@
 import { Routes, Route } from 'react-router-dom'
+import ScrollToTop from './components/ScrollToTop'
 import SiteLayout from './components/SiteLayout'
 import ProtectedRoute from './components/ProtectedRoute'
 import Home from './pages/index'
@@ -23,7 +24,9 @@ import { posts } from './lib/content'
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route element={<SiteLayout />}>
         <Route index element={<Home />} />
         <Route path="about" element={<About />} />
@@ -60,6 +63,7 @@ export default function App() {
       <Route path="login" element={<Login />} />
       <Route path="forgot-password" element={<ForgotPassword />} />
       <Route path="*" element={<NotFound />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }
