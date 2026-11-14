@@ -454,3 +454,102 @@ content:
             type: image
             options:
               categories: [image]
+
+  - name: get-involved
+    label: Get Involved Page
+    type: file
+    path: src/content/get-involved.json
+    format: json
+    fields:
+      - name: intro
+        label: Intro
+        type: object
+        required: true
+        fields:
+          - name: eyebrow
+            label: Eyebrow
+            type: string
+            required: true
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: description
+            label: Description
+            type: text
+            required: true
+      - name: items
+        label: Involvement items
+        type: object
+        list: true
+        required: true
+        fields:
+          - name: slug
+            label: Slug
+            type: string
+            required: true
+            description: Used in the URL for detail pages, e.g. volunteer or take-a-stall.
+          - name: icon
+            label: Icon
+            type: string
+            required: true
+            description: Material Symbols icon name.
+          - name: title
+            label: Title
+            type: string
+            required: true
+          - name: summary
+            label: Summary
+            type: text
+            required: true
+          - name: ctaLabel
+            label: Button label
+            type: string
+            required: true
+          - name: ctaTo
+            label: Button link
+            type: string
+            required: true
+            description: Target URL, e.g. /donate, /contact, or /get-involved/volunteer.
+          - name: detail
+            label: Detail page
+            type: object
+            fields:
+              - name: title
+                label: Detail title
+                type: string
+                required: true
+              - name: description
+                label: Detail description
+                type: text
+                required: true
+              - name: steps
+                label: How it works steps
+                type: object
+                list: true
+                fields:
+                  - name: title
+                    label: Step title
+                    type: string
+                    required: true
+                  - name: body
+                    label: Step body
+                    type: text
+                    required: true
+              - name: sections
+                label: Sections
+                type: object
+                list: true
+                fields:
+                  - name: title
+                    label: Section title
+                    type: string
+                    required: true
+                  - name: body
+                    label: Section body
+                    type: text
+                    required: true
+                  - name: list
+                    label: Bullet list
+                    type: string
+                    list: true
