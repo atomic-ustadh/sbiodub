@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
+import StallForm from '../components/StallForm'
 import VolunteerForm from '../components/VolunteerForm'
 import { getInvolvementItem } from '../lib/involvement'
 import NotFound from './NotFound'
@@ -40,7 +41,8 @@ export default function InvolvementDetail({ slug: slugProp }: { slug?: string })
           {/* Detail content */}
           <div className="space-y-md">
             {item.slug === 'volunteer' && <VolunteerForm />}
-            {detail.sections.map((section) => (
+            {item.slug === 'take-a-stall' && <StallForm />}
+            {detail.sections?.map((section) => (
               <article key={section.title} className="card p-lg md:p-xl">
                 <h2 className="mb-sm font-headline-sm text-headline-sm text-primary">
                   {section.title}
@@ -92,15 +94,27 @@ export default function InvolvementDetail({ slug: slugProp }: { slug?: string })
                     ))}
                   </ol>
                 </div>
-                <blockquote className="card bg-primary p-lg text-on-primary">
-                  <p className="font-body-md text-body-md italic text-on-primary/80">
-                    “And cooperate in righteousness and piety, but do not
-                    cooperate in sin and aggression.”
-                  </p>
-                  <cite className="mt-sm block font-label-md text-label-md not-italic text-secondary-fixed">
-                    Qur’an 5:2
-                  </cite>
-                </blockquote>
+                {item.slug === 'volunteer' && (
+                  <blockquote className="card bg-primary p-lg text-on-primary">
+                    <p className="font-body-md text-body-md italic text-on-primary/80">
+                      “And cooperate in righteousness and piety, but do not
+                      cooperate in sin and aggression.”
+                    </p>
+                    <cite className="mt-sm block font-label-md text-label-md not-italic text-secondary-fixed">
+                      Qur’an 5:2
+                    </cite>
+                  </blockquote>
+                )}
+                {item.slug === 'take-a-stall' && (
+                  <div className="card bg-primary p-lg text-on-primary">
+                    <p className="font-body-md text-body-md text-on-primary/85">
+                      We choose vendors whose work sits comfortably alongside
+                      ours, and we try to keep a spread of categories rather than
+                      ten of the same thing. Being turned down is not a judgement
+                      on your business.
+                    </p>
+                  </div>
+                )}
               </>
             ) : (
               <div className="card p-lg">

@@ -12,7 +12,7 @@ export interface InvolvementStep {
 export interface InvolvementDetail {
   title: string
   description: string
-  sections: InvolvementSection[]
+  sections?: InvolvementSection[]
   steps?: InvolvementStep[]
 }
 
@@ -102,24 +102,22 @@ export const involvementItems: InvolvementItem[] = [
       title: 'Take a Stall at Our Events',
       description:
         'Bring your business, brand or service to an engaged community of young people and families.',
-      sections: [
+      steps: [
         {
-          title: 'Why take a stall',
-          body: 'Our events bring together young Muslims, professionals and families in a welcoming environment. A stall gives your business direct access to a loyal, engaged audience.',
+          title: 'Apply',
+          body: 'Fill in the form below. You may apply for only one stall slot.',
         },
         {
-          title: 'What you can offer',
-          body: 'Stalls are suitable for a wide range of businesses and initiatives.',
-          list: [
-            'Food, fashion and lifestyle products',
-            'Books, art and creative goods',
-            'Professional and financial services',
-            'Community and education initiatives',
-          ],
+          title: 'We review',
+          body: 'Our Stall Unit selects a mix of vendors that suit the event and its audience. Only selected vendors will be contacted. Please note that it may take up to three weeks after the EOI closes to receive an email.',
         },
         {
-          title: 'How to apply',
-          body: 'Stall spaces are limited and allocated on a first-come basis. We will confirm availability, fees and event details when you apply.',
+          title: 'Keep an eye on your mailbox',
+          body: 'All notifications are sent only to the email address given in your application, so please check your inbox, spam and junk folders regularly.',
+        },
+        {
+          title: 'Pay within 48 hours',
+          body: 'The payment link is valid for 48 hours only. After that the stall is offered to another vendor, and any payment received after the deadline will not secure a stall — it will be treated as a charitable donation.',
         },
       ],
     },
