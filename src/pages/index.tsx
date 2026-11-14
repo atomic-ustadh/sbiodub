@@ -48,9 +48,9 @@ export default function Platform() {
 
           {/* Hero image with stat badge */}
           <div className="relative mx-auto hidden w-full max-w-128 lg:block">
-            <div className="absolute -inset-4 rotate-3 rounded-[2.5rem] border border-secondary-fixed/25" />
-            <div className="absolute -inset-4 -rotate-2 rounded-[2.5rem] border border-white/10" />
-            <div className="relative overflow-hidden rounded-[2rem] shadow-float">
+            <div className="absolute -inset-4 rotate-3 rounded-4xl border border-secondary-fixed/25" />
+            <div className="absolute -inset-4 -rotate-2 rounded-4xl border border-white/10" />
+            <div className="relative overflow-hidden rounded-3xl shadow-float">
               <img
                 className="aspect-4/5 w-full object-cover"
                 alt="A diverse group of energetic young adults collaborating"
@@ -236,7 +236,7 @@ export default function Platform() {
             <div className="grid items-center gap-xl md:grid-cols-2">
               {/* Testimonial author image */}
               <div className="relative mx-auto w-full max-w-112">
-                <div className="absolute -inset-3 -rotate-2 rounded-[2rem] border border-secondary-fixed/25" />
+                <div className="absolute -inset-3 -rotate-2 rounded-3xl border border-secondary-fixed/25" />
                 <div className="relative overflow-hidden rounded-3xl shadow-float">
                   <img
                     className="aspect-4/5 w-full object-cover"
