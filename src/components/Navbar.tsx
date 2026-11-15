@@ -58,21 +58,14 @@ export default function Navbar() {
           >
             Donate
           </Link>
-          {user ? (
-            <Link
-              to="/profile"
-              className="btn btn-primary px-4 py-2 text-xs sm:text-button"
-            >
-              Profile
-            </Link>
-          ) : (
-            <Link
-              to="/login"
-              className="btn btn-primary px-4 py-2 text-xs sm:text-button"
-            >
-              Login
-            </Link>
-          )}
+          <Link
+            to={user ? "/profile" : "/login"}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-on-primary transition-colors hover:bg-primary-container"
+            aria-label={user ? "Profile" : "Login"}
+            title={user ? "Profile" : "Login"}
+          >
+            <span className="material-symbols-outlined">person</span>
+          </Link>
           <button
             className="flex h-10 w-10 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-low hover:text-primary md:hidden"
             onClick={() => setMenuOpen(!menuOpen)}
