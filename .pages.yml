@@ -527,6 +527,14 @@ content:
             label: Detail description
             type: text
             required: true
+          - name: applicationsOpen
+            label: Applications open
+            type: boolean
+            description: Used by Take a Stall to show or hide the application form.
+          - name: applicationsClosedMessage
+            label: Applications closed message
+            type: text
+            description: Message shown when applications are closed (Take a Stall).
           - name: steps
             label: How it works steps
             type: object

@@ -41,7 +41,20 @@ export default function InvolvementDetail({ slug: slugProp }: { slug?: string })
           {/* Detail content */}
           <div className="space-y-md">
             {item.slug === 'volunteer' && <VolunteerForm />}
-            {item.slug === 'take-a-stall' && <StallForm />}
+            {item.slug === 'take-a-stall' &&
+              (detail.applicationsOpen !== false ? (
+                <StallForm />
+              ) : (
+                <div className="card p-lg md:p-xl">
+                  <h2 className="mb-sm font-headline-md text-headline-md text-primary">
+                    Applications closed
+                  </h2>
+                  <p className="font-body-md text-body-md text-on-surface-variant">
+                    {detail.applicationsClosedMessage ??
+                      'Stall applications are closed for now. Please check back later.'}
+                  </p>
+                </div>
+              ))}
             {detail.sections?.map((section) => (
               <article key={section.title} className="card p-lg md:p-xl">
                 <h2 className="mb-sm font-headline-sm text-headline-sm text-primary">

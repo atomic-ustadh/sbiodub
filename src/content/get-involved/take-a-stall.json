@@ -8,6 +8,8 @@
   "detail": {
     "title": "Take a Stall at Our Events",
     "description": "Bring your business, brand or service to an engaged community of young people and families.",
+    "applicationsOpen": true,
+    "applicationsClosedMessage": "Stall applications are closed for now. Please check back later.",
     "steps": [
       {
         "title": "Apply",

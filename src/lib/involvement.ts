@@ -14,6 +14,8 @@ export interface InvolvementStep {
 export interface InvolvementDetail {
   title: string
   description: string
+  applicationsOpen?: boolean
+  applicationsClosedMessage?: string
   sections?: InvolvementSection[]
   steps?: InvolvementStep[]
 }
