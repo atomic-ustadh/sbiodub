@@ -36,6 +36,15 @@ export default function Footer() {
                 <img src={icon} alt="" className="h-4 w-4 opacity-80" />
               </a>
             ))}
+            <a
+              href="mailto:info@leadershipcourseabuja.org"
+              aria-label="Email"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 transition-all duration-300 hover:-translate-y-0.5 hover:border-secondary-fixed/50 hover:bg-white/10"
+            >
+              <span className="material-symbols-outlined text-[18px] text-on-primary/80">
+                mail
+              </span>
+            </a>
           </div>
           <p className="font-body-sm text-body-sm text-on-primary/75">
             09065750161, 08105185369, 09041520412
