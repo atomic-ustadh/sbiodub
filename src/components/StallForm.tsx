@@ -10,7 +10,7 @@ const categories = [
 export default function StallForm() {
   return (
     <form
-      className="card p-lg md:p-xl"
+      className="card p-md md:p-lg"
       onSubmit={(event) => event.preventDefault()}
     >
       <h2 className="mb-sm font-headline-md text-headline-md text-primary">
