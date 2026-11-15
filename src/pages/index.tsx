@@ -34,9 +34,6 @@ export default function Platform() {
               thrive and lead in a modern world.
             </p>
             <div className="flex flex-wrap gap-sm pt-base">
-              <Link to="/get-involved" className="btn btn-gold">
-                Join the Movement
-              </Link>
               <Link
                 to="/about"
                 className="btn border border-white/25 px-lg py-3 text-on-primary hover:border-secondary-fixed/60 hover:bg-white/10"
