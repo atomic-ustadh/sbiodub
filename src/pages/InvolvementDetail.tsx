@@ -1,8 +1,72 @@
 import { Link, useParams } from 'react-router-dom'
 import StallForm from '../components/StallForm'
 import VolunteerForm from '../components/VolunteerForm'
-import { getInvolvementItem } from '../lib/involvement'
+import {
+  getInvolvementItem,
+  type StallApplications,
+} from '../lib/involvement'
 import NotFound from './NotFound'
+
+type ApplicationStatus = 'open' | 'upcoming' | 'closed'
+
+function datePartsInTimezone(date: Date, timeZone: string): { y: number; m: number; d: number } | null {
+  try {
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(date)
+    const get = (type: string) => parts.find((p) => p.type === type)?.value
+    const y = Number(get('year'))
+    const m = Number(get('month'))
+    const d = Number(get('day'))
+    if (!y || !m || !d) return null
+    return { y, m, d }
+  } catch {
+    return null
+  }
+}
+
+function parseIsoDate(value?: string): { y: number; m: number; d: number } | null {
+  if (!value) return null
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
+  if (!match) return null
+  return { y: Number(match[1]), m: Number(match[2]), d: Number(match[3]) }
+}
+
+function compareDateParts(
+  a: { y: number; m: number; d: number },
+  b: { y: number; m: number; d: number },
+): number {
+  if (a.y !== b.y) return a.y - b.y
+  if (a.m !== b.m) return a.m - b.m
+  return a.d - b.d
+}
+
+function getApplicationStatus(applications?: StallApplications): ApplicationStatus {
+  if (!applications) return 'open'
+  const mode = applications.mode ?? 'scheduled'
+  if (mode === 'open') return 'open'
+  if (mode === 'closed') return 'closed'
+
+  const opensAt = parseIsoDate(applications.opensAt)
+  const closesAt = parseIsoDate(applications.closesAt)
+  if (!opensAt || !closesAt) return 'closed'
+
+  const timeZone = applications.timezone || 'Africa/Lagos'
+  const today =
+    datePartsInTimezone(new Date(), timeZone) ??
+    datePartsInTimezone(new Date(), 'Africa/Lagos') ??
+    (() => {
+      const now = new Date()
+      return { y: now.getFullYear(), m: now.getMonth() + 1, d: now.getDate() }
+    })()
+
+  if (compareDateParts(today, opensAt) < 0) return 'upcoming'
+  if (compareDateParts(today, closesAt) > 0) return 'closed'
+  return 'open'
+}
 
 export default function InvolvementDetail({ slug: slugProp }: { slug?: string }) {
   const { slug: slugParam } = useParams()
@@ -42,19 +106,26 @@ export default function InvolvementDetail({ slug: slugProp }: { slug?: string })
           <div className="space-y-md">
             {item.slug === 'volunteer' && <VolunteerForm />}
             {item.slug === 'take-a-stall' &&
-              (detail.applicationsOpen !== false ? (
-                <StallForm />
-              ) : (
-                <div className="card p-lg md:p-xl">
-                  <h2 className="mb-sm font-headline-md text-headline-md text-primary">
-                    Applications closed
-                  </h2>
-                  <p className="font-body-md text-body-md text-on-surface-variant">
-                    {detail.applicationsClosedMessage ??
-                      'Stall applications are closed for now. Please check back later.'}
-                  </p>
-                </div>
-              ))}
+              (() => {
+                const status = getApplicationStatus(detail.applications)
+                if (status === 'open') return <StallForm />
+                const isUpcoming = status === 'upcoming'
+                const message = isUpcoming
+                  ? detail.applications?.notYetOpenMessage ??
+                    'Stall applications are not yet open. Please check back later.'
+                  : detail.applications?.closedMessage ??
+                    'Stall applications are closed for now. Please check back later.'
+                return (
+                  <div className="card p-lg md:p-xl">
+                    <h2 className="mb-sm font-headline-md text-headline-md text-primary">
+                      {isUpcoming ? 'Applications not yet open' : 'Applications closed'}
+                    </h2>
+                    <p className="font-body-md text-body-md text-on-surface-variant">
+                      {message}
+                    </p>
+                  </div>
+                )
+              })()}
             {detail.sections?.map((section) => (
               <article key={section.title} className="card p-lg md:p-xl">
                 <h2 className="mb-sm font-headline-sm text-headline-sm text-primary">

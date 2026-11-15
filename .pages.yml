@@ -527,14 +527,44 @@ content:
             label: Detail description
             type: text
             required: true
-          - name: applicationsOpen
-            label: Applications open
-            type: boolean
-            description: Used by Take a Stall to show or hide the application form.
-          - name: applicationsClosedMessage
-            label: Applications closed message
-            type: text
-            description: Message shown when applications are closed (Take a Stall).
+          - name: applications
+            label: Stall applications
+            type: object
+            description: Controls when the Take a Stall form is available.
+            fields:
+              - name: mode
+                label: Availability mode
+                type: select
+                options:
+                  values:
+                    - scheduled
+                    - open
+                    - closed
+                description: Scheduled uses the date window; open/closed override it.
+              - name: opensAt
+                label: Opens on
+                type: date
+                options:
+                  format: yyyy-MM-dd
+                description: First day applications are accepted (inclusive).
+              - name: closesAt
+                label: Closes on
+                type: date
+                options:
+                  format: yyyy-MM-dd
+                description: Last day applications are accepted (inclusive, end of day).
+              - name: timezone
+                label: Timezone
+                type: string
+                description: IANA timezone for the window (e.g. Africa/Lagos).
+              - name: notYetOpenMessage
+                label: Before opening message
+                type: text
+                description: Shown when the current date is before the opening date.
+              - name: closedMessage
+                label: Closed message
+                type: text
+                description: Shown when applications are closed or after the closing date.
           - name: steps
             label: How it works steps
             type: object

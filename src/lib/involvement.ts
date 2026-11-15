@@ -11,11 +11,21 @@ export interface InvolvementStep {
   body: string
 }
 
+export type ApplicationMode = 'scheduled' | 'open' | 'closed'
+
+export interface StallApplications {
+  mode?: ApplicationMode
+  opensAt?: string
+  closesAt?: string
+  timezone?: string
+  notYetOpenMessage?: string
+  closedMessage?: string
+}
+
 export interface InvolvementDetail {
   title: string
   description: string
-  applicationsOpen?: boolean
-  applicationsClosedMessage?: string
+  applications?: StallApplications
   sections?: InvolvementSection[]
   steps?: InvolvementStep[]
 }

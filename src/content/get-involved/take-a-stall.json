@@ -8,8 +8,14 @@
   "detail": {
     "title": "Take a Stall at Our Events",
     "description": "Bring your business, brand or service to an engaged community of young people and families.",
-    "applicationsOpen": true,
-    "applicationsClosedMessage": "Stall applications are closed for now. Please check back later.",
+    "applications": {
+      "mode": "scheduled",
+      "opensAt": "2026-11-20",
+      "closesAt": "2026-11-30",
+      "timezone": "Africa/Lagos",
+      "notYetOpenMessage": "Stall applications open on 20 November 2026 and close on 30 November 2026.",
+      "closedMessage": "Stall applications are closed for now. Please check back later."
+    },
     "steps": [
       {
         "title": "Apply",
