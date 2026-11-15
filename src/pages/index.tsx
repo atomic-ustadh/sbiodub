@@ -55,23 +55,6 @@ export default function Platform() {
               />
               <div className="absolute inset-0 bg-linear-to-t from-primary/70 via-transparent to-transparent" />
             </div>
-            {/* Floating stat card */}
-            <div className="absolute -bottom-6 -left-6 rounded-2xl border border-white/30 bg-secondary-fixed p-md shadow-gold">
-              <div className="flex items-center gap-sm">
-                <span
-                  className="material-symbols-outlined text-4xl text-primary"
-                  style={{ fontVariationSettings: '"FILL" 1' }}
-                >
-                  star
-                </span>
-                <div>
-                  <div className="font-headline-sm text-primary">500+</div>
-                  <div className="font-body-sm text-primary/80">
-                    Active Members
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -230,7 +213,7 @@ export default function Platform() {
                 Real stories from the heart of our community.
               </p>
             </div>
-            <div className="grid items-center gap-xl md:grid-cols-2">
+            <div className="grid items-center gap-md md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-md">
               {/* Testimonial author image */}
               <div className="relative mx-auto w-full max-w-112">
                 <div className="absolute -inset-3 -rotate-2 rounded-3xl border border-secondary-fixed/25" />
@@ -242,14 +225,34 @@ export default function Platform() {
                   />
                 </div>
               </div>
-              {/* Testimonial quote + navigation controls */}
+              {/* Prev / Next buttons */}
+              <div className="flex items-center justify-center gap-base md:flex-col">
+                <button
+                  onClick={() => setCurrent((current - 1 + testimonials.length) % testimonials.length)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-on-primary transition-colors hover:border-secondary-fixed/60 hover:bg-white/10"
+                  aria-label="Previous testimonial"
+                >
+                  <span className="material-symbols-outlined">chevron_left</span>
+                </button>
+                <span className="font-body-sm text-body-sm text-on-primary/60">
+                  {current + 1} / {testimonials.length}
+                </span>
+                <button
+                  onClick={() => setCurrent((current + 1) % testimonials.length)}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-on-primary transition-colors hover:border-secondary-fixed/60 hover:bg-white/10"
+                  aria-label="Next testimonial"
+                >
+                  <span className="material-symbols-outlined">chevron_right</span>
+                </button>
+              </div>
+              {/* Testimonial quote */}
               <div className="space-y-md">
                 <span className="material-symbols-outlined text-6xl text-secondary-fixed/70">
                   format_quote
                 </span>
                 <blockquote
                   key={current}
-                  className="animate-[fadeIn_0.3s_ease-in-out] font-headline-sm text-headline-sm italic leading-relaxed text-on-primary"
+                  className="animate-[fadeIn_0.3s_ease-in-out] font-headline-sm text-headline-xs md:text-headline-sm italic leading-relaxed text-on-primary"
                 >
                   &ldquo;{t.quote}&rdquo;
                 </blockquote>
@@ -258,24 +261,6 @@ export default function Platform() {
                     {t.name}
                   </p>
                   <p className="text-body-sm text-on-primary/60">{t.title}</p>
-                </div>
-                {/* Prev / Next buttons */}
-                <div className="flex items-center gap-base pt-sm">
-                  <button
-                    onClick={() => setCurrent((current - 1 + testimonials.length) % testimonials.length)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-on-primary transition-colors hover:border-secondary-fixed/60 hover:bg-white/10"
-                  >
-                    <span className="material-symbols-outlined">chevron_left</span>
-                  </button>
-                  <span className="font-body-sm text-body-sm text-on-primary/60">
-                    {current + 1} / {testimonials.length}
-                  </span>
-                  <button
-                    onClick={() => setCurrent((current + 1) % testimonials.length)}
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 text-on-primary transition-colors hover:border-secondary-fixed/60 hover:bg-white/10"
-                  >
-                    <span className="material-symbols-outlined">chevron_right</span>
-                  </button>
                 </div>
               </div>
             </div>
