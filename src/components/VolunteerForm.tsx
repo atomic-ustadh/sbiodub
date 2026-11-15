@@ -27,7 +27,7 @@ export default function VolunteerForm() {
       onSubmit={(event) => event.preventDefault()}
     >
       <h2 className="mb-sm font-headline-md text-headline-md text-primary">
-        Register
+        Register to Volunteer
       </h2>
       <p className="mb-lg font-body-md text-body-md text-on-surface-variant">
         There is no commitment at this stage — you choose which duties to accept
