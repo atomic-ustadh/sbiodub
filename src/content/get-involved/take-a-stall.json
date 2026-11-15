@@ -10,7 +10,7 @@
     "description": "Bring your business, brand or service to an engaged community of young people and families.",
     "applications": {
       "mode": "scheduled",
-      "opensAt": "2026-11-20",
+      "opensAt": "2026-11-15",
       "closesAt": "2026-11-30",
       "timezone": "Africa/Lagos",
       "notYetOpenMessage": "Stall applications open on 20 November 2026 and close on 30 November 2026.",
