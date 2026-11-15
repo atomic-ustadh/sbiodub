@@ -54,7 +54,7 @@ content:
         options:
           format: html
           switcher: true
-          media: false
+          media: true
       - name: author
         label: Author
         type: string
