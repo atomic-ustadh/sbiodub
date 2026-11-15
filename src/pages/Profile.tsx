@@ -39,12 +39,12 @@ export default function Profile() {
         </h1>
 
         {/* Tabs */}
-        <div className="mb-xl flex flex-wrap items-center gap-sm rounded-full border border-outline-variant/70 bg-surface-container-lowest p-1.5 shadow-card">
+        <div className="mb-xl grid grid-cols-2 gap-sm rounded-2xl border border-outline-variant/70 bg-surface-container-lowest p-1.5 shadow-card sm:flex sm:flex-wrap sm:items-center sm:rounded-full">
           {tabs.map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`rounded-full px-md py-sm font-button text-button transition-all ${
+              className={`w-full rounded-full px-md py-sm text-center font-button text-button transition-all sm:w-auto ${
                 tab === t
                   ? "bg-primary text-on-primary shadow-sm"
                   : "text-on-surface-variant hover:bg-surface-container-low hover:text-primary"
@@ -58,7 +58,7 @@ export default function Profile() {
               logout();
               navigate("/", { replace: true });
             }}
-            className="ml-auto rounded-full px-md py-sm font-button text-button text-error transition-all hover:bg-error-container/60"
+            className="w-full rounded-full px-md py-sm text-center font-button text-button text-error transition-all hover:bg-error-container/60 sm:ml-auto sm:w-auto"
           >
             Log Out
           </button>
