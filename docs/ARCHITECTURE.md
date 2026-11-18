@@ -1,10 +1,12 @@
 # Architecture and Documentation Guide
 
-This document is the Stage 1 map for the repository. It explains how the app is
-structured, how data flows through it, and the conventions to follow when adding
-code comments in later stages.
+This document is the architecture map for the repository. It explains how the app
+is structured, how data flows through it, and the conventions followed by the
+documentation stages.
 
-For product-level status and setup steps, see [`../README.md`](../README.md).
+For product-level status and setup steps, see [`../README.md`](../README.md). For
+the CMS/content schema and code-coupled fields, see
+[`CONTENT.md`](./CONTENT.md).
 
 ## High-level overview
 
@@ -32,7 +34,7 @@ LCA, Abuja is a Vite + React + TypeScript single-page app deployed on Netlify.
 
 ```text
 .
-├─ docs/                    # Architecture and content/schema reference docs
+├─ docs/                    # Architecture and content/CMS schema references
 ├─ src/
 │  ├─ main.tsx              # App bootstrap (Clerk, Router, AuthProvider)
 │  ├─ App.tsx               # Route table and layout composition
@@ -74,7 +76,8 @@ LCA, Abuja is a Vite + React + TypeScript single-page app deployed on Netlify.
 ## CMS → content pipeline
 
 - **Source of truth (editable):** JSON in `src/content/` and media in
-  `public/media/`, managed by Pages CMS per `.pages.yml`.
+  `public/media/`, managed by Pages CMS per `.pages.yml`. The full field-by-field
+  schema and validation matrix are in [`CONTENT.md`](./CONTENT.md).
 - **Build-time loading:**
   - `src/lib/content.ts` statically imports `about.json`/`donate.json` and uses
     `import.meta.glob(..., { eager: true })` for collections (resources, events,
@@ -166,9 +169,10 @@ inserted/updated server-side only.
 
 ## Stage status
 
-- **Stage 1 (this change):** Architecture doc, config/comments foundation.
+- **Stage 1:** Architecture doc, config/comments foundation.
 - **Stage 2:** Core logic and data layer (`src/lib`, context, routing/bootstrap,
   Netlify functions/libs).
 - **Stage 3:** Shared components and layout.
 - **Stage 4:** Pages and route-level behavior.
-- **Stage 5:** Content/CMS schema reference and consistency pass.
+- **Stage 5 (this change):** Content/CMS schema reference (`CONTENT.md`) and a
+  consistency pass over `.pages.yml`, README, and schema documentation.

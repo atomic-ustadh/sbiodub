@@ -1,6 +1,6 @@
 -- Neon Data API schema for LCA, Abuja member data.
 --
--- STAGE 1 CONTEXT (see docs/ARCHITECTURE.md):
+-- SCHEMA CONTEXT (see docs/ARCHITECTURE.md):
 -- - Browser reads/writes member data through the Neon Data API using a Clerk JWT
 --   (template: "neon") with role "authenticated" and sub = Clerk user id.
 -- - RLS is the authorization boundary: policies compare row user_id to auth.user_id().
@@ -8,17 +8,15 @@
 --   inserts/updates are performed server-side by Netlify Functions with DATABASE_URL
 --   (owner) after Paystack verification/webhook validation (never by the client).
 --
--- Neon Data API schema for LCA, Abuja member data.
---
 -- PREREQUISITE: Enable the Data API on the branch first (Postgres database ->
 -- Data API -> Enable Data API). That creates the `authenticated` role. If you
 -- run this script before enabling the Data API you will get:
 --   ERROR: role "authenticated" does not exist (SQLSTATE 42704)
 -- Then run this script in the Neon SQL Editor and click "Refresh schema cache".
 --
--- Authorization is enforced by Postgres Row Level Security. The Data API
--- extracts Clerk's JWT `sub` claim via auth.user_id(); the client must send a
--- token whose `role` claim is "authenticated" (see the Clerk JWT template).
+-- The Data API extracts Clerk's JWT `sub` claim via auth.user_id(); the client
+-- must send a token whose `role` claim is "authenticated" (see the Clerk JWT
+-- template).
 
 grant usage on schema public to authenticated;
 

@@ -26,8 +26,8 @@ Paystack payments.
 - **Events** — five CMS events (2026–2027), category filters, grid/timeline view,
   and RSVP through a modal. RSVP requires login, is stored per user in Neon,
   prevents duplicates, and can be cancelled from the profile.
-- **Resources** — four articles with category filters, a featured article, and
-  article detail pages.
+- **Resources** — CMS articles, guides and videos with category filters, a
+  featured item, and resource detail pages.
 - **Content management** — resources, events, testimonials, leadership, FAQ, legal
   pages, Donate and About content live in `src/content/` and are edited through
   [Pages CMS](https://pagescms.org) via `.pages.yml`. Saving commits to GitHub and
@@ -48,8 +48,8 @@ Paystack payments.
 ### Not implemented / limitations
 
 - **Resource and event search** — only category filters exist.
-- **Membership flow** — `/join` is a landing page; account creation and sign-in
-  happen through Clerk on `/login`.
+- **Membership flow** — there is no separate membership form; account creation
+  and sign-in happen through Clerk on `/login`.
 - **Transactional email** — the app itself does not send email. Paystack sends
   payment receipts, Clerk sends auth emails, and the newsletter is handled by a
   Google Form or Netlify Forms.
@@ -58,7 +58,7 @@ Paystack payments.
   history, and signing in later does not claim it.
 - **Pages CMS edits** require a Git commit and a rebuild; content is not live
   immediately.
-- **Home, Join and parts of Donate copy** still live in source files.
+- **Home and parts of Donate copy** still live in source files.
 - **Uploaded media** lives under `public/media/` and is committed to the repository.
 - **404 background** uses the relative path `../404bg.png`, which can break on
   deeper unmatched paths.
@@ -84,7 +84,9 @@ Paystack payments.
 ## Architecture
 
 > See [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for the repo map, data-flow
-> diagrams-in-text (CMS, auth, payments), and commenting conventions.
+> diagrams-in-text (CMS, auth, payments), and commenting conventions. See
+> [`docs/CONTENT.md`](./docs/CONTENT.md) for the CMS/content schema and
+> code-coupled fields.
 
 - **Bootstrap:** `src/main.tsx` mounts React inside `ClerkProvider`, `BrowserRouter`
   and `AuthProvider`, then renders the route table in `src/App.tsx`.
@@ -100,8 +102,9 @@ Paystack payments.
 - **Server:** `netlify/functions/paystack-verify.ts` verifies a transaction and
   records it; `paystack-webhook.ts` handles `charge.success` idempotently. Shared
   helpers live in `netlify/lib/`.
-- **Content:** JSON files under `src/content/`, loaded and validated by
-  `src/lib/content.ts` at build time.
+- **Content:** JSON files under `src/content/`, loaded at build time by
+  `src/lib/content.ts` (strictly validated) and `src/lib/involvement.ts` (typed
+  cast). See [`docs/CONTENT.md`](./docs/CONTENT.md).
 - **Styling:** Tailwind theme tokens and utilities live in `src/index.css`,
   following `design.md` ("Emerald & Gold").
 - **Deployment:** Netlify builds with Vite, publishes `dist/`, serves the API
@@ -242,7 +245,8 @@ Paystack    -> POST /api/paystack/webhook  (charge.success, HMAC-verified)
 ## Editing Content with Pages CMS
 
 Content lives in `src/content/` and is managed through
-[Pages CMS](https://pagescms.org) using `.pages.yml`.
+[Pages CMS](https://pagescms.org) using `.pages.yml`. The complete field-by-field
+schema and code-coupled field list are in [`docs/CONTENT.md`](./docs/CONTENT.md).
 
 1. Sign in at [app.pagescms.org](https://app.pagescms.org) with GitHub.
 2. Install the Pages CMS GitHub App on the account that owns this repository.
@@ -260,7 +264,10 @@ Content lives in `src/content/` and is managed through
 - Donation destinations include a **Type** (`donation` or `payment`). Use `payment`
   when the money is for a programme or event; that value is written to the payment
   history.
-- Event images use `/media/...` paths under `public/media/`.
+- Get Involved `slug` values are code-coupled: keep them as `give`, `volunteer`,
+  `partner`, or `take-a-stall` so buttons and detail routes keep working.
+- Legal page `slug` values are code-coupled: keep them as `privacy` or `terms`.
+- Images use `/media/...` paths under `public/media/`.
 - Content is compiled at build time; edits are visible only after a successful
   deploy. Pull the latest commit before running the app locally.
 
@@ -277,6 +284,9 @@ Content lives in `src/content/` and is managed through
 ├── tsconfig.json              # App TypeScript config
 ├── tsconfig.functions.json    # Netlify Functions TypeScript config
 ├── vite.config.ts
+├── docs/
+│   ├── ARCHITECTURE.md        # Repo map, data flow, conventions
+│   └── CONTENT.md             # CMS/content schema and code-coupled fields
 ├── db/
 │   └── schema.sql             # Tables, grants, RLS policies
 ├── netlify/
@@ -304,6 +314,9 @@ Content lives in `src/content/` and is managed through
     │   ├── Navbar.tsx
     │   ├── Footer.tsx
     │   ├── LoginModal.tsx
+    │   ├── ScrollToTop.tsx
+    │   ├── StallForm.tsx
+    │   ├── VolunteerForm.tsx
     │   ├── SubscribeForm.tsx
     │   └── LegalPageContent.tsx
     ├── context/
@@ -315,10 +328,14 @@ Content lives in `src/content/` and is managed through
     │   ├── leadership/
     │   ├── faq/
     │   ├── legal/
+    │   ├── get-involved/
     │   ├── about.json
-    │   └── donate.json
+    │   ├── contact.json
+    │   ├── donate.json
+    │   └── get-involved-intro.json
     ├── lib/
     │   ├── content.ts         # Content loader, types and validation
+    │   ├── involvement.ts     # Get Involved loader and CTA route map
     │   ├── neon.ts            # Neon Data API client (Clerk JWT)
     │   └── paystack.ts        # Paystack Inline loader
     └── pages/
@@ -326,10 +343,12 @@ Content lives in `src/content/` and is managed through
         ├── about.tsx
         ├── login.tsx          # Clerk SignIn / SignUp
         ├── ForgotPassword.tsx # Redirects to Clerk sign-in
-        ├── Join.tsx
         ├── Events.tsx
+        ├── GetInvolved.tsx
+        ├── InvolvementDetail.tsx
         ├── Resources.tsx
         ├── BlogPost.tsx
+        ├── Contact.tsx
         ├── Donate.tsx         # Paystack + bank transfer
         ├── Profile.tsx
         ├── PaymentHistory.tsx # Donation & payment history table
@@ -348,9 +367,11 @@ Content lives in `src/content/` and is managed through
 | `/login` | Login / Signup | Clerk components; standalone layout |
 | `/forgot-password` | Forgot Password | Redirects to `/login`, where Clerk handles reset |
 | `/events` | Events | CMS events split into upcoming/past; RSVP requires login |
-| `/join` | Membership | Landing page; CTA links to `/login` |
+| `/get-involved` | Get Involved | CMS involvement paths; CTAs are code-owned |
+| `/get-involved/:slug` | Involvement Detail | Generated only for items with `detail` |
 | `/resources` | Resources | Category filters; no search |
 | `/resources/:slug` | Blog Post | Article detail |
+| `/contact` | Contact | CMS contact details; form is UI-only |
 | `/donate` | Donate | Paystack online payment + manual bank transfer |
 | `/profile` | Profile | Protected |
 | `/history` | Donation & Payment History | Protected |

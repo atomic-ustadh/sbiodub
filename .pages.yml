@@ -1,7 +1,8 @@
 # Pages CMS configuration (.pages.yml)
 # Defines editable content sources committed to Git; changes require rebuild/deploy
 # because src/lib/content.ts and src/lib/involvement.ts load JSON at build time.
-# See docs/ARCHITECTURE.md for data-flow and code-coupled field notes.
+# See docs/ARCHITECTURE.md for data flow and docs/CONTENT.md for the full
+# collection/file schema, validation rules, and code-coupled fields.
 
 media:
   # Local repo media: files saved under public/media are served from /media.
@@ -76,6 +77,8 @@ content:
       - name: featured
         label: Featured
         type: boolean
+        required: true
+        description: Required by the build-time loader; use false unless this is the promoted post.
 
   # Events collection: filename becomes fallback id/slug; keep "id" stable once users RSVP.
   - name: events
@@ -503,7 +506,7 @@ content:
         label: Slug
         type: string
         required: true
-        description: Used in the URL for detail pages, e.g. volunteer or take-a-stall.
+        description: Must stay one of give, volunteer, partner, or take-a-stall; links/routes are code-owned in src/lib/involvement.ts.
       - name: icon
         label: Icon
         type: string
