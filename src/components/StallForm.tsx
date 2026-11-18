@@ -1,3 +1,6 @@
+import { formatContentDate } from '../lib/content'
+import type { StallApplications } from '../lib/involvement'
+
 const categories = [
   'Food & drink',
   'Fashion & lifestyle',
@@ -7,7 +10,15 @@ const categories = [
   'Other',
 ]
 
-export default function StallForm() {
+export default function StallForm({
+  applications,
+}: {
+  applications?: StallApplications
+}) {
+  const opensAt = applications?.opensAt
+  const closesAt = applications?.closesAt
+  const showWindow = opensAt && closesAt
+
   return (
     <form
       className="card p-md md:p-lg"
@@ -16,10 +27,18 @@ export default function StallForm() {
       <h2 className="mb-sm font-headline-md text-headline-md text-primary">
         Apply for a Stall
       </h2>
-      <p className="mb-lg font-body-md text-body-md text-on-surface-variant">
-        Tell us about your business and what you would like to bring. You may
-        apply for only one stall slot.
-      </p>
+      <div className="mb-lg space-y-xs">
+        <p className="font-body-md text-body-md text-on-surface-variant">
+          Tell us about your business and what you would like to bring. You may
+          apply for only one stall slot.
+        </p>
+        {showWindow && (
+          <p className="font-body-md text-body-md text-secondary">
+            Stall applications are open from {formatContentDate(opensAt)} to{' '}
+            {formatContentDate(closesAt)}.
+          </p>
+        )}
+      </div>
 
       <div className="grid grid-cols-1 gap-md sm:grid-cols-2">
         <div>

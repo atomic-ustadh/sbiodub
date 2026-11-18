@@ -108,7 +108,8 @@ export default function InvolvementDetail({ slug: slugProp }: { slug?: string })
             {item.slug === 'take-a-stall' &&
               (() => {
                 const status = getApplicationStatus(detail.applications)
-                if (status === 'open') return <StallForm />
+                if (status === 'open')
+                  return <StallForm applications={detail.applications} />
                 const isUpcoming = status === 'upcoming'
                 const message = isUpcoming
                   ? detail.applications?.notYetOpenMessage ??
