@@ -1,6 +1,15 @@
+/**
+ * Trusted server-side persistence for verified Paystack donations.
+ * - Connects with DATABASE_URL (owner) so writes bypass client RLS restrictions;
+ *   the browser must never write donation rows directly.
+ * - Idempotent on `reference` (upsert) to safely handle verify + webhook retries.
+ * - Validates transaction status/amount/currency and derives stored fields from
+ *   Paystack data and metadata (allocation, type, user hint, anonymity).
+ */
 import { neon } from '@neondatabase/serverless'
 import type { PaystackTransaction } from './paystack'
 
+/** Minimal donation row returned after insert/upsert. */
 export interface DonationRow {
   id: string
   reference: string
@@ -10,6 +19,7 @@ export interface DonationRow {
   created_at: string
 }
 
+/** Thrown when the database is unavailable or persistence fails. */
 export class DatabaseUnavailableError extends Error {
   constructor(message: string, options?: ErrorOptions) {
     super(message, options)
@@ -82,6 +92,7 @@ export async function recordVerifiedDonation(
   }
   const phone = asString(metadata.phone) || transaction.customer?.phone || null
   const anonymous = asBoolean(metadata.anonymous)
+  // Prefer verified session user; webhook may only have metadata hint (merged on conflict).
   const resolvedUserId = userId ?? (asString(metadata.user_id) || null)
   const paidAt = transaction.paid_at ?? transaction.paidAt ?? new Date().toISOString()
   const paystackId = transaction.id != null ? String(transaction.id) : null

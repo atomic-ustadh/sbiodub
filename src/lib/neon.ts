@@ -1,12 +1,19 @@
+/**
+ * Thin client for the Neon Data API (PostgREST-compatible).
+ * - Authenticates with a Clerk-issued JWT (e.g. `neon` template). Authorization
+ *   is enforced by Postgres RLS on the server, not by this helper.
+ * - BASE_URL comes from VITE_NEON_DATA_API_URL and should end with `/rest/v1`.
+ */
 const BASE_URL = (import.meta.env.VITE_NEON_DATA_API_URL ?? '').replace(/\/+$/, '')
 
+/** Returns true when the Neon Data API base URL is configured. */
 export function isNeonConfigured(): boolean {
   return BASE_URL.length > 0
 }
 
 /**
- * Sends a request to the Neon Data API (PostgREST-compatible) using the
- * Clerk-issued JWT. Authorization is enforced by Postgres RLS, not here.
+ * Sends an authenticated request to the Neon Data API.
+ * Defaults `Prefer: return=representation` so inserts/updates return rows unless overridden.
  */
 export async function neonRequest<T>(
   path: string,

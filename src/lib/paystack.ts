@@ -1,3 +1,12 @@
+/**
+ * Client-side Paystack Inline integration.
+ * - Lazily loads the Paystack Inline script once and opens the checkout iframe.
+ * - Uses NGN and expects `amount` in kobo (as required by Paystack).
+ * - Resolves with the transaction reference on success; rejects if cancelled or
+ *   unavailable. Server-side verification/persistence is handled by Netlify Functions.
+ */
+
+/** Minimal shape of the Paystack Inline success callback payload. */
 interface PaystackSuccessResponse {
   reference: string
 }
@@ -30,6 +39,7 @@ declare global {
 const SCRIPT_URL = 'https://js.paystack.co/v1/inline.js'
 let loadPromise: Promise<void> | null = null
 
+/** Ensures the Paystack Inline script is loaded in the browser. */
 export function loadPaystack(): Promise<void> {
   if (typeof window === 'undefined') {
     return Promise.reject(new Error('Paystack requires a browser'))
@@ -52,6 +62,11 @@ export function loadPaystack(): Promise<void> {
   return loadPromise
 }
 
+/**
+ * Opens Paystack Inline checkout and resolves with the successful reference.
+ * @param options.amount Amount in kobo.
+ * @param options.reference Unique transaction reference (used for verify/webhook idempotency).
+ */
 export async function payWithPaystack(options: {
   publicKey: string
   email: string

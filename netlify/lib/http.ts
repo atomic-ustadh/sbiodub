@@ -1,3 +1,6 @@
+/**
+ * Minimal JSON response helper for Netlify Functions.
+ */
 export function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
     status,

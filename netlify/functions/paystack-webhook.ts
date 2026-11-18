@@ -1,3 +1,11 @@
+/**
+ * Netlify Function: Paystack webhook receiver.
+ * - Validates `x-paystack-signature` (HMAC SHA512) against the raw body.
+ * - On `charge.success`, records the transaction idempotently (no Clerk token;
+ *   user linkage may rely on metadata hint handled in recordVerifiedDonation).
+ * - Returns non-2xx on persistence failure so Paystack can retry.
+ * - Mapped publicly via /api/paystack/webhook (see netlify.toml).
+ */
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { recordVerifiedDonation } from '../lib/donations'
 import type { PaystackTransaction } from '../lib/paystack'

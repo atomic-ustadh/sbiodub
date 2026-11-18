@@ -1,3 +1,10 @@
+/**
+ * Netlify Function: verify a Paystack transaction (client-initiated).
+ * - Validates request/reference, optionally authenticates the caller via Clerk,
+ *   verifies the transaction with Paystack's secret API, then records it (idempotent).
+ * - Returns 503 with a specific code when payment is verified but DB persistence fails.
+ * - Mapped publicly via /api/paystack/verify (see netlify.toml).
+ */
 import { getOptionalClerkUserId, UnauthorizedError } from '../lib/clerk'
 import { DatabaseUnavailableError, recordVerifiedDonation } from '../lib/donations'
 import { json } from '../lib/http'

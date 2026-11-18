@@ -1,3 +1,13 @@
+/**
+ * Get Involved content loader (build-time).
+ *
+ * - Intro comes from `get-involved-intro.json`; items are loaded from the
+ *   `get-involved/*.json` collection via `import.meta.glob` and sorted by `order`.
+ * - Button destinations (`ctaTo`) are code-controlled in `involvementRoutes` (not
+ *   CMS-editable) to keep navigation/route behavior stable; CMS controls labels/copy.
+ * - `applications` window config for Take a Stall is CMS data but evaluated at
+ *   runtime in the page component so availability flips without a rebuild.
+ */
 import introData from '../content/get-involved-intro.json'
 
 export interface InvolvementSection {
@@ -44,6 +54,7 @@ export interface InvolvementItem extends InvolvementItemData {
   ctaTo: string
 }
 
+/** Code-owned CTA destinations keyed by item slug (kept out of CMS). */
 const involvementRoutes: Record<string, string> = {
   give: '/donate',
   volunteer: '/get-involved/volunteer',
@@ -51,6 +62,7 @@ const involvementRoutes: Record<string, string> = {
   'take-a-stall': '/get-involved/take-a-stall',
 }
 
+/** Hero/intro copy for the Get Involved page. */
 export const involvementIntro = introData as {
   eyebrow: string
   title: string
@@ -62,6 +74,7 @@ const itemModules = import.meta.glob('../content/get-involved/*.json', {
   import: 'default',
 }) as Record<string, unknown>
 
+/** Involvement items sorted by `order` with code-controlled `ctaTo` merged in. */
 export const involvementItems: InvolvementItem[] = Object.values(itemModules)
   .map((value) => value as InvolvementItemData)
   .sort((a, b) => a.order - b.order)
@@ -70,6 +83,7 @@ export const involvementItems: InvolvementItem[] = Object.values(itemModules)
     ctaTo: involvementRoutes[item.slug] ?? '/get-involved',
   }))
 
+/** Looks up an involvement item by slug (used for detail routing/rendering). */
 export function getInvolvementItem(
   slug: string | undefined,
 ): InvolvementItem | undefined {

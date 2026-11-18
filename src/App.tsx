@@ -1,3 +1,14 @@
+/**
+ * Application route table.
+ * - `ScrollToTop` resets scroll on pathname changes.
+ * - Most routes render inside `SiteLayout` (nav/footer/chrome); `/login`,
+ *   `/forgot-password`, and `*` render standalone.
+ * - Detail routes for involvement (items with `detail`) and resources are
+ *   generated from content so unknown slugs are not matched here and fall
+ *   through to the global `*` 404 route.
+ * - Protected member routes (`/profile`, `/history`, legacy `/receipts`) are
+ *   wrapped by `ProtectedRoute`.
+ */
 import { Routes, Route } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import SiteLayout from './components/SiteLayout'

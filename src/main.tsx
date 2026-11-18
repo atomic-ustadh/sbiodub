@@ -1,3 +1,10 @@
+/**
+ * Client bootstrap.
+ * - Mounts React into #root and composes global providers: Clerk (auth/session),
+ *   BrowserRouter (routing), and AuthProvider (app member data bridge).
+ * - Requires VITE_CLERK_PUBLISHABLE_KEY at build/runtime; fails fast if missing.
+ * - Loads global Tailwind/CSS tokens and utilities from index.css.
+ */
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'

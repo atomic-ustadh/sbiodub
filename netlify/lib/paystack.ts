@@ -1,3 +1,10 @@
+/**
+ * Server-side Paystack API client (secret key).
+ * Used by Netlify Functions to verify transactions against Paystack before
+ * trusting or persisting payment data.
+ */
+
+/** Subset of Paystack transaction fields used for verification and persistence. */
 export interface PaystackTransaction {
   id?: number | string
   reference: string
@@ -18,6 +25,7 @@ export interface PaystackTransaction {
 
 const PAYSTACK_BASE_URL = 'https://api.paystack.co'
 
+/** Verifies a transaction reference with Paystack and returns the transaction data. */
 export async function verifyPaystackTransaction(
   reference: string,
 ): Promise<PaystackTransaction> {

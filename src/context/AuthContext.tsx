@@ -1,3 +1,17 @@
+/**
+ * Authentication and member-data context.
+ *
+ * - Bridges Clerk identity/session to app state: derives a lightweight `User`
+ *   from Clerk, and loads per-user RSVPs and donation history from the Neon Data
+ *   API using a Clerk JWT (`template: 'neon'`).
+ * - Authorization is enforced by Postgres RLS (auth.user_id()/role), not by the
+ *   client. Donation rows are read-only from the client; verified writes happen
+ *   server-side (Netlify Functions) after Paystack verification/webhook.
+ * - Profile updates: name is written to Clerk profile fields; phone is stored in
+ *   Clerk `unsafeMetadata.phone` (email remains Clerk-managed/read-only).
+ * - RSVP writes use `on_conflict=user_id,event_id` merge semantics; cancellations
+ *   delete by user/event. Data is refreshed after mutations.
+ */
 import {
   createContext,
   useCallback,
@@ -10,6 +24,7 @@ import {
 import { useAuth as useClerkAuth, useUser } from '@clerk/react'
 import { neonRequest } from '../lib/neon'
 
+/** App-level user shape derived from the signed-in Clerk user. */
 export interface User {
   id: string
   name: string
@@ -17,8 +32,10 @@ export interface User {
   phone: string
 }
 
+/** Editable profile fields exposed by the UI. */
 export type ProfileUpdates = Partial<Pick<User, 'name' | 'email' | 'phone'>>
 
+/** Payload for creating/updating an RSVP (event + attendee snapshot). */
 export interface RsvpInput {
   id: string
   title: string
@@ -30,10 +47,12 @@ export interface RsvpInput {
   phone: string
 }
 
+/** RSVP record as used in the app (includes server timestamp). */
 export interface Rsvp extends RsvpInput {
   rsvpedAt: string
 }
 
+/** Donation/payment history row as displayed to the user. */
 export interface Donation {
   amount: number
   type: string
@@ -45,6 +64,7 @@ export interface Donation {
   channel?: string | null
 }
 
+/** Context contract consumed via `useAuth()`. */
 interface AuthContextValue {
   user: User | null
   isLoading: boolean
@@ -58,6 +78,7 @@ interface AuthContextValue {
   refreshDonations: () => Promise<void>
 }
 
+/** Raw RSVP row shape returned by the Neon Data API. */
 interface RsvpRow {
   event_id: string
   title: string
@@ -70,6 +91,7 @@ interface RsvpRow {
   rsvped_at: string
 }
 
+/** Raw donation row shape returned by the Neon Data API. */
 interface DonationRow {
   id: string
   amount: number | string
@@ -83,6 +105,7 @@ interface DonationRow {
 
 const AuthContext = createContext<AuthContextValue | null>(null)
 
+/** Maps a Neon RSVP row to the app Rsvp shape. */
 function toRsvp(row: RsvpRow): Rsvp {
   return {
     id: row.event_id,
@@ -97,6 +120,7 @@ function toRsvp(row: RsvpRow): Rsvp {
   }
 }
 
+/** Maps a Neon donation row to the app Donation shape (amount coerced to number). */
 function toDonation(row: DonationRow): Donation {
   return {
     id: row.id,
@@ -110,6 +134,10 @@ function toDonation(row: DonationRow): Donation {
   }
 }
 
+/**
+ * Provides auth state and member data to the app.
+ * Loads RSVPs/donations for the signed-in Clerk user from Neon; clears state on sign-out.
+ */
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { isLoaded, getToken, signOut } = useClerkAuth()
   const { user: clerkUser } = useUser()
@@ -117,6 +145,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [donations, setDonations] = useState<Donation[]>([])
   const [dataError, setDataError] = useState<string | null>(null)
 
+  // Derive the app User from Clerk (phone prefers Clerk phone, falls back to unsafeMetadata).
   const user = useMemo<User | null>(() => {
     if (!clerkUser) return null
     const email = clerkUser.primaryEmailAddress?.emailAddress ?? ''
@@ -131,6 +160,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [clerkUser])
 
+  // Authenticated Neon Data API request helper (requires Clerk `neon` JWT template).
   const authFetch = useCallback(
     async <T,>(path: string, init?: RequestInit): Promise<T> => {
       const token = await getToken({ template: 'neon' })
@@ -140,6 +170,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [getToken],
   )
 
+  // Reload member data (RSVPs + donations) for the current user; sets a user-facing error on failure.
   const refresh = useCallback(async () => {
     if (!user) {
       setRsvps([])
@@ -169,6 +200,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     void signOut()
   }, [signOut])
 
+  // Updates Clerk profile (name split into first/last) and/or stores phone in unsafeMetadata.
   const updateProfile = useCallback(
     (updates: ProfileUpdates) => {
       if (!clerkUser) return
@@ -192,6 +224,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [clerkUser],
   )
 
+  // Upserts an RSVP for the current user (idempotent on user_id,event_id) then refreshes.
   const addRsvp = useCallback(
     (input: RsvpInput) => {
       if (!user) return
@@ -221,6 +254,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [user, authFetch, refresh],
   )
 
+  // Deletes the user's RSVP for an event then refreshes.
   const cancelRsvp = useCallback(
     (eventId: string) => {
       if (!user) return
@@ -269,6 +303,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
+/** Accessor hook for AuthContext; must be used within AuthProvider. */
 export function useAuth() {
   const ctx = useContext(AuthContext)
   if (!ctx) throw new Error('useAuth must be used within AuthProvider')

@@ -1,14 +1,30 @@
+/**
+ * Build-time CMS/content loader and validator.
+ *
+ * - Static JSON and `import.meta.glob(..., { eager: true })` imports bundle
+ *   content into the client at build time (no runtime CMS fetch). Edits in
+ *   `src/content/` / Pages CMS require a rebuild/deploy to appear.
+ * - Each loader validates shape and required fields and throws with a contextual
+ *   path on invalid data to fail fast during build/dev.
+ * - Collection slugs are derived from filenames (`slugFromPath`); changing a
+ *   filename changes its URL/identifier. Event `id` prefers an explicit `id`
+ *   field (kept stable for RSVPs) and falls back to the filename slug.
+ * - Exports are the typed, sorted datasets consumed by pages/routes.
+ */
 import aboutData from "../content/about.json"
 import donateData from "../content/donate.json"
 
+/** Resource/article content type shown in listings and detail pages. */
 export type PostType = "Guide" | "Article" | "Video"
 
+/** Resource categories used for filtering and validation. */
 export type PostCategory =
   | "Faith & Spirit"
   | "Professional Skills"
   | "Mental Wellness"
   | "Community Action"
 
+/** Parsed resource record (slug derived from filename; body is HTML/rich-text). */
 export interface Post {
   slug: string
   title: string
@@ -21,6 +37,7 @@ export interface Post {
   featured: boolean
 }
 
+/** Testimonial shown in the home carousel; ordered ascending by `order`. */
 export interface Testimonial {
   slug: string
   name: string
@@ -30,6 +47,7 @@ export interface Testimonial {
   order: number
 }
 
+/** Leadership profile shown on the About page; ordered ascending by `order`. */
 export interface LeadershipProfile {
   slug: string
   name: string
@@ -39,6 +57,7 @@ export interface LeadershipProfile {
   order: number
 }
 
+/** FAQ entry (answer may contain HTML/rich-text); ordered ascending by `order`. */
 export interface FaqItem {
   slug: string
   question: string
@@ -46,6 +65,7 @@ export interface FaqItem {
   order: number
 }
 
+/** CMS-driven legal page (e.g. privacy/terms) identified by `slug`. */
 export interface LegalPage {
   slug: string
   title: string
@@ -53,19 +73,23 @@ export interface LegalPage {
   content: string
 }
 
+/** Distinguishes charitable gifts from programme/event payments in records/history. */
 export type DonationKind = "donation" | "payment"
 
+/** Selectable allocation/destination on the Donate page. */
 export interface DonationDestination {
   label: string
   description: string
   kind: DonationKind
 }
 
+/** Donate page FAQ entry. */
 export interface DonationFaq {
   question: string
   answer: string
 }
 
+/** Donate page CMS content (bank details, quote, destinations, FAQs). */
 export interface DonationPageContent {
   bankName: string
   accountName: string
@@ -78,8 +102,10 @@ export interface DonationPageContent {
   faqs: DonationFaq[]
 }
 
+/** Visual variants for About page pillar cards. */
 export type AboutPillarStyle = "default" | "primary" | "wide" | "full"
 
+/** Single pillar/value card on the About page. */
 export interface AboutPillar {
   icon: string
   title: string
@@ -88,6 +114,7 @@ export interface AboutPillar {
   image?: string
 }
 
+/** About page CMS content (journey, mission/vision, pillars). */
 export interface AboutPageContent {
   journeyEyebrow: string
   journeyTitle: string
@@ -105,8 +132,13 @@ export interface AboutPageContent {
   pillars: AboutPillar[]
 }
 
+/** Event categories used for validation and UI filtering/styling. */
 export type EventCategory = "Educational" | "Social" | "Sports" | "Spiritual"
 
+/**
+ * Normalized event record for the app.
+ * `id` must remain stable for existing events because RSVPs are keyed by it.
+ */
 export interface CommunityEvent {
   id: string
   img: string
@@ -118,6 +150,7 @@ export interface CommunityEvent {
   location: string
 }
 
+/** Allowed values kept in sync with .pages.yml selects and UI expectations. */
 const POST_CATEGORIES: PostCategory[] = [
   "Faith & Spirit",
   "Professional Skills",
@@ -136,6 +169,7 @@ const EVENT_CATEGORIES: EventCategory[] = [
 
 type RawRecord = Record<string, unknown>
 
+/** Strict YYYY-MM-DD validation/formatting (also used for date comparisons). */
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/
 const MONTHS = [
   "Jan",
@@ -152,15 +186,18 @@ const MONTHS = [
   "Dec",
 ]
 
+/** Type guard for plain JSON objects (non-null, non-array). */
 function isRecord(value: unknown): value is RawRecord {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
 
+/** Derives a stable slug/id from a content JSON module path (filename without .json). */
 function slugFromPath(filePath: string): string {
   const filename = filePath.split("/").pop() ?? filePath
   return filename.replace(/\.json$/i, "")
 }
 
+/** Requires a non-empty string field; throws with `context` for build-time diagnostics. */
 function requireString(
   record: RawRecord,
   key: string,
@@ -173,6 +210,7 @@ function requireString(
   return value
 }
 
+/** Requires a string field matching one of `allowed` values. */
 function requireEnum<T extends string>(
   record: RawRecord,
   key: string,
@@ -188,6 +226,7 @@ function requireEnum<T extends string>(
   return value as T
 }
 
+/** Requires a non-empty YYYY-MM-DD date string. */
 function requireDate(record: RawRecord, key: string, context: string): string {
   const value = requireString(record, key, context)
   if (!ISO_DATE.test(value)) {
@@ -427,6 +466,7 @@ function toEvent(filePath: string, value: unknown): CommunityEvent {
   }
 }
 
+// Eager glob imports bundle all matching content JSON at build time.
 const resourceModules = import.meta.glob("../content/resources/*.json", {
   eager: true,
   import: "default",
@@ -457,44 +497,55 @@ const legalModules = import.meta.glob("../content/legal/*.json", {
   import: "default",
 }) as Record<string, unknown>
 
+/** All resources, newest date first. */
 export const posts: Post[] = Object.entries(resourceModules)
   .map(([filePath, value]) => toPost(filePath, value))
   .sort((a, b) => b.date.localeCompare(a.date) || a.title.localeCompare(b.title))
 
+/** All events, earliest date first (pages split upcoming/past as needed). */
 export const events: CommunityEvent[] = Object.entries(eventModules)
   .map(([filePath, value]) => toEvent(filePath, value))
   .sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title))
 
+/** Testimonials in display order. */
 export const testimonials: Testimonial[] = Object.entries(testimonialModules)
   .map(([filePath, value]) => toTestimonial(filePath, value))
   .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
 
+/** Leadership profiles in display order. */
 export const leadershipProfiles: LeadershipProfile[] = Object.entries(
   leadershipModules,
 )
   .map(([filePath, value]) => toLeadershipProfile(filePath, value))
   .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
 
+/** FAQ items in display order. */
 export const faqItems: FaqItem[] = Object.entries(faqModules)
   .map(([filePath, value]) => toFaqItem(filePath, value))
   .sort((a, b) => a.order - b.order || a.question.localeCompare(b.question))
 
+/** Legal pages sorted by title. */
 export const legalPages: LegalPage[] = Object.entries(legalModules)
   .map(([filePath, value]) => toLegalPage(filePath, value))
   .sort((a, b) => a.title.localeCompare(b.title))
 
+/** Donate page content (single-file CMS source). */
 export const donationPage = toDonationPage(donateData)
 
+/** About page content (single-file CMS source). */
 export const aboutPage = toAboutPage(aboutData)
 
+/** Looks up a resource by filename-derived slug. */
 export function getPostBySlug(slug: string): Post | undefined {
   return posts.find((post) => post.slug === slug)
 }
 
+/** Looks up a legal page by its content `slug` field (e.g. "privacy", "terms"). */
 export function getLegalPageBySlug(slug: string): LegalPage | undefined {
   return legalPages.find((page) => page.slug === slug)
 }
 
+/** Formats YYYY-MM-DD for display (e.g. "Nov 14, 2026"); returns input if invalid. */
 export function formatContentDate(value: string): string {
   const match = value.match(ISO_DATE)
   if (!match) return value
@@ -505,6 +556,7 @@ export function formatContentDate(value: string): string {
   return `${MONTHS[month - 1]} ${day}, ${year}`
 }
 
+/** Returns today's date in local time as YYYY-MM-DD (used for upcoming/past splits). */
 export function getTodayIsoDate(): string {
   const now = new Date()
   const month = String(now.getMonth() + 1).padStart(2, "0")
