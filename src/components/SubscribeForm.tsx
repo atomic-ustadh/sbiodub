@@ -1,6 +1,16 @@
+/**
+ * Newsletter subscription form with two submission backends.
+ * - If `VITE_GOOGLE_FORM_ID` and `VITE_GOOGLE_FORM_EMAIL_ENTRY` are set, posts to
+ *   Google Forms with `mode: 'no-cors'` (response is opaque, so success is optimistic).
+ * - Otherwise falls back to Netlify Forms by POSTing `form-name=newsletter` to `/`
+ *   (paired with the hidden form in `index.html`).
+ * - Includes a honeypot field (`company`) to deter bots; `variant` adjusts styling
+ *   for default and footer contexts.
+ */
 import { useState, type SubmitEvent } from 'react'
 
 interface SubscribeFormProps {
+  /** Visual/context variant (default inline or footer). */
   variant?: 'default' | 'footer'
 }
 

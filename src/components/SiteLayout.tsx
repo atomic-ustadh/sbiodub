@@ -1,3 +1,9 @@
+/**
+ * Shared page chrome for most routes (see `App.tsx`).
+ * - Composes fixed `Navbar`, routed content via `<Outlet />`, and `Footer`.
+ * - Shows a floating FAQ shortcut except on `/faq` and Get Involved pages
+ *   (including detail routes), hidden in print.
+ */
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'

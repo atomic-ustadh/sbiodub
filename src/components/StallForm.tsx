@@ -1,3 +1,10 @@
+/**
+ * Take-a-Stall application form (UI only).
+ * - Rendered by `InvolvementDetail` when stall applications are open.
+ * - Displays the CMS-configured open window dates (if provided) alongside intro copy.
+ * - Submission is currently prevented (`preventDefault`); wiring to a backend/CMS
+ *   workflow is handled separately.
+ */
 import { formatContentDate } from '../lib/content'
 import type { StallApplications } from '../lib/involvement'
 
@@ -13,6 +20,7 @@ const categories = [
 export default function StallForm({
   applications,
 }: {
+  /** Application window config (from CMS) used to show open dates when present. */
   applications?: StallApplications
 }) {
   const opensAt = applications?.opensAt

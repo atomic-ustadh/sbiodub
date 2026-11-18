@@ -1,3 +1,9 @@
+/**
+ * Site-wide footer rendered by `SiteLayout`.
+ * - Shows contact/address/phone, social + mail links, quick/legal navigation,
+ *   and the newsletter `SubscribeForm` (footer variant). Hidden in print.
+ * - Content/links here are currently hardcoded in the component (not CMS-driven).
+ */
 import { Link } from 'react-router-dom'
 import SubscribeForm from './SubscribeForm'
 import { facebook, instagram, twitter, whatsapp } from '../assets'

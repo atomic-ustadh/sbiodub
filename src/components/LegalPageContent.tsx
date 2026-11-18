@@ -1,3 +1,10 @@
+/**
+ * Renders a CMS-managed legal page (privacy/terms) by content slug.
+ * - Looks up the page via `getLegalPageBySlug` (build-time content); renders
+ *   `NotFound` if missing.
+ * - Renders `page.content` as trusted HTML inside `.article-prose`
+ *   (`dangerouslySetInnerHTML`), consistent with other CMS rich-text pages.
+ */
 import { Link } from 'react-router-dom'
 import { formatContentDate, getLegalPageBySlug } from '../lib/content'
 import NotFound from '../pages/NotFound'

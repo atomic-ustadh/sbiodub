@@ -1,12 +1,24 @@
+/**
+ * Modal prompt that asks the user to sign in before a gated action.
+ * - Locks body scroll while open, traps Tab focus within the dialog, closes on
+ *   Escape/backdrop click, and restores focus/overflow on close.
+ * - "Log In" navigates to `/login` with `state.from` so the app can return the
+ *   user to their previous location after authentication.
+ * - Note: file is named `LoginModal.tsx` but the exported component is `LoginPrompt`.
+ */
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 interface LoginPromptProps {
+  /** Controls visibility; when false the component renders nothing. */
   open: boolean
+  /** Called to dismiss the prompt (cancel, backdrop, Escape). */
   onClose: () => void
+  /** Return path passed to `/login` state for post-login redirect. */
   from: string
   title?: string
   description?: string
+  /** Material Symbols icon name shown in the prompt. */
   icon?: string
 }
 

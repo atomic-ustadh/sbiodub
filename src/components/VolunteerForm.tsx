@@ -1,3 +1,9 @@
+/**
+ * Volunteer registration form (UI only).
+ * - Rendered by `InvolvementDetail` for the volunteer item.
+ * - Submission is currently prevented (`preventDefault`); wiring to a backend/CMS
+ *   workflow (e.g. Google Form) is handled separately.
+ */
 const teamOptions = [
   'Registration desk',
   'Crowd control',

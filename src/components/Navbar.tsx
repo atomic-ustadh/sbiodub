@@ -1,3 +1,10 @@
+/**
+ * Fixed top navigation rendered by `SiteLayout`.
+ * - Desktop: primary links + Donate + auth-aware profile/login icon button.
+ * - Mobile: hamburger toggles a menu (includes Donate); closes on navigation.
+ * - Uses `useAuth()` to route the user icon to `/profile` (signed in) or `/login`.
+ * - Hidden in print; active route styling handled via `NavLink`.
+ */
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
