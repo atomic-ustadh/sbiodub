@@ -1,6 +1,14 @@
+/**
+ * FAQ page (route `/faq`).
+ * - Renders `faqItems` from the CMS collection in collapsible `<details>` cards;
+ *   shows an empty state with a home link when no items exist.
+ * - Answers are trusted CMS HTML rendered via `dangerouslySetInnerHTML`.
+ * - Reachable from the floating shortcut in `SiteLayout` (hidden on this page).
+ */
 import { Link } from 'react-router-dom'
 import { faqItems } from '../lib/content'
 
+/** CMS-driven frequently asked questions with native expand/collapse. */
 export default function Faq() {
   return (
     <main className="min-h-screen bg-surface pb-xl pt-18">

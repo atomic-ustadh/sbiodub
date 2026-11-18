@@ -1,16 +1,26 @@
+/**
+ * Contact page (route `/contact`).
+ * - Reads `src/content/contact.json` directly at build time and renders the
+ *   hero, contact/email details, and enquiry form copy from it.
+ * - The form is UI-only: submission is prevented (`preventDefault`); there is no
+ *   backend or email delivery wired up here.
+ */
 import data from '../content/contact.json'
 
+/** A single contact channel (e.g. address, phone) with icon and display lines. */
 interface ContactDetail {
   icon: string
   label: string
   lines: string[]
 }
 
+/** A labelled email address shown in the contact details card. */
 interface EmailContact {
   label: string
   email: string
 }
 
+/** Shape of `src/content/contact.json` as consumed by this page. */
 interface ContactContent {
   hero: {
     eyebrow: string
@@ -32,6 +42,7 @@ interface ContactContent {
 const contact = data as ContactContent
 const { hero, contactDetails, emailHeading, emailContacts, form } = contact
 
+/** Contact layout with CMS-provided details and a non-submitting enquiry form. */
 export default function Contact() {
   return (
     <main className="pt-18">

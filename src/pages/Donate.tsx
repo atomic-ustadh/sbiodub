@@ -1,3 +1,15 @@
+/**
+ * Donate page (route `/donate`).
+ * - Online flow: Paystack Inline (`src/lib/paystack.ts`) → POST `/api/paystack/verify`
+ *   (Netlify function) → on success, refresh donations and, for signed-in users,
+ *   navigate to `/history?donation=<id>`; anonymous donors see an inline receipt note.
+ * - If the verify function reports the database is unavailable (`database_unavailable`
+ *   / HTTP 503), the charge is assumed successful (Paystack emails the receipt) and
+ *   the page shows a fallback notice instead of failing the donation.
+ * - Offline flow: bank-transfer details (with copy buttons) plus a WhatsApp
+ *   receipt link built from `contact`-style fields in `donate.json`.
+ * - Amounts are entered in naira and converted to kobo when passed to Paystack.
+ */
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth as useClerkAuth } from "@clerk/react";
@@ -5,8 +17,10 @@ import { donationPage } from "../lib/content";
 import { payWithPaystack } from "../lib/paystack";
 import { useAuth } from "../context/AuthContext";
 
+/** Preset naira amounts offered as quick-select buttons. */
 const PRESET_AMOUNTS = [5000, 20000, 42000, 126000];
 
+/** Donation UI: online Paystack checkout, bank transfer details, and FAQs. */
 export default function Donate() {
   const navigate = useNavigate();
   const { user, refreshDonations } = useAuth();
@@ -41,6 +55,7 @@ export default function Donate() {
     setDonorPhone((current) => current || user.phone);
   }, [user]);
 
+  /** Copies a bank detail to the clipboard and briefly flips the icon to a check. */
   const copyDetail = async (label: string, value: string) => {
     try {
       await navigator.clipboard.writeText(value);
@@ -51,6 +66,11 @@ export default function Donate() {
     }
   };
 
+  /**
+   * Runs the Paystack checkout and server-side verification.
+   * Note: the reference is generated per attempt and the verify call is sent with
+   * the Clerk token when signed in, so the donation can be linked to the account.
+   */
   const handleOnlineDonation = async () => {
     setPaymentError(null);
     setPaymentSuccess(false);

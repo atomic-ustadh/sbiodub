@@ -1,6 +1,15 @@
+/**
+ * Catch-all 404 page (route `*`, no site chrome).
+ * - Also rendered by detail pages when a slug does not resolve.
+ * - The large "404" follows the pointer on desktop via a mousemove listener
+ *   (disabled under 768px), with cleanup on unmount.
+ * - Background image is referenced as `../404bg.png` (served from `public/` at
+ *   the site root), not imported through Vite.
+ */
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
+/** Standalone not-found screen with a subtle pointer-parallax effect. */
 export default function NotFound() {
   const floatingRef = useRef<HTMLSpanElement>(null)
 

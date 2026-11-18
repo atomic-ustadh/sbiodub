@@ -1,7 +1,17 @@
+/**
+ * Donation/payment history page (route `/history`, legacy alias `/receipts`).
+ * - Protected by `ProtectedRoute`; data (`donations`) comes from `AuthContext`
+ *   (Neon Data API + RLS) and can be refreshed on error.
+ * - The `?donation=<id>` query param highlights a just-completed payment and
+ *   shows a confirmation or a "still confirming" notice.
+ * - When there are no donations, an empty/error state is shown instead of the table.
+ * - Print styles (`.print:*`) hide controls for printable receipts.
+ */
 import { Link, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { formatContentDate } from '../lib/content'
 
+/** Formats a numeric naira amount with two decimals and locale grouping. */
 function formatAmount(amount: number): string {
   return amount.toLocaleString(undefined, {
     minimumFractionDigits: 2,
@@ -9,6 +19,7 @@ function formatAmount(amount: number): string {
   })
 }
 
+/** Table of the signed-in user's verified payments with totals and print. */
 export default function PaymentHistory() {
   const { donations, dataError, refreshDonations } = useAuth()
   const [searchParams] = useSearchParams()

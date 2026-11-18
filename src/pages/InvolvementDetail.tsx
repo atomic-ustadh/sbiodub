@@ -1,3 +1,12 @@
+/**
+ * Get Involved detail page (route `/get-involved/:slug`).
+ * - Routes are generated in `App.tsx` only for items with `detail`; unknown slugs
+ *   render the shared `NotFound` page.
+ * - `volunteer` renders `VolunteerForm`; `take-a-stall` renders `StallForm` only
+ *   while applications are open, otherwise an explanatory card.
+ * - Stall application windows (`detail.applications`) are evaluated at runtime in
+ *   the configured timezone so availability changes without a rebuild.
+ */
 import { Link, useParams } from 'react-router-dom'
 import StallForm from '../components/StallForm'
 import VolunteerForm from '../components/VolunteerForm'
@@ -7,8 +16,13 @@ import {
 } from '../lib/involvement'
 import NotFound from './NotFound'
 
+/** Availability of Take-a-Stall applications at the current instant. */
 type ApplicationStatus = 'open' | 'upcoming' | 'closed'
 
+/**
+ * Extracts y/m/d for `date` in `timeZone` using `Intl` (handles DST/offset),
+ * returning null when the timezone is invalid.
+ */
 function datePartsInTimezone(date: Date, timeZone: string): { y: number; m: number; d: number } | null {
   try {
     const parts = new Intl.DateTimeFormat('en-CA', {
@@ -28,6 +42,7 @@ function datePartsInTimezone(date: Date, timeZone: string): { y: number; m: numb
   }
 }
 
+/** Parses a CMS `YYYY-MM-DD` date string; returns null for missing/malformed input. */
 function parseIsoDate(value?: string): { y: number; m: number; d: number } | null {
   if (!value) return null
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value)
@@ -44,6 +59,11 @@ function compareDateParts(
   return a.d - b.d
 }
 
+/**
+ * Resolves the stall application window against "today" in the configured
+ * timezone. Missing config defaults to open; scheduled windows with invalid
+ * dates fail closed; an unparseable timezone falls back to Africa/Lagos.
+ */
 function getApplicationStatus(applications?: StallApplications): ApplicationStatus {
   if (!applications) return 'open'
   const mode = applications.mode ?? 'scheduled'
@@ -68,6 +88,7 @@ function getApplicationStatus(applications?: StallApplications): ApplicationStat
   return 'open'
 }
 
+/** Renders an involvement item's detail, or `NotFound` when unavailable. */
 export default function InvolvementDetail({ slug: slugProp }: { slug?: string }) {
   const { slug: slugParam } = useParams()
   const slug = slugProp ?? slugParam

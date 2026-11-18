@@ -1,13 +1,23 @@
+/**
+ * Resource detail page (route `/resources/:slug`).
+ * - Receives `slug` as a prop from generated routes in `App.tsx`, falling back
+ *   to `useParams` when rendered by a matched dynamic route.
+ * - Looks up the CMS post by slug; unknown slugs render the shared `NotFound`
+ *   page while the URL/status handling remains client-side.
+ * - Post body HTML is trusted CMS content rendered via `dangerouslySetInnerHTML`.
+ */
 import { useParams, Link } from 'react-router-dom'
 import { posts, formatContentDate, type PostType } from '../lib/content'
 import NotFound from './NotFound'
 
+/** Material Symbols icon per resource type. */
 const typeIcons: Record<PostType, string> = {
   Guide: 'menu_book',
   Article: 'article',
   Video: 'play_circle',
 }
 
+/** Renders a single resource post, or `NotFound` when the slug is unknown. */
 export default function BlogPost({ slug: slugProp }: { slug?: string }) {
   const { slug: slugParam } = useParams()
   const slug = slugProp ?? slugParam

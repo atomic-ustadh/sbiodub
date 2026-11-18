@@ -1,14 +1,24 @@
+/**
+ * Profile page (route `/profile`, protected by `ProtectedRoute`).
+ * - Profile name/phone are saved through Clerk (`updateProfile` in
+ *   `AuthContext`); email is display-only because Clerk owns it.
+ * - "My Events" lists/cancels RSVPs from Neon; "Donations" links to `/history`
+ *   rather than duplicating the payment table.
+ * - Logging out clears the Clerk session and returns to the home page.
+ */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { formatContentDate } from "../lib/content";
 
+/** Tab labels for the profile sections. */
 const tabs = [
   "Edit Profile",
   "My Events",
   "Donations",
 ];
 
+/** Member dashboard: editable profile, RSVP list, and donation shortcut. */
 export default function Profile() {
   const navigate = useNavigate();
   const {

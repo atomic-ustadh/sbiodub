@@ -1,7 +1,15 @@
+/**
+ * Standalone auth page (routes `/login` and `/login?mode=signup`, no site chrome).
+ * - Uses Clerk's hash-routed `<SignIn />`/`<SignUp />`, themed via `appearance`.
+ * - Post-auth redirect: `location.state.from` when it is a safe internal path
+ *   (starts with `/` but not `//`), otherwise `/profile`.
+ * - Signed-in users are redirected immediately (once auth finishes loading).
+ */
 import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { SignIn, SignUp } from '@clerk/react'
 import { useAuth } from '../context/AuthContext'
 
+/** Clerk component theming matched to the Emerald & Gold design tokens. */
 const appearance = {
   variables: {
     colorPrimary: '#0c3a2c',
@@ -11,6 +19,7 @@ const appearance = {
   },
 }
 
+/** Sign-in/sign-up screen with the split hero panel. */
 export default function Login() {
   const location = useLocation()
   const navigate = useNavigate()

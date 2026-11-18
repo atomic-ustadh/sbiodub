@@ -1,3 +1,13 @@
+/**
+ * Events page (route `/events`).
+ * - Lists CMS events split into upcoming/past by `getTodayIsoDate`, with category
+ *   filters and grid/timeline views.
+ * - RSVP is gated: guests get `LoginPrompt`; signed-in users open an in-page
+ *   modal whose submit calls `addRsvp` (Neon via `AuthContext`). RSVP ids must
+ *   stay stable because they key off the CMS event id.
+ * - The page locks body scroll while the RSVP modal is open and restores it on
+ *   close/unmount.
+ */
 import { useState, useEffect, type SubmitEvent } from "react"
 import { useLocation } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
@@ -6,7 +16,9 @@ import LoginPrompt from "../components/LoginModal"
 
 import { events, formatContentDate, getTodayIsoDate, type CommunityEvent, type EventCategory } from "../lib/content"
 
+/** "All Events" plus each CMS event category. */
 type EventFilter = "All Events" | EventCategory
+/** Display mode toggled in the hero controls. */
 type EventView = "grid" | "calendar"
 const categories: EventFilter[] = [
   "All Events",
@@ -30,6 +42,7 @@ const dotColors: Record<EventCategory, string> = {
   Spiritual: "bg-secondary",
 };
 
+/** Event listing with filtering, view switching, and authenticated RSVP. */
 export default function Events() {
   const { user, addRsvp, rsvps } = useAuth()
   const { pathname } = useLocation()
@@ -46,6 +59,7 @@ export default function Events() {
     return () => { document.body.style.overflow = '' }
   }, [])
 
+  /** Opens the RSVP modal, or the login prompt when the visitor is a guest. */
   const openRsvp = (event: CommunityEvent) => {
     if (!user) {
       setShowLoginPrompt(true)
@@ -64,6 +78,7 @@ export default function Events() {
     document.body.style.overflow = ''
   }
 
+  /** Persists the RSVP through `AuthContext`, then shows a transient confirmation. */
   const handleRsvpSubmit = (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!rsvpEvent) return

@@ -1,6 +1,15 @@
+/**
+ * About page (route `/about`).
+ * - All narrative copy, pillars, and leadership profiles are CMS-driven via
+ *   `src/lib/content.ts`; only layout and pillar style mapping live here.
+ * - Rich-text fields are rendered with `dangerouslySetInnerHTML` as authored in
+ *   the CMS (trusted content, styled with Tailwind arbitrary variants).
+ * - In-page anchors (`#story`, `#team`) power the hero's jump links.
+ */
 import { about_hero } from '../assets'
 import { aboutPage, leadershipProfiles, type AboutPillarStyle } from '../lib/content'
 
+/** Maps CMS-configured pillar styles to border layout classes. */
 const pillarStyles: Record<AboutPillarStyle, string> = {
   default: 'border-t-4 border-secondary',
   primary: 'border-t-4 border-primary',
@@ -13,6 +22,7 @@ const purposeCards = [
   { icon: 'visibility', title: aboutPage.visionTitle, content: aboutPage.visionContent },
 ]
 
+/** About page composition: hero, story, mission/vision, values, and team. */
 export default function About() {
   return (
     <main className="pt-18">

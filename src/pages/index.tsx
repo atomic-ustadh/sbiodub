@@ -1,8 +1,17 @@
+/**
+ * Home page (route `/`, exported as `Platform`).
+ * - Hero and static "Core Pillars" copy are code-owned; events/testimonials come
+ *   from CMS content (`src/lib/content.ts`).
+ * - Only the next three events on/after today are shown, with an empty state
+ *   when none are upcoming.
+ * - Testimonials are a client-side carousel with wrap-around controls.
+ */
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { home_hero } from '../assets'
 import { events, formatContentDate, getTodayIsoDate, testimonials } from '../lib/content'
 
+/** Landing page composition: hero, pillars, upcoming events, testimonials, CTA. */
 export default function Platform() {
   // Track which testimonial is currently shown in the carousel
   const [current, setCurrent] = useState(0)

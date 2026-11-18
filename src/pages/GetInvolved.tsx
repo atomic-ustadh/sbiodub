@@ -1,6 +1,15 @@
+/**
+ * Get Involved landing page (route `/get-involved`).
+ * - Intro copy and item summaries/icons come from CMS (`src/lib/involvement.ts`).
+ * - CTA destinations are code-controlled (`ctaTo`), not CMS fields; the `give`
+ *   item is rendered as a full-width highlighted card.
+ * - Items whose CTA points to a detail route are additionally expanded into
+ *   generated routes in `App.tsx`.
+ */
 import { Link } from 'react-router-dom'
 import { involvementIntro, involvementItems } from '../lib/involvement'
 
+/** Grid of involvement paths with a highlighted donation card. */
 export default function GetInvolved() {
   return (
     <main className="pt-18">

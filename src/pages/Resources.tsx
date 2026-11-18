@@ -1,8 +1,17 @@
+/**
+ * Resources listing page (route `/resources`).
+ * - Posts come from CMS content; one `featured` post gets a hero card and the
+ *   rest render as cards linking to `/resources/:slug`.
+ * - Category filter is client-side; `categories` is UI-owned and should stay in
+ *   sync with CMS `category` values or posts will not match a filter.
+ * - Includes the newsletter `SubscribeForm` CTA.
+ */
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SubscribeForm from "../components/SubscribeForm";
 import { posts, formatContentDate, type PostType } from "../lib/content";
 
+/** Filter labels offered in the hero; "All Resources" disables filtering. */
 const categories = [
   "All Resources",
   "Faith & Spirit",
@@ -23,6 +32,7 @@ const typeBadgeClasses: Record<PostType, string> = {
   Video: "bg-tertiary text-on-tertiary",
 };
 
+/** Featured post showcase plus a filterable grid of remaining resources. */
 export default function Resources() {
   const [activeCat, setActiveCat] = useState("All Resources");
 
