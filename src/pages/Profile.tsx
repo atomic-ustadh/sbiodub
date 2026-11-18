@@ -8,6 +8,7 @@
  */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Seo from "../components/Seo";
 import { useAuth } from "../context/AuthContext";
 import { formatContentDate } from "../lib/content";
 
@@ -43,6 +44,7 @@ export default function Profile() {
 
   return (
     <main className="min-h-screen bg-surface-container-low pb-xl pt-18">
+      <Seo title="My Profile" description="Manage your Leadership Course Abuja profile and event registrations." noindex />
       <div className="mx-auto max-w-container-max px-gutter py-xl">
         <h1 className="mb-lg font-display-lg text-display-lg-mobile text-primary md:text-display-lg">
           My Profile

@@ -7,6 +7,7 @@
  */
 import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { SignIn, SignUp } from '@clerk/react'
+import Seo from '../components/Seo'
 import { useAuth } from '../context/AuthContext'
 
 /** Clerk component theming matched to the Emerald & Gold design tokens. */
@@ -39,6 +40,11 @@ export default function Login() {
 
   return (
     <main className="relative flex min-h-screen w-full flex-col overflow-x-hidden md:flex-row">
+      <Seo
+        title="Sign In"
+        description="Sign in or create your Leadership Course Abuja account."
+        noindex
+      />
       <button
         onClick={() => navigate(-1)}
         aria-label="Go back"

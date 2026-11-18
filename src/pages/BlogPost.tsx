@@ -7,6 +7,7 @@
  * - Post body HTML is trusted CMS content rendered via `dangerouslySetInnerHTML`.
  */
 import { useParams, Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { posts, formatContentDate, type PostType } from '../lib/content'
 import NotFound from './NotFound'
 
@@ -29,6 +30,7 @@ export default function BlogPost({ slug: slugProp }: { slug?: string }) {
 
   return (
     <main className="pt-18 pb-xl">
+      <Seo title={post.title} description={post.excerpt} type="article" />
       <article>
         {/* Hero */}
         <div className="relative overflow-hidden bg-primary">

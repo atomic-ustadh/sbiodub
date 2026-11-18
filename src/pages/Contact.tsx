@@ -6,6 +6,7 @@
  *   backend or email delivery wired up here.
  */
 import data from '../content/contact.json'
+import Seo from '../components/Seo'
 
 /** A single contact channel (e.g. address, phone) with icon and display lines. */
 interface ContactDetail {
@@ -46,6 +47,7 @@ const { hero, contactDetails, emailHeading, emailContacts, form } = contact
 export default function Contact() {
   return (
     <main className="pt-18">
+      <Seo title={hero.title} description={hero.description} />
       <section className="relative overflow-hidden bg-primary px-gutter py-20">
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />
         <div className="absolute -right-24 -top-24 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />

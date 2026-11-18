@@ -13,6 +13,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth as useClerkAuth } from "@clerk/react";
+import Seo from "../components/Seo";
 import { donationPage } from "../lib/content";
 import { payWithPaystack } from "../lib/paystack";
 import { useAuth } from "../context/AuthContext";
@@ -163,6 +164,10 @@ export default function Donate() {
 
   return (
     <main className="pt-18 pb-xl">
+      <Seo
+        title="Donate"
+        description="Support Leadership Course Abuja's mission with a secure online donation or bank transfer."
+      />
       <section className="hero-gradient relative mb-xl overflow-hidden py-20">
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />
         <div className="absolute -right-24 top-0 h-72 w-72 rounded-full bg-secondary/20 blur-3xl" />

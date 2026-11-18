@@ -6,6 +6,7 @@
  *   (`dangerouslySetInnerHTML`), consistent with other CMS rich-text pages.
  */
 import { Link } from 'react-router-dom'
+import Seo from './Seo'
 import { formatContentDate, getLegalPageBySlug } from '../lib/content'
 import NotFound from '../pages/NotFound'
 
@@ -18,6 +19,7 @@ export default function LegalPageContent({ slug }: { slug: string }) {
 
   return (
     <main className="pb-xl pt-18">
+      <Seo title={page.title} description={`Read the ${page.title} for Leadership Course Abuja.`} />
       <section className="container-shell py-xl">
         <Link
           to="/"

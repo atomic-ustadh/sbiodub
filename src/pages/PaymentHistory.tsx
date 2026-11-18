@@ -8,6 +8,7 @@
  * - Print styles (`.print:*`) hide controls for printable receipts.
  */
 import { Link, useSearchParams } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { useAuth } from '../context/AuthContext'
 import { formatContentDate } from '../lib/content'
 
@@ -33,6 +34,7 @@ export default function PaymentHistory() {
   if (!donations.length) {
     return (
       <main className="flex min-h-screen items-center justify-center px-gutter pt-18">
+        <Seo title="Donation History" description="View your Leadership Course Abuja donation and payment history." noindex />
         <div className="card w-full max-w-2xl space-y-md p-lg text-center">
           {dataError ? (
             <>
@@ -75,6 +77,7 @@ export default function PaymentHistory() {
 
   return (
     <main className="min-h-screen bg-surface-container-low pb-xl pt-18 print:bg-white">
+      <Seo title="Donation History" description="View your Leadership Course Abuja donation and payment history." noindex />
       <div className="mx-auto w-full max-w-container-max px-gutter py-xl">
         <div className="mb-lg flex flex-col gap-md sm:flex-row sm:items-end sm:justify-between print:hidden">
           <div>

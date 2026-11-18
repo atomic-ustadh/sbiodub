@@ -10,6 +10,7 @@
 import { Link, useParams } from 'react-router-dom'
 import StallForm from '../components/StallForm'
 import VolunteerForm from '../components/VolunteerForm'
+import Seo from '../components/Seo'
 import {
   getInvolvementItem,
   type StallApplications,
@@ -101,6 +102,7 @@ export default function InvolvementDetail({ slug: slugProp }: { slug?: string })
 
   return (
     <main className="pt-18">
+      <Seo title={detail.title} description={detail.description} />
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary px-gutter py-20">
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />

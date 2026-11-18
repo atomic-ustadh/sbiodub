@@ -7,12 +7,14 @@
  *   generated routes in `App.tsx`.
  */
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { involvementIntro, involvementItems } from '../lib/involvement'
 
 /** Grid of involvement paths with a highlighted donation card. */
 export default function GetInvolved() {
   return (
     <main className="pt-18">
+      <Seo title={involvementIntro.title} description={involvementIntro.description} />
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary px-gutter py-20">
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />

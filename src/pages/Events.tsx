@@ -13,6 +13,7 @@ import { useLocation } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 import SubscribeForm from "../components/SubscribeForm"
 import LoginPrompt from "../components/LoginModal"
+import Seo from "../components/Seo"
 
 import { events, formatContentDate, getTodayIsoDate, type CommunityEvent, type EventCategory } from "../lib/content"
 
@@ -229,6 +230,11 @@ export default function Events() {
 
   return (
     <main className="pt-18">
+      <Seo
+        title="Events"
+        description="Explore upcoming and past Leadership Course Abuja events — seminars, socials, sports, and spiritual programmes."
+        image="/media/events/annual-soccer-tournament.png"
+      />
       {/* Hero */}
       <header className="relative overflow-hidden bg-primary px-gutter pb-14 pt-28">
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />

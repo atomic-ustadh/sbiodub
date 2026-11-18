@@ -9,6 +9,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SubscribeForm from "../components/SubscribeForm";
+import Seo from "../components/Seo";
 import { posts, formatContentDate, type PostType } from "../lib/content";
 
 /** Filter labels offered in the hero; "All Resources" disables filtering. */
@@ -45,6 +46,11 @@ export default function Resources() {
 
   return (
     <main className="pt-18 pb-xl">
+      <Seo
+        title="Resources"
+        description="Explore guides, articles, and videos on faith, professional skills, mental wellness, and community action from Leadership Course Abuja."
+        image="/media/resources/navigating-career-with-faith.png"
+      />
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary px-gutter pb-16 pt-24">
         <div className="absolute inset-0 geometric-pattern opacity-[0.07]" />

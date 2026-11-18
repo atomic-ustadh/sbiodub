@@ -7,6 +7,7 @@
  * - In-page anchors (`#story`, `#team`) power the hero's jump links.
  */
 import { about_hero } from '../assets'
+import Seo from '../components/Seo'
 import { aboutPage, leadershipProfiles, type AboutPillarStyle } from '../lib/content'
 
 /** Maps CMS-configured pillar styles to border layout classes. */
@@ -26,6 +27,11 @@ const purposeCards = [
 export default function About() {
   return (
     <main className="pt-18">
+      <Seo
+        title="About Us"
+        description="Learn about Leadership Course Abuja: our story since 2012, mission, vision, values, and leadership team."
+        image={aboutPage.journeyImage}
+      />
       {/* Hero */}
       <section className="relative flex min-h-[70svh] items-center py-24">
         <div className="absolute inset-0 z-0">

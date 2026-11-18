@@ -8,6 +8,7 @@
  */
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 
 /** Standalone not-found screen with a subtle pointer-parallax effect. */
 export default function NotFound() {
@@ -30,6 +31,11 @@ export default function NotFound() {
 
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-primary px-4 font-body-md text-on-background md:px-gutter">
+      <Seo
+        title="Page Not Found"
+        description="The page you are looking for could not be found. Return to the Leadership Course Abuja home page."
+        noindex
+      />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <img
           alt="Serene spiritual path illustration"

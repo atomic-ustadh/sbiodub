@@ -6,12 +6,17 @@
  * - Reachable from the floating shortcut in `SiteLayout` (hidden on this page).
  */
 import { Link } from 'react-router-dom'
+import Seo from '../components/Seo'
 import { faqItems } from '../lib/content'
 
 /** CMS-driven frequently asked questions with native expand/collapse. */
 export default function Faq() {
   return (
     <main className="min-h-screen bg-surface pb-xl pt-18">
+      <Seo
+        title="FAQ"
+        description="Answers to common questions about Leadership Course Abuja events, membership, donations, and volunteering."
+      />
       <section className="container-shell py-xl">
         <div className="mx-auto mb-xl max-w-3xl text-center">
           <div className="mx-auto mb-md flex h-20 w-20 items-center justify-center rounded-3xl bg-secondary-fixed/40 ring-1 ring-secondary/15">

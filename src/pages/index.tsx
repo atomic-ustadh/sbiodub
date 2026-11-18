@@ -9,6 +9,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { home_hero } from '../assets'
+import Seo from '../components/Seo'
 import { events, formatContentDate, getTodayIsoDate, testimonials } from '../lib/content'
 
 /** Landing page composition: hero, pillars, upcoming events, testimonials, CTA. */
@@ -23,6 +24,7 @@ export default function Platform() {
 
   return (
     <main className="pt-18">
+      <Seo />
       {/* ===== Hero Section ===== */}
       <section className="hero-gradient relative flex min-h-[calc(100svh-72px)] items-center overflow-hidden py-xl">
         <div className="pattern-dots-light absolute inset-0 opacity-40" />
