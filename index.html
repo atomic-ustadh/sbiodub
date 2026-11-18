@@ -10,10 +10,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   </head>
   <body>
+    <!--
+      Hidden Netlify Forms registration form. Detected at build time so Netlify
+      accepts submissions from the client-rendered SubscribeForm (posts to "/"
+      with form-name "newsletter"). Kept in static HTML because SPA forms aren't
+      present in the built HTML.
+    -->
     <form name="newsletter" data-netlify="true" netlify-honeypot="bot-field" hidden>
       <input type="email" name="email" />
       <input name="bot-field" />
     </form>
+    <!-- React SPA mounts here (bootstrap: src/main.tsx, routes: src/App.tsx). -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

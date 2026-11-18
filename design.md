@@ -1,3 +1,8 @@
+<!--
+  Design reference (Emerald & Gold). Implementation source of truth for tokens
+  and utilities is src/index.css, which may evolve beyond this document.
+  See docs/ARCHITECTURE.md for repo structure and data flow.
+-->
 ---
 name: Emerald & Gold
 colors:

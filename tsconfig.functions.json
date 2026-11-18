@@ -1,4 +1,7 @@
 {
+  // TypeScript config for Netlify Functions (server-side, Node runtime).
+  // Extends app config for strictness but targets non-DOM libs/types and only
+  // checks netlify/**/*.ts. Netlify/esbuild bundles functions at deploy time.
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "lib": ["ES2022"],

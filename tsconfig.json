@@ -1,4 +1,8 @@
 {
+  // TypeScript config for the browser/Vite app (and Vite config).
+  // - Strict, noEmit: type-checking only (Vite/esbuild handle emit/bundling).
+  // - Bundler resolution + resolveJsonModule support ESM, JSON content imports,
+  //   and import.meta.glob usage in src/lib.
   "compilerOptions": {
     "target": "ES2022",
     "useDefineForClassFields": true,

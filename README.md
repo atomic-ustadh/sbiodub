@@ -83,6 +83,9 @@ Paystack payments.
 
 ## Architecture
 
+> See [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for the repo map, data-flow
+> diagrams-in-text (CMS, auth, payments), and commenting conventions.
+
 - **Bootstrap:** `src/main.tsx` mounts React inside `ClerkProvider`, `BrowserRouter`
   and `AuthProvider`, then renders the route table in `src/App.tsx`.
 - **Layouts:** most pages render inside `SiteLayout` (`Navbar` + `Outlet` + `Footer`

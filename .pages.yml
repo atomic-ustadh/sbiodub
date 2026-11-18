@@ -1,9 +1,17 @@
+# Pages CMS configuration (.pages.yml)
+# Defines editable content sources committed to Git; changes require rebuild/deploy
+# because src/lib/content.ts and src/lib/involvement.ts load JSON at build time.
+# See docs/ARCHITECTURE.md for data-flow and code-coupled field notes.
+
 media:
+  # Local repo media: files saved under public/media are served from /media.
+  # If you switch to an external image host/CDN, update this block per Pages CMS docs.
   input: public/media
   output: /media
   rename: safe
 
 content:
+  # Resources collection: filename becomes the URL slug (/resources/:slug).
   - name: resources
     label: Resources
     type: collection
@@ -69,6 +77,7 @@ content:
         label: Featured
         type: boolean
 
+  # Events collection: filename becomes fallback id/slug; keep "id" stable once users RSVP.
   - name: events
     label: Events
     type: collection
@@ -455,6 +464,8 @@ content:
             options:
               categories: [image]
 
+  # Get Involved: intro (file) + items (collection). Button destinations (ctaTo/routes)
+  # are code-controlled in src/lib/involvement.ts; CMS edits labels/copy/content only.
   - name: get-involved-intro
     label: Get Involved Intro
     type: file
