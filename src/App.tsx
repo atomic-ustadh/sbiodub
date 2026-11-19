@@ -3,35 +3,40 @@
  * - `ScrollToTop` resets scroll on pathname changes.
  * - Most routes render inside `SiteLayout` (nav/footer/chrome); `/login`,
  *   `/forgot-password`, and `*` render standalone.
+ * - Public pages are lazy-loaded; `SiteLayout` supplies the Suspense boundary for
+ *   nested routes and `/login` wraps its own.
  * - Detail routes for involvement (items with `detail`) and resources are
  *   generated from content so unknown slugs are not matched here and fall
  *   through to the global `*` 404 route.
  * - Protected member routes (`/profile`, `/history`, legacy `/receipts`) are
  *   wrapped by `ProtectedRoute`.
  */
+import { lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import ScrollToTop from './components/ScrollToTop'
 import SiteLayout from './components/SiteLayout'
 import ProtectedRoute from './components/ProtectedRoute'
+import PageLoader from './components/PageLoader'
 import Home from './pages/index'
-import About from './pages/about'
-import Login from './pages/login'
-import Events from './pages/Events'
-import GetInvolved from './pages/GetInvolved'
-import InvolvementDetail from './pages/InvolvementDetail'
-import Resources from './pages/Resources'
-import BlogPost from './pages/BlogPost'
-import PrivacyPolicy from './pages/PrivacyPolicy'
-import TermsOfService from './pages/TermsOfService'
-import Faq from './pages/Faq'
-import Contact from './pages/Contact'
-import Donate from './pages/Donate'
-import Profile from './pages/Profile'
-import PaymentHistory from './pages/PaymentHistory'
 import ForgotPassword from './pages/ForgotPassword'
 import NotFound from './pages/NotFound'
 import { involvementItems } from './lib/involvement'
 import { posts } from './lib/content'
+
+const About = lazy(() => import('./pages/about'))
+const Login = lazy(() => import('./pages/login'))
+const Events = lazy(() => import('./pages/Events'))
+const GetInvolved = lazy(() => import('./pages/GetInvolved'))
+const InvolvementDetail = lazy(() => import('./pages/InvolvementDetail'))
+const Resources = lazy(() => import('./pages/Resources'))
+const BlogPost = lazy(() => import('./pages/BlogPost'))
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'))
+const TermsOfService = lazy(() => import('./pages/TermsOfService'))
+const Faq = lazy(() => import('./pages/Faq'))
+const Contact = lazy(() => import('./pages/Contact'))
+const Donate = lazy(() => import('./pages/Donate'))
+const Profile = lazy(() => import('./pages/Profile'))
+const PaymentHistory = lazy(() => import('./pages/PaymentHistory'))
 
 export default function App() {
   return (
@@ -71,7 +76,14 @@ export default function App() {
           <Route path="receipts" element={<PaymentHistory />} />
         </Route>
       </Route>
-      <Route path="login" element={<Login />} />
+      <Route
+        path="login"
+        element={
+          <Suspense fallback={<PageLoader />}>
+            <Login />
+          </Suspense>
+        }
+      />
       <Route path="forgot-password" element={<ForgotPassword />} />
       <Route path="*" element={<NotFound />} />
       </Routes>

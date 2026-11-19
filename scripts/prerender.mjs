@@ -108,10 +108,7 @@ function startServer() {
 async function prerenderRoute(page, baseUrl, route, siteUrl) {
   await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 60000 })
   await page.waitForFunction(
-    () => {
-      const rootElement = document.querySelector('#root')
-      return Boolean(rootElement && rootElement.children.length > 0)
-    },
+    () => Boolean(document.querySelector('#root main h1')),
     { timeout: 30000 },
   )
   await page.waitForFunction(() => document.title.includes('|'), { timeout: 5000 }).catch(() => {})

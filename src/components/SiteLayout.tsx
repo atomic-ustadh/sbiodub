@@ -4,9 +4,11 @@
  * - Shows a floating FAQ shortcut except on `/faq` and Get Involved pages
  *   (including detail routes), hidden in print.
  */
+import { Suspense } from 'react'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import PageLoader from './PageLoader'
 
 export default function SiteLayout() {
   const { pathname } = useLocation()
@@ -15,7 +17,9 @@ export default function SiteLayout() {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <Outlet />
+      <Suspense fallback={<PageLoader />}>
+        <Outlet />
+      </Suspense>
       <Footer />
       {showFaqButton && (
         <Link
