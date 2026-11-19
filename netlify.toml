@@ -2,8 +2,8 @@
 # - Builds the Vite SPA, publishes dist/, and bundles Netlify Functions with esbuild.
 # - Rewrites public /api/paystack/* paths to serverless functions (keeps browser calls
 #   same-origin; function names stay internal).
-# - SPA fallback serves index.html for all non-matched routes so React Router handles them.
-#   Keep the catch-all redirect last.
+# - SPA fallback serves the unprerendered shell for all non-matched routes so React
+#   Router handles them client-side. Keep the catch-all redirect last.
 
 [build]
   command = "npm run build"
@@ -26,5 +26,5 @@
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/_spa.html"
   status = 200
