@@ -20,7 +20,7 @@ export default function LegalPageContent({ slug }: { slug: string }) {
   return (
     <main className="pb-xl pt-18">
       <Seo title={page.title} description={`Read the ${page.title} for Leadership Course Abuja.`} />
-      <section className="container-shell py-md">
+      <section className="container-shell py-lg">
         <Link
           to="/"
           className="mb-lg inline-flex items-center gap-sm font-button text-primary hover:underline"
