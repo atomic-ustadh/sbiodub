@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run typecheck && vite build && npm run prerender",
+    "build": "npm run typecheck && vite build && npm run prerender:install && npm run prerender",
     "prerender": "node scripts/prerender.mjs",
+    "prerender:install": "puppeteer browsers install chrome",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.functions.json",
     "preview": "vite preview"
   },

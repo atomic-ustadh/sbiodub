@@ -140,6 +140,7 @@ bundle; everything else must stay server-only.
 | `VITE_GOOGLE_FORM_EMAIL_ENTRY` | Client | Optional | Google Form email entry id (required if the form id is set) |
 | `PAYSTACK_SECRET_KEY` | Function | For online donations | Paystack secret key; also validates webhook signatures |
 | `CLERK_SECRET_KEY` | Function | For signed-in donations | Verifies the caller's Clerk session token |
+| `CLERK_AUTHORIZED_PARTIES` | Function | Optional | Comma-separated origins allowed to mint sessions; defaults to Netlify's `URL`/`DEPLOY_PRIME_URL`/`BRANCH_URL` |
 | `DATABASE_URL` | Function | For online donations | Neon Postgres connection string (database owner) |
 
 Never put `PAYSTACK_SECRET_KEY`, `CLERK_SECRET_KEY` or `DATABASE_URL` behind a
